@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace KuberaManager.Models
 {
-    public class Activity
+    public class Scenario
     {
         [Key]
         public int Id { get; set; }

@@ -31,7 +31,7 @@ namespace KuberaManager.Models
         public int PrefStopTimeDay { get; set; }
 
         [Display(Name = "Preferred Activities", Description = "Will perform these actions unless manually overwritten.")]
-        public List<Activity> PreferredActivities { get; set; }
+        public List<Scenario> PreferredActivities { get; set; }
 
     }
 }
