@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
@@ -18,7 +19,7 @@ namespace KuberaManager.Models
         public int AccountId { get; set; }
 
         [AllowNull]
-        public string RspeerSession { get; set; }
+        public string RspeerSessionTag { get; set; }
 
 
         [AllowNull]
@@ -33,8 +34,21 @@ namespace KuberaManager.Models
         public DateTime StartTime { get; set; }
 
         [AllowNull]
-        public DateTime EndTime { get; set; }
+        public DateTime LastUpdateTime { get; set; }
 
+        [DefaultValue(true)]
+        public bool IsFinished { get; set; }
 
+        #region Static
+
+        #endregion
+
+        #region Non-static
+        public bool ShouldStop()
+        {
+            return StartTime + TargetDuration > DateTime.Now;
+        }
+
+        #endregion
     }
 }
