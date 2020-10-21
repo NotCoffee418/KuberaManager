@@ -20,7 +20,7 @@ namespace KuberaManager.Models.Logic.Api.Update
         public bool IsStopRequest { get; set; } = false;
 
         // Which scenario should be running
-        public Scenario Scenario { get; set; }
+        public string Scenario { get; set; }
 
 
     }
