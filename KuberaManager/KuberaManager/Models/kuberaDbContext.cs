@@ -6,13 +6,6 @@ namespace KuberaManager.Models
 {
     public partial class kuberaDbContext : DbContext
     {
-        // Entities
-        public DbSet<Account> Accounts { get; set; }
-        public DbSet<Computer> Computers { get; set; }
-        public DbSet<Scenario> Scenarios { get; set; }
-        public DbSet<Session> Sessions { get; set; }
-
-
         public kuberaDbContext()
         {
         }
@@ -21,6 +14,12 @@ namespace KuberaManager.Models
             : base(options)
         {
         }
+
+        public virtual DbSet<Config> Configs { get; set; }
+        public virtual DbSet<Account> Accounts { get; set; }
+        public virtual DbSet<Computer> Computers { get; set; }
+        public virtual DbSet<Scenario> Scenarios { get; set; }
+        public virtual DbSet<Session> Sessions { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -33,6 +32,25 @@ namespace KuberaManager.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Account>(entity =>
+            {
+                entity.Property(e => e.Login).IsRequired();
+
+                entity.Property(e => e.Password).IsRequired();
+            });
+
+            modelBuilder.Entity<Computer>(entity =>
+            {
+                entity.Property(e => e.Hostname).IsRequired();
+            });
+
+            modelBuilder.Entity<Scenario>(entity =>
+            {
+                entity.HasIndex(e => e.Id);
+
+                entity.Property(e => e.Name).IsRequired();
+            });
+
             OnModelCreatingPartial(modelBuilder);
         }
 
