@@ -19,7 +19,7 @@ namespace KuberaManager.Models.Logic.Api.Update
         // when true, client should stop
         public bool IsStopRequest { get; set; } = false;
 
-        // Which scenario should be running
+        // Which scenario should be running. Null is acceptable.
         public string Scenario { get; set; }
 
 

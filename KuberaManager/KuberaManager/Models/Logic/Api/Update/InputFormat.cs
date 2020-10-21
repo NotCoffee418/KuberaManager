@@ -20,7 +20,6 @@ namespace KuberaManager.Models.Logic.Api.Update
         /// <summary>
         /// Possible statuses:
         /// 
-        /// started
         /// stopping
         /// update (no changes, just phoning in)
         /// discord-notify
@@ -37,5 +36,16 @@ namespace KuberaManager.Models.Logic.Api.Update
         /// The RS account sending the request
         /// </summary>
         public string RunescapeAccount { get; set; }
+
+        internal bool HasValidStatus()
+        {
+            string[] validStatuses = new string[]
+            {
+                "stopping",
+                "update",
+                "discord-notify"
+            };
+            return validStatuses.Contains(Status);
+        }
     }
 }

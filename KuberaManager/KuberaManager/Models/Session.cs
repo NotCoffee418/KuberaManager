@@ -40,6 +40,19 @@ namespace KuberaManager.Models
         public bool IsFinished { get; set; }
 
         #region Static
+        /// <summary>
+        /// Find Session based on RS login email
+        /// </summary>
+        /// <param name="runescapeaccount"></param>
+        /// <returns>null or account</returns>
+        public static Session FromAccount(string runescapeaccount)
+        {
+            // todos
+            // ensure latest session only
+            // ensure session id makes sense (no ancient ID)
+            // Create session if it doesn't exist (and fill in id threaded)
+            throw new NotImplementedException();
+        }
 
         #endregion
 
