@@ -1,8 +1,9 @@
 ﻿using System;
+using KuberaManager.Models.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace KuberaManager.Models
+namespace KuberaManager.Models.Database
 {
     public partial class kuberaDbContext : DbContext
     {

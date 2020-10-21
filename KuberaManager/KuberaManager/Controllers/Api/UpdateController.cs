@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using KuberaManager.Models;
+using KuberaManager.Models.Database;
 using KuberaManager.Models.Logic;
 using KuberaManager.Models.Logic.Api.Update;
 using Microsoft.AspNetCore.Mvc;

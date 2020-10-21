@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using KuberaManager.Models;
+using KuberaManager.Models.Database;
 
 namespace KuberaManager.Controllers
 {
@@ -20,7 +21,16 @@ namespace KuberaManager.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            return View(); //tmp
+            // Redirect to config page on first run
+            if (Config.Get<int>("InstalledConfigVersion") == 0)
+            {
+                return View();
+            }
+            else
+            {
+                return View();
+            }
         }
 
         public IActionResult Privacy()
