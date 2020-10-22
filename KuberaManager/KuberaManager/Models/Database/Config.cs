@@ -66,14 +66,14 @@ namespace KuberaManager.Models.Database
                 .First().ConfigVersion;
 
             // Det DB config version
-            int installedVersion = Config.Get<int>("InstalledConfigVersion");
+            int databaseVersion = Config.Get<int>("InstalledConfigVersion");
 
             // Install new keys if needed
-            if (applicationVersion > installedVersion)
+            if (applicationVersion > databaseVersion)
             {
-                var keysToAdd = cd.Keys.Where(x => x.ConfigVersion > installedVersion);
+                var keysToAdd = cd.Keys.Where(x => x.ConfigVersion > databaseVersion);
 
-                // Add value
+                // Add values
                 using (var db = new kuberaDbContext())
                 {
                     var config = db.Set<Config>();
@@ -81,6 +81,9 @@ namespace KuberaManager.Models.Database
                         config.Add(new Config { ConfKey = key.Name, ConfValue = null });
                     db.SaveChanges();
                 }
+
+                // Update database version
+                Set<int>("InstalledConfigVersion", applicationVersion);
             }
         }
     }

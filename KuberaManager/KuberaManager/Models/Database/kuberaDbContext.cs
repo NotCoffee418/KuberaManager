@@ -2,6 +2,7 @@
 using KuberaManager.Models.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.Extensions.Configuration;
 
 namespace KuberaManager.Models.Database
 {
@@ -26,8 +27,12 @@ namespace KuberaManager.Models.Database
         {
             if (!optionsBuilder.IsConfigured)
             {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseNpgsql("Server=127.0.0.1;Port=5432;Database=kuberamanagerdev;User Id=postgres;Password=postgres");
+                //optionsBuilder.UseNpgsql("Server=127.0.0.1;Port=5432;Database=kuberamanagerdev;User Id=postgres;Password=postgres");
+                IConfigurationRoot configuration = new ConfigurationBuilder()
+                    .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+                    .AddJsonFile("appsettings.json")
+                    .Build();
+                optionsBuilder.UseNpgsql(configuration.GetConnectionString("DefaultConnection"));
             }
         }
 

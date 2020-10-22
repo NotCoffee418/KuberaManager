@@ -21,16 +21,18 @@ namespace KuberaManager.Controllers
 
         public IActionResult Index()
         {
-            return View(); //tmp
-            // Redirect to config page on first run
+            // Redirect to config page on first run or DB update
             if (Config.Get<int>("InstalledConfigVersion") == 0)
             {
-                return View();
+                // Prepare Config table
+                Config.CheckUpdateConfigVersion();
+
+                // Return view
+                ViewBag.Notification = "New config values have been added. Please define them";
             }
-            else
-            {
-                return View();
-            }
+
+
+            return View();
         }
 
         public IActionResult Privacy()
