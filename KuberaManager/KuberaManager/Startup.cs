@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using KuberaManager.Models.Database;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -30,6 +31,24 @@ namespace KuberaManager
                     options.UseNpgsql(
                         this.Configuration.GetConnectionString("DefaultConnection")));
 
+            // Session
+            services.AddDistributedMemoryCache();
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromSeconds(10);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
+
+            // Cookie auth scheme
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            .AddCookie(options =>
+            {
+                options.AccessDeniedPath = new PathString("/Account/Login");
+                options.LoginPath = new PathString("/Account/Login");
+                options.LogoutPath = new PathString("/Account/Logout");
+            });
+
             // controller/views
             services.AddControllersWithViews();
         }
@@ -51,12 +70,19 @@ namespace KuberaManager
             // Install/upgrade database:
             context.Database.Migrate();
 
+            // Default
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
             app.UseRouting();
 
-            app.UseAuthorization();
+
+            // Authentication & authorization
+            app.UseAuthentication();
+            app.UseAuthorization(); // this MUST be below Authentication or stuff breaks
+
+            // Session
+            app.UseSession();
 
             app.UseEndpoints(endpoints =>
             {

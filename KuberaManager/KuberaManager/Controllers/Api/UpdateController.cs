@@ -5,12 +5,14 @@ using System.Threading.Tasks;
 using KuberaManager.Models.Database;
 using KuberaManager.Models.Logic;
 using KuberaManager.Models.Logic.Api.Update;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace KuberaManager.Controllers.Api
 {
+    [AllowAnonymous]
     [Route("api/[controller]")]
     [ApiController]
     public class UpdateController : ControllerBase

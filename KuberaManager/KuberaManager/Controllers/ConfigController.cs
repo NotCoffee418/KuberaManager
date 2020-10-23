@@ -6,9 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 using System.IO;
 using KuberaManager.Models.Database;
 using KuberaManager.Models.Data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace KuberaManager.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class ConfigController : Controller
     {
         public IActionResult Index()
@@ -80,12 +82,14 @@ namespace KuberaManager.Controllers
             return View(newConf);
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public IActionResult ChangeAdminPass()
         {
             return View();
         }
 
+        [AllowAnonymous]
         [HttpPost]
         public IActionResult ChangeAdminPass(AdminPassword adminPass)
         {
