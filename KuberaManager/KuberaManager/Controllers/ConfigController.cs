@@ -86,20 +86,32 @@ namespace KuberaManager.Controllers
         [HttpGet]
         public IActionResult ChangeAdminPass()
         {
-            return View();
+            // if pass isn't set or user is admin.
+            string passHash = Config.Get<string>("AdminPassHash");
+            if (passHash == null || passHash == "" || User.IsInRole("Admin"))
+            {
+                return View();
+            }
+            else return Unauthorized();
         }
 
         [AllowAnonymous]
         [HttpPost]
         public IActionResult ChangeAdminPass(AdminPassword adminPass)
         {
-            if (ModelState.IsValid)
+            // if pass isn't set or user is admin.
+            string passHash = Config.Get<string>("AdminPassHash");
+            if (passHash == null || passHash == "" || User.IsInRole("Admin"))
             {
-                ViewBag.Notification = "Admin password successfully updated";
-                Config.Set<string>("AdminPassHash", adminPass.GetPasswordHash());
-            }
+                if (ModelState.IsValid)
+                {
+                    ViewBag.Notification = "Admin password successfully updated";
+                    Config.Set<string>("AdminPassHash", adminPass.GetPasswordHash());
+                }
 
-            return View();
+                return View();
+            }
+            else return Unauthorized();
         }
     }
 }
