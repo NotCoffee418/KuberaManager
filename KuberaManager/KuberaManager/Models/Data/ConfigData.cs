@@ -27,6 +27,7 @@ namespace KuberaManager.Models.Data
             new KeyData("InstalledConfigVersion", 1),
             new KeyData("RspeerApiKey1", 1),
             new KeyData("DiscordApiKey", 1),
+            new KeyData("AdminPassHash", 2),
         };
     }
 }

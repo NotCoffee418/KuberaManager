@@ -33,6 +33,12 @@ namespace KuberaManager.Controllers
                     // Return view
                     ViewBag.Notification = "New config values have been added. Please define them";
                 }
+                else Config.CheckUpdateConfigVersion();
+
+                // Redirect to set admin password page if password isn't defined yet
+                string adminPassHash = Config.Get<string>("AdminPassHash");
+                if (adminPassHash == null || adminPassHash == "")
+                    return Redirect("/config/changeadminpass");
             }
             catch (Exception ex)
             {

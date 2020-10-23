@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using System.IO;
 using KuberaManager.Models.Database;
+using KuberaManager.Models.Data;
 
 namespace KuberaManager.Controllers
 {
@@ -29,6 +30,11 @@ namespace KuberaManager.Controllers
                         ViewBag.Notification = "InstalledConfigVersion cannot be manually updated. No changes were saved.";
                         break;
 
+                    case "AdminPassHash":
+                        ViewBag.Notification = "Admin password must be changed through the admin password page. No changes were saved";
+                        break;
+
+
                     default: // Update value in db
                         Config.Set<string>(config.ConfKey, config.ConfValue);
                         break;
@@ -50,15 +56,46 @@ namespace KuberaManager.Controllers
         [HttpGet("Config/Edit/{confKey}")]
         public IActionResult Edit(string confKey)
         {
-            string confValue = Config.Get<string>(confKey);
+            // Load current config value
+            string confValue = "";
+            
+            // Handle exceptions
+            switch (confKey)
+            {
+                case "AdminPassHash":
+                    return Redirect("/Config/ChangeAdminPass");
+
+                default:
+                    Config.Get<string>(confKey);
+                    break;
+
+            }
+
+            // Preload form
             Config newConf = new Config()
             {
                 ConfKey = confKey,
                 ConfValue = confValue
             };
-
             return View(newConf);
         }
 
+        [HttpGet]
+        public IActionResult ChangeAdminPass()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult ChangeAdminPass(AdminPassword adminPass)
+        {
+            if (ModelState.IsValid)
+            {
+                ViewBag.Notification = "Admin password successfully updated";
+                Config.Set<string>("AdminPassHash", adminPass.GetPasswordHash());
+            }
+
+            return View();
+        }
     }
 }
