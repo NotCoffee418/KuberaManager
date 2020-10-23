@@ -21,14 +21,22 @@ namespace KuberaManager.Controllers
 
         public IActionResult Index()
         {
-            // Redirect to config page on first run or DB update
-            if (Config.Get<int>("InstalledConfigVersion") == 0)
+            // Validate database setup & config version
+            try
             {
-                // Prepare Config table
-                Config.CheckUpdateConfigVersion();
+                // Redirect to config page on first run or DB update
+                if (Config.Get<int>("InstalledConfigVersion") == 0)
+                {
+                    // Prepare Config table
+                    Config.CheckUpdateConfigVersion();
 
-                // Return view
-                ViewBag.Notification = "New config values have been added. Please define them";
+                    // Return view
+                    ViewBag.Notification = "New config values have been added. Please define them";
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Notification = ex.Message;
             }
 
 
