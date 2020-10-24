@@ -69,6 +69,22 @@ namespace KuberaManager.Controllers.Api
                     relevantSession.IsFinished = true;
                     break;
 
+                case "report-banned":
+                    // Update banned state in database
+                    using (var db = new kuberaDbContext())
+                    {
+                        Account acct = db.Accounts
+                            .Where(x => x.Id == relevantSession.AccountId)
+                            .FirstOrDefault();
+                        if (acct != null)
+                        {
+                            acct.IsBanned = true;
+                            db.SaveChanges();
+                        }
+                    }
+                    relevantSession.IsFinished = true;
+                    break;
+
                 case "discord-notify":
                     if (input.Details == null || input.Details == "")
                     {

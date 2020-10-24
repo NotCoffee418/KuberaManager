@@ -20,6 +20,10 @@ namespace KuberaManager.Models.Database
         [PasswordPropertyText]
         public string Password { get; set; }
 
+        [Required]
+        [DefaultValue(false)]
+        public bool IsBanned { get; set; }
+
         [Range(0, 23)]
         [DefaultValue(0)]
         [Display(Name = "Start Time of Day", Description = "Preferred time of the day to start 0-23. Logic is that an account should have consistent playing habits.")]
