@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using KuberaManager.Models.Data.RspeerApiStructure;
 using KuberaManager.Models.Database;
 using Newtonsoft.Json;
 
@@ -24,15 +25,32 @@ namespace KuberaManager.Models.Logic
 
         }
 
-        public static Computer[] GetConnectedComputers()
+        // Store in memory during this request
+        private static ConnectedComputers storedConnectedComputers = null;
+        public static ConnectedComputers GetConnectedComputers()
         {
-            // API key in request functions!
-            throw new NotImplementedException();
+            if (storedConnectedComputers == null)
+            {
+                string response = RspeerGetRequest("api/botLauncher/connected")
+                    .GetAwaiter().GetResult();
+
+                storedConnectedComputers = JsonConvert.DeserializeObject<ConnectedComputers>(response);
+            }
+            return storedConnectedComputers;
         }
 
-        public static Session[] GetActiveSessions()
+        // Store in memory during this request
+        private static ConnectedClients storedConnectedClients = null;
+        public static ConnectedClients GetConnectedClients()
         {
-            throw new NotImplementedException();
+            if (storedConnectedClients == null)
+            {
+                string response = RspeerGetRequest("api/botLauncher/connectedClients")
+                    .GetAwaiter().GetResult();
+
+                var data = JsonConvert.DeserializeObject<ConnectedClients>(response);
+            }
+            return storedConnectedClients;
         }
 
 
@@ -49,7 +67,7 @@ namespace KuberaManager.Models.Logic
             using (var client = new HttpClient())
             {
                 var request = new HttpRequestMessage(HttpMethod.Post, new Uri($"https://services.rspeer.org/{path}"));
-                /////////////////request.Headers.Add("ApiClient", "fuck");
+                request.Headers.Add("ApiClient", Config.Get<string>("RspeerApiKey1"));
                 request.Content = new StringContent(json, Encoding.UTF8, "application/json"); ;
                 var response = await client.SendAsync(request);
             }
@@ -61,7 +79,7 @@ namespace KuberaManager.Models.Logic
             using (var client = new HttpClient())
             {
                 var request = new HttpRequestMessage(HttpMethod.Get, new Uri($"https://services.rspeer.org/{path}"));
-                /////////////////request.Headers.Add("ApiClient", "Value");
+                request.Headers.Add("ApiClient", Config.Get<string>("RspeerApiKey1"));
                 var response = await client.SendAsync(request);
                 string json = await response.Content.ReadAsStringAsync();
                 result = JsonConvert.DeserializeObject(json);

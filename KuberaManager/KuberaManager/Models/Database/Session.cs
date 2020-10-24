@@ -1,4 +1,5 @@
-﻿using System;
+﻿using KuberaManager.Models.Logic;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -44,14 +45,62 @@ namespace KuberaManager.Models.Database
         /// Find Session based on RS login email
         /// </summary>
         /// <param name="runescapeaccount"></param>
-        /// <returns>null or account</returns>
+        /// <returns>null or session</returns>
         public static Session FromAccount(string runescapeaccount)
         {
-            // todos
-            // ensure latest session only
-            // ensure session id makes sense (no ancient ID)
-            // Create session if it doesn't exist (and fill in id threaded)
-            throw new NotImplementedException();
+            // Get runescape account
+            Account account = Account.FromLogin(runescapeaccount);
+
+            // Attempt to find existing session or create new one
+            using (var db = new kuberaDbContext())
+            {
+                Session foundSession = db.Sessions
+                    .Where(x => x.IsFinished == false)
+                    .Where(x => x.AccountId == account.Id)
+                    .Where(x => x.LastUpdateTime < DateTime.Now.AddHours(-1)) // last update must be less than an hour old.
+                    .OrderByDescending(x => x.LastUpdateTime)
+                    .FirstOrDefault();
+
+                // if session is known, change LastUpdateTime and return
+                if (foundSession != null)
+                {
+                    foundSession.LastUpdateTime = DateTime.Now;
+                    db.SaveChanges();
+                    return foundSession;
+                }
+            }
+
+            /// We're still here. Session was not found. Create new one & return.
+            // Determine Get relevant session data
+            var sessionCd = ClientManager.GetConnectedClients()
+                .Where(x => x.runescapeEmail == runescapeaccount)
+                .First(); // first or error
+
+            // Determine relevant computer
+            var computerKvp = ClientManager.GetConnectedComputers()
+                .Where(x => x.Value.host == sessionCd.machineName)
+                .First(); // first or error
+
+            // Prepare new session var
+            Session sess = new Session()
+            {
+                AccountId = account.Id,
+                IsFinished = false,
+                StartTime = DateTime.Now,
+                LastUpdateTime = DateTime.Now,
+                TargetDuration = Brain.GetTargetDuration(account),
+                RspeerSessionTag = sessionCd.tag,
+                ActiveComputer = Computer.ByHostname(sessionCd.machineName).Id
+            };
+            
+            // Save new session to database & return
+            using (var db = new kuberaDbContext())
+            {
+                db.Sessions.Add(sess);
+                db.SaveChanges();
+            }
+
+            return sess;
         }
 
         #endregion

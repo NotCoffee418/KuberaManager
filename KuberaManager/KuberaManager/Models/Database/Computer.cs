@@ -32,5 +32,10 @@ namespace KuberaManager.Models.Database
 
         [DefaultValue(true)]
         public bool DisableSceneRendering { get; set; }
+
+        public static Computer ByHostname(string hostName)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

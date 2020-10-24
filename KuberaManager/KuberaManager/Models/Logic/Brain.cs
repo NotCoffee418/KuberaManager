@@ -12,5 +12,10 @@ namespace KuberaManager.Models.Logic
         {
             throw new NotImplementedException();
         }
+
+        public static TimeSpan GetTargetDuration(Account account)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

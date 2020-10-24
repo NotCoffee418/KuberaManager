@@ -33,5 +33,9 @@ namespace KuberaManager.Models.Database
         [Display(Name = "Preferred Activities", Description = "Will perform these actions unless manually overwritten.")]
         public List<Scenario> PreferredActivities { get; set; }
 
+        internal static Account FromLogin(string runescapeaccount)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
