@@ -63,11 +63,5 @@ namespace KuberaManagerUnitTests
             int intResult = Config.Get<int>("testKey");
             Assert.AreEqual(intResult, 123);
         }
-
-        [Test]
-        public void GithubFailTest()
-        {
-            Assert.Fail();
-        }
     }
 }
