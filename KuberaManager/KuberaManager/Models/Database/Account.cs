@@ -1,4 +1,5 @@
 ﻿using KuberaManager.Models.Logic;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -17,7 +18,7 @@ namespace KuberaManager.Models.Database
         [Required]
         public string Login { get; set; }
 
-        [Required]
+        [AllowNull]
         [PasswordPropertyText]
         public string Password { get; set; }
 
@@ -68,6 +69,126 @@ namespace KuberaManager.Models.Database
                 DiscordHandler.PostMessage($"New account '{runescapeaccount}' detected. You must manually define the password & enabled before Brain will assign tasks to it.");
 
             return result;
+        }
+
+
+        /// <summary>
+        /// Gets an available account, keeping in mind PrefStartTimeDay 
+        /// </summary>
+        /// <returns></returns>
+        public static Account GetAvailableAccount()
+        {
+            TimeSpan maxTimePerDayPerAcc = TimeSpan.FromHours(Config.Get<int>("MaxHoursPerDay"));
+            using (var db = new kuberaDbContext())
+            {
+                return db.Accounts
+                    // Enabled and not banned
+                    .Where(x => !x.IsBanned && x.IsEnabled)
+
+                    // Password is defined
+                    .Where(x => x.Password != null && x.Password != "")
+
+                    // Within preferred time
+                    .Where(x => x.PrefStartTimeDay >= DateTime.Now.Hour)
+                    .Where(x => x.PrefStopTimeDay <= DateTime.Now.Hour)
+
+                    // Isn't currently playing
+                    .Where(x => x.GetActiveSession() == null)
+
+                    // Hasn't reached the maximum allocated time for the day
+                    .Where(x => x.GetTodayPlayedTime() < maxTimePerDayPerAcc)
+
+                    // Prefer accounts with narrowed down playable timespans
+                    .OrderBy(x => x.PrefStopTimeDay - x.PrefStartTimeDay)
+
+                    // Prefer least played account today
+                    .ThenBy(x => x.GetTodayPlayedTime())
+                    .FirstOrDefault();
+            }
+        }
+
+
+
+        /// <summary>
+        /// Stored since it's it's an intensive operation 
+        /// and is called twice by GetAvailableAccount()
+        /// </summary>
+        private Nullable<TimeSpan> _todayPlayedTime = null;
+        private TimeSpan GetTodayPlayedTime()
+        {
+            // Get value if already calculated
+            if (_todayPlayedTime.HasValue)
+                return _todayPlayedTime.Value;
+
+
+            // one day var
+            DateTime dayAgo = DateTime.Now.AddDays(-1);
+
+            double totalSeconds = 0;
+            using (var db = new kuberaDbContext())
+            {
+                /// Calculate time played from finished sessions
+                totalSeconds = db.Sessions
+                    .Where(x => x.AccountId == this.Id)
+
+                    // Only include finished sessions in first check
+                    .Where(x => x.IsFinished)
+
+                    // if session started within the past day
+                    .Where(x => x.StartTime > dayAgo)
+
+                    // Sum of relevant durations
+                    .Sum(x => x.TargetDuration.TotalSeconds);
+
+
+                /// Append session that was ongoing 24 hours ago
+                var possiblyOngoingYday = db.Sessions
+                    .Where(x => x.AccountId == this.Id)
+                    .Where(x => x.IsFinished)
+
+                    // Grab first session based on END time
+                    .Where(x => x.StartTime.Add(x.TargetDuration) > dayAgo)
+                    .OrderBy(x => x.StartTime)
+                    .FirstOrDefault();
+
+                // Only if start time wasn't already included in previous calculation
+                if (possiblyOngoingYday != null && possiblyOngoingYday.StartTime < dayAgo)
+                {
+                    // Amount of time that should be subtracted from the target duration
+                    TimeSpan offset = dayAgo.Subtract(possiblyOngoingYday.StartTime);
+
+                    // Append the result to totalSeconds
+                    totalSeconds += possiblyOngoingYday.TargetDuration.Subtract(offset).TotalSeconds;
+                }
+
+                /// Append active session if any
+                Session activeSession = GetActiveSession();
+                if (activeSession != null)
+                {
+                    // Add time since we started to totalSeconds
+                    totalSeconds += DateTime.Now.Subtract(activeSession.StartTime).TotalSeconds;
+                }
+            }
+
+            // Store in memory & return
+            _todayPlayedTime = TimeSpan.FromSeconds(totalSeconds);
+            return _todayPlayedTime.Value;
+        }
+
+        /// <summary>
+        /// If this account has a session not flagged as IsFinished
+        /// </summary>
+        /// <returns></returns>
+        private Session GetActiveSession()
+        {
+            using (var db = new kuberaDbContext())
+            {
+                return db.Sessions
+                    .Where(x => x.AccountId == this.Id)
+                    .Where(x => !x.IsFinished)
+                    .OrderByDescending(x => x.StartTime) // Should only be one but bugs exist
+                    .FirstOrDefault();
+            }
         }
     }
 }

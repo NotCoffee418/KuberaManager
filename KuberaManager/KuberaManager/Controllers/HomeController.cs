@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using KuberaManager.Models;
 using KuberaManager.Models.Database;
+using KuberaManager.Models.Logic;
 
 namespace KuberaManager.Controllers
 {
@@ -32,6 +33,7 @@ namespace KuberaManager.Controllers
 
                     // Return view
                     ViewBag.Notification = "New config values have been added. Please define them";
+                    DiscordHandler.PostMessage("KuberaManager has been updated and new config values have been added. Manually define them or stuff will break.");
                 }
                 else Config.CheckUpdateConfigVersion();
 
