@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace KuberaManagerUnitTests
 {
-    public class Tests
+    public class ConfigTests
     {
         [SetUp]
         public void Setup()
@@ -31,8 +31,7 @@ namespace KuberaManagerUnitTests
         {
             using (var db = new kuberaDbContext())
             {
-                db.Configs.Remove(db.Configs.Where(x => x.ConfKey == "testKey").FirstOrDefault());
-                db.SaveChanges();
+                db.Database.EnsureDeleted();
             }
         }
 

@@ -43,7 +43,7 @@ namespace KuberaManager.Models.Database
         [Display(Name = "Preferred Activities", Description = "Will perform these actions unless manually overwritten.")]
         public List<Scenario> PreferredActivities { get; set; }
 
-        internal static Account FromLogin(string runescapeaccount)
+        public static Account FromLogin(string runescapeaccount)
         {
             Account result = null;
             bool newCreated = false;
@@ -103,6 +103,8 @@ namespace KuberaManager.Models.Database
 
                     // Prefer least played account today
                     .ThenBy(x => x.GetTodayPlayedTime())
+
+                    .ToList() // Required for some reason
                     .FirstOrDefault();
             }
         }
@@ -114,7 +116,7 @@ namespace KuberaManager.Models.Database
         /// and is called twice by GetAvailableAccount()
         /// </summary>
         private Nullable<TimeSpan> _todayPlayedTime = null;
-        private TimeSpan GetTodayPlayedTime()
+        public TimeSpan GetTodayPlayedTime()
         {
             // Get value if already calculated
             if (_todayPlayedTime.HasValue)
