@@ -22,11 +22,9 @@ namespace KuberaManager.Models.Database
         [AllowNull]
         public string RspeerSessionTag { get; set; }
 
-
         [AllowNull]
         [ForeignKey("Computer")]
         public int ActiveComputer { get; set; }
-
 
         [Required]
         public TimeSpan TargetDuration { get; set; }
@@ -101,6 +99,21 @@ namespace KuberaManager.Models.Database
             }
 
             return sess;
+        }
+
+        internal void ReportFinished()
+        {
+            using (var db = new kuberaDbContext())
+            {
+                Session dbSess = db.Sessions
+                    .Where(x => x.Id == this.Id)
+                    .FirstOrDefault();
+                if (dbSess != null)
+                {
+                    dbSess.IsFinished = true;
+                    db.SaveChanges();
+                }
+            }
         }
 
         #endregion

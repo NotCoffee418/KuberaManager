@@ -54,7 +54,7 @@ namespace KuberaManager.Controllers.Api
             if (input.Errors.Count > 0)
             {
                 output.Errors.Add("Recieved an error from the client. End session.");
-                relevantSession.IsFinished = true;
+                relevantSession.ReportFinished();
                 return output;
             }
 
@@ -66,7 +66,7 @@ namespace KuberaManager.Controllers.Api
                     break;
 
                 case "stopping":
-                    relevantSession.IsFinished = true;
+                    relevantSession.ReportFinished();
                     break;
 
                 case "report-banned":
@@ -82,7 +82,7 @@ namespace KuberaManager.Controllers.Api
                             db.SaveChanges();
                         }
                     }
-                    relevantSession.IsFinished = true;
+                    relevantSession.ReportFinished();
                     break;
 
                 case "discord-notify":
@@ -96,7 +96,7 @@ namespace KuberaManager.Controllers.Api
 
                 default:
                     output.Errors.Add("NANI!?");
-                    relevantSession.IsFinished = true;
+                    relevantSession.ReportFinished();
                     break;
             }
 
