@@ -17,6 +17,8 @@ namespace KuberaManager.Models.Database
         {
         }
 
+        public static bool IsUnitTesting { get; set; }
+
         public virtual DbSet<Config> Configs { get; set; }
         public virtual DbSet<Account> Accounts { get; set; }
         public virtual DbSet<Computer> Computers { get; set; }
@@ -27,12 +29,18 @@ namespace KuberaManager.Models.Database
         {
             if (!optionsBuilder.IsConfigured)
             {
-                //optionsBuilder.UseNpgsql("Server=127.0.0.1;Port=5432;Database=kuberamanagerdev;User Id=postgres;Password=postgres");
-                IConfigurationRoot configuration = new ConfigurationBuilder()
-                    .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
-                    .AddJsonFile("appsettings.json")
-                    .Build();
-                optionsBuilder.UseNpgsql(configuration.GetConnectionString("DefaultConnection"));
+                if (IsUnitTesting)
+                {
+                    optionsBuilder.UseInMemoryDatabase("KuberaMgrUnitTestDb");
+                }
+                else
+                {
+                    IConfigurationRoot configuration = new ConfigurationBuilder()
+                        .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+                        .AddJsonFile("appsettings.json")
+                        .Build();
+                    optionsBuilder.UseNpgsql(configuration.GetConnectionString("DefaultConnection"));
+                }
             }
         }
 
