@@ -1,4 +1,5 @@
-﻿using System;
+﻿using KuberaManager.Models.Logic;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -21,6 +22,10 @@ namespace KuberaManager.Models.Database
         public string Password { get; set; }
 
         [Required]
+        [DefaultValue(true)]
+        public bool IsEnabled { get; set; }
+
+        [Required]
         [DefaultValue(false)]
         public bool IsBanned { get; set; }
 
@@ -39,7 +44,30 @@ namespace KuberaManager.Models.Database
 
         internal static Account FromLogin(string runescapeaccount)
         {
-            throw new NotImplementedException();
+            Account result = null;
+            bool newCreated = false;
+            using (var db = new kuberaDbContext())
+            {
+                result = db.Accounts
+                    .Where(x => x.Login == runescapeaccount)
+                    .FirstOrDefault();
+                if (result == null)
+                {
+                    // Account was manually opened. Adding to database without password
+                    result = new Account()
+                    {
+                        Login = runescapeaccount,
+                        IsEnabled = false,
+                    };
+                    db.Accounts.Add(result);
+                }
+            }
+
+            // Report to discord
+            if (newCreated)
+                DiscordHandler.PostMessage($"New account '{runescapeaccount}' detected. You must manually define the password & enabled before Brain will assign tasks to it.");
+
+            return result;
         }
     }
 }
