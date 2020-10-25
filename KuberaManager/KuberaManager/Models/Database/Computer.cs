@@ -18,6 +18,11 @@ namespace KuberaManager.Models.Database
         public string Hostname{ get; set; }
 
         [Required]
+        [DefaultValue(false)]
+        [Display(Description = "Indicates if bots should be automatically assigned to this computer")]
+        public bool IsEnabled { get; set; }
+
+        [Required]
         [DefaultValue(3)]
         [Display(Name = "Max Clients", Description = "0 for unlimited")]
         public int MaxClients { get; set; }
@@ -33,6 +38,7 @@ namespace KuberaManager.Models.Database
 
         [DefaultValue(true)]
         public bool DisableSceneRendering { get; set; }
+
 
         public static Computer ByHostname(string hostName)
         {
@@ -59,8 +65,39 @@ namespace KuberaManager.Models.Database
 
             // Send discord notification if this computer is new
             DiscordHandler.PostMessage(
-                $"New computer '{hostName}' has been added to the database. Change the config in KuberaManager as needed.");
+                $"New computer '{hostName}' has been added to the database. You must manually enable & configure it before it is used.");
             return comp;
+        }
+
+
+        /// <summary>
+        /// Returns an available computer to use for a new session
+        /// </summary>
+        /// <returns>computer or null</returns>
+        public static Computer GetAvailableComputer()
+        {
+            var connectedComputers = ClientManager.GetConnectedComputers();
+            Computer result = null;
+            using (var db = new kuberaDbContext())
+            {
+                result = db.Computers
+                    // Only if confifured to be on
+                    .Where(x => x.IsEnabled)
+
+                    // Only if we haven't reached the max allowed sessions on that computer yet
+                    .Where(x => db.Sessions
+                        .Where(y => y.IsFinished == false)
+                        .Where(y => y.ActiveComputer == x.Id)
+                        .Count() < x.MaxClients)
+
+                    // Only if the computer is currently connected
+                    .Where(x => connectedComputers.Values
+                        .Where(z => z.host == x.Hostname).Count() > 0)
+
+                    // Return first (no priority implemented atm)
+                    .FirstOrDefault();
+            }
+            return result;
         }
 
         /// <summary>
@@ -73,5 +110,7 @@ namespace KuberaManager.Models.Database
                 .Where(x => x.Value.host == Hostname)
                 .FirstOrDefault().Key;
         }
+
+
     }
 }

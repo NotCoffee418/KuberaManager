@@ -17,5 +17,19 @@ namespace KuberaManager.Models.Logic
         {
             throw new NotImplementedException();
         }
+
+        // input args etc need to be defined
+        // false means we can't do it for some reason
+        public static bool StartNewClient()
+        {
+            // Get available computer. return if none is available
+            Computer availableComputer = Computer.GetAvailableComputer();
+            if (availableComputer == null)
+                return false;
+
+            //
+
+            throw new NotImplementedException();
+        }
     }
 }
