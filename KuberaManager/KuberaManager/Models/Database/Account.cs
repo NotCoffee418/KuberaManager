@@ -33,12 +33,12 @@ namespace KuberaManager.Models.Database
         [Range(0, 23)]
         [DefaultValue(0)]
         [Display(Name = "Start Time of Day", Description = "Preferred time of the day to start 0-23. Logic is that an account should have consistent playing habits.")]
-        public int PrefStartTimeDay { get; set; }
+        public int PrefStartTimeDay { get; set; } = 0;
 
         [Range(0, 23)]
         [DefaultValue(23)]
         [Display(Name = "Stop Time of Day", Description = "Preferred time of the day to stop 0-23. Logic is that an account should have consistent playing habits.")]
-        public int PrefStopTimeDay { get; set; }
+        public int PrefStopTimeDay { get; set; } = 23;
 
         [Display(Name = "Preferred Activities", Description = "Will perform these actions unless manually overwritten.")]
         public List<Scenario> PreferredActivities { get; set; }
@@ -78,10 +78,15 @@ namespace KuberaManager.Models.Database
         /// <returns></returns>
         public static Account GetAvailableAccount()
         {
+            // Define maxTimePerDayPerAcc from config
             TimeSpan maxTimePerDayPerAcc = TimeSpan.FromHours(Config.Get<int>("MaxHoursPerDay"));
+            if (maxTimePerDayPerAcc == TimeSpan.FromSeconds(0))
+                maxTimePerDayPerAcc = TimeSpan.FromHours(25);
+
+            // Find eligible account
             using (var db = new kuberaDbContext())
             {
-                return db.Accounts
+                var result = db.Accounts
                     // Enabled and not banned
                     .Where(x => !x.IsBanned && x.IsEnabled)
 
@@ -89,9 +94,13 @@ namespace KuberaManager.Models.Database
                     .Where(x => x.Password != null && x.Password != "")
 
                     // Within preferred time
-                    .Where(x => x.PrefStartTimeDay >= DateTime.Now.Hour)
-                    .Where(x => x.PrefStopTimeDay <= DateTime.Now.Hour)
+                    .Where(x => x.PrefStartTimeDay <= DateTime.Now.Hour)
+                    //.Where(x => x.PrefStopTimeDay >= DateTime.Now.Hour)
 
+                    // Complete DB query
+                    .ToList();
+
+                return result // Continue outside of db
                     // Isn't currently playing
                     .Where(x => x.GetActiveSession() == null)
 
@@ -181,7 +190,7 @@ namespace KuberaManager.Models.Database
         /// If this account has a session not flagged as IsFinished
         /// </summary>
         /// <returns></returns>
-        private Session GetActiveSession()
+        public Session GetActiveSession()
         {
             using (var db = new kuberaDbContext())
             {

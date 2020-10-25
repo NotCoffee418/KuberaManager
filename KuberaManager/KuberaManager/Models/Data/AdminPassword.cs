@@ -17,10 +17,6 @@ namespace KuberaManager.Models.Data
         [StringLength(30, MinimumLength = 8)]
         public string AdminPassPlain { get; set; }
 
-
-
-
-        private static ISession session;
         private PasswordHasher<string> pw = new PasswordHasher<string>();
 
         public string GetPasswordHash()

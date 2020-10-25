@@ -3,7 +3,6 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace KuberaManagerUnitTests
 {
@@ -90,19 +89,83 @@ namespace KuberaManagerUnitTests
         }
 
         [Test]
+        public void GetActiveSession_HasActiveSession_ExpectSession()
+        {
+            // create mock account
+            _TestHelper.DbCreateMockAccounts(1);
+            
+            // Create ongoing session
+            _TestHelper.DbCreateMockSession(1, true, DateTime.Now.AddHours(-1), TimeSpan.FromHours(2), isFinished:false);
+
+            // Find thee account
+            Account acct = Account.FromLogin("testAccount1@mockup.fake");
+
+            //Get active session
+            Session sess = acct.GetActiveSession();
+
+            // Assert
+            Assert.NotNull(sess);
+            Assert.IsInstanceOf<Session>(sess);
+        }
+
+        [Test]
         public void GetAvailableAccount_NoAccountsExist_ExpectNull()
         {
-            _TestHelper.DbCreateMockAccounts(0,0);
+            _TestHelper.DbCreateMockAccounts(0, 0);
             Account acc = Account.GetAvailableAccount();
             Assert.IsNull(acc);
         }
+
+        [Test]
+        public void GetAvailableAccount_AllAccountsBanned_ExpectNull()
+        {
+            _TestHelper.DbCreateMockAccounts(0, 2);
+            Account acc = Account.GetAvailableAccount();
+            Assert.IsNull(acc);
+        }
+
+        [Test]
         public void GetAvailableAccount_AllAccountsBusy_ExpectNull()
         {
-            throw new NotImplementedException();
+            // Create mock account
+            _TestHelper.DbCreateMockAccounts(1, 0);
+            // Create ongoing session
+            _TestHelper.DbCreateMockSession(1, true, DateTime.Now.AddHours(-1), TimeSpan.FromHours(2), isFinished:false);
+            // Set max hours per day
+            Config.Set<int>("MaxHoursPerDay", 8);
+
+
+            // TEZSTDEL
+            Account accTEE = Account.FromLogin("testAccount1@mockup.fake");
+
+            // All accounts should be busy
+            Account acc = Account.GetAvailableAccount();
+            Assert.IsNull(acc);
         }
+
+        [Test]
         public void GetAvailableAccount_AccountAvailable_ExpectAccount()
         {
-            throw new NotImplementedException();
+            // Variables
+            _TestHelper.DbCreateMockAccounts(2,0);
+            Config.Set<int>("MaxHoursPerDay", 8);
+
+            // Assert
+            Account acc = Account.GetAvailableAccount();
+            Assert.NotNull(acc);
+            Assert.IsInstanceOf(typeof(Account), acc);
+        }
+
+        [Test]
+        public void GetAvailableAccount_AccountAvailableUnlimitedHoursPerDay_ExpectAccount()
+        {
+            // Variables
+            _TestHelper.DbCreateMockAccounts(2, 0);
+            Config.Set<int>("MaxHoursPerDay", 0);
+
+            // Assert
+            Account acc = Account.GetAvailableAccount();
+            Assert.IsInstanceOf(typeof(Account), acc);
         }
     }
 }

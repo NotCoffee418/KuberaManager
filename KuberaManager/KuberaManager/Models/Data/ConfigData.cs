@@ -32,7 +32,7 @@ namespace KuberaManager.Models.Data
             new KeyData("RspeerApiKey1", 1),
             new KeyData("DiscordApiKey", 1, "Channel webhook"),
             new KeyData("AdminPassHash", 2, "Edit brings you to change password page"),
-            new KeyData("MaxHoursPerDay", 3, "Maximum hours per day an account will run"),
+            new KeyData("MaxHoursPerDay", 3, "Maximum hours per day an account will run."),
         };
     }
 }

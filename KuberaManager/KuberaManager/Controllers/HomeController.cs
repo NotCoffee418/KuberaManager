@@ -25,18 +25,6 @@ namespace KuberaManager.Controllers
             // Validate database setup & config version
             try
             {
-                // Redirect to config page on first run or DB update
-                if (Config.Get<int>("InstalledConfigVersion") == 0)
-                {
-                    // Prepare Config table
-                    Config.CheckUpdateConfigVersion();
-
-                    // Return view
-                    ViewBag.Notification = "New config values have been added. Please define them";
-                    DiscordHandler.PostMessage("KuberaManager has been updated and new config values have been added. Manually define them or stuff will break.");
-                }
-                else Config.CheckUpdateConfigVersion();
-
                 // Redirect to set admin password page if password isn't defined yet
                 string adminPassHash = Config.Get<string>("AdminPassHash");
                 if (adminPassHash == null || adminPassHash == "")
@@ -46,7 +34,6 @@ namespace KuberaManager.Controllers
             {
                 ViewBag.Notification = ex.Message;
             }
-
 
             return View();
         }

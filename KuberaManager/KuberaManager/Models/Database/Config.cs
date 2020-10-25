@@ -11,6 +11,11 @@ namespace KuberaManager.Models.Database
 {
     public class Config
     {
+        static Config()
+        {
+            CheckUpdateConfigVersion();
+        }
+
         [Key]
         public string ConfKey { get; set; }
 

@@ -25,19 +25,19 @@ namespace KuberaManager.Models.Database
         [Required]
         [DefaultValue(3)]
         [Display(Name = "Max Clients", Description = "0 for unlimited")]
-        public int MaxClients { get; set; }
+        public int MaxClients { get; set; } = 3;
 
         [DefaultValue(true)]
-        public bool LowCpuMode { get; set; }
+        public bool LowCpuMode { get; set; } = true;
 
         [DefaultValue(true)]
-        public bool SuperLowCpuMode { get; set; }
+        public bool SuperLowCpuMode { get; set; } = true;
 
         [DefaultValue(true)]
-        public bool DisableModelRendering { get; set; }
+        public bool DisableModelRendering { get; set; } = true;
 
         [DefaultValue(true)]
-        public bool DisableSceneRendering { get; set; }
+        public bool DisableSceneRendering { get; set; } = true;
 
 
         public static Computer ByHostname(string hostName)

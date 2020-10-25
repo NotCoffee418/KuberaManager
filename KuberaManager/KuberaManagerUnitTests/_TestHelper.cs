@@ -46,7 +46,7 @@ namespace KuberaManagerUnitTests
         }
 
 
-        internal static void DbCreateMockSession(int acctId, bool wasToday, DateTime? overrideStartTime = null, TimeSpan? overrideDuration = null)
+        internal static void DbCreateMockSession(int acctId, bool wasToday, DateTime? overrideStartTime = null, TimeSpan? overrideDuration = null, bool isFinished = true)
         {
             kuberaDbContext.IsUnitTesting = true;
 
@@ -70,7 +70,7 @@ namespace KuberaManagerUnitTests
                     ActiveComputer = 1,
                     TargetDuration = overrideDuration.HasValue ? overrideDuration.Value : TimeSpan.FromHours(1),
                     StartTime = startTime,
-                    IsFinished = true,
+                    IsFinished = isFinished,
                 });
 
                 // Save
