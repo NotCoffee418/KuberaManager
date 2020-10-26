@@ -1,0 +1,62 @@
+﻿@model KuberaManager.Models.Database.Computer
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Edit</h1>
+
+<h4>Computer</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="Hostname" class="control-label"></label>
+                <input asp-for="Hostname" class="form-control" />
+                <span asp-validation-for="Hostname" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="IsEnabled" /> @Html.DisplayNameFor(model => model.IsEnabled)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="MaxClients" class="control-label"></label>
+                <input asp-for="MaxClients" class="form-control" />
+                <span asp-validation-for="MaxClients" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="LowCpuMode" /> @Html.DisplayNameFor(model => model.LowCpuMode)
+                </label>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="SuperLowCpuMode" /> @Html.DisplayNameFor(model => model.SuperLowCpuMode)
+                </label>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="DisableModelRendering" /> @Html.DisplayNameFor(model => model.DisableModelRendering)
+                </label>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="DisableSceneRendering" /> @Html.DisplayNameFor(model => model.DisableSceneRendering)
+                </label>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

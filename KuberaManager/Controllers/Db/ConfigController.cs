@@ -8,7 +8,7 @@ using KuberaManager.Models.Database;
 using KuberaManager.Models.Data;
 using Microsoft.AspNetCore.Authorization;
 
-namespace KuberaManager.Controllers
+namespace KuberaManager.Controllers.Db
 {
     [Authorize(Roles = "Admin")]
     public class ConfigController : Controller
