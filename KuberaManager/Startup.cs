@@ -44,9 +44,9 @@ namespace KuberaManager
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
             .AddCookie(options =>
             {
-                options.AccessDeniedPath = new PathString("/Account/Login");
-                options.LoginPath = new PathString("/Account/Login");
-                options.LogoutPath = new PathString("/Account/Logout");
+                options.AccessDeniedPath = new PathString("/Admin/Login");
+                options.LoginPath = new PathString("/Admin/Login");
+                options.LogoutPath = new PathString("/Admin/Logout");
             });
 
             // controller/views

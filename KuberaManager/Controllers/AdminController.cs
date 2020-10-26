@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace KuberaManager.Controllers
 {
     [Authorize]
-    public class AccountController : Controller
+    public class AdminController : Controller
     {
         [AllowAnonymous]
         public IActionResult Login()
@@ -23,7 +23,6 @@ namespace KuberaManager.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        [Route("/Account/Login")]
         public async Task<ActionResult> Login(AdminPassword viewModel, string ReturnUrl)
         {
 
