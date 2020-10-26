@@ -7,7 +7,7 @@ namespace KuberaManager.Models.Data.RspeerApiStructure
 {
     public class ConnectedClients : List<ConnectedClients.ClientData>
     {
-        public struct ClientData
+        public class ClientData
         {
             public string machineName { get; set; }
             public string runescapeEmail { get; set; }

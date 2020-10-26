@@ -15,7 +15,8 @@ namespace KuberaManager.Models.Logic
 
         public static TimeSpan GetTargetDuration(Account account)
         {
-            throw new NotImplementedException();
+            return TimeSpan.FromMinutes(5);
+            //throw new NotImplementedException();
         }
 
         // input args etc need to be defined

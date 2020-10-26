@@ -71,12 +71,12 @@ namespace KuberaManager.Models.Database
             /// We're still here. Session was not found. Create new one & return.
             // Determine Get relevant session data
             var sessionCd = ClientManager.GetConnectedClients()
-                .Where(x => x.runescapeEmail == runescapeaccount)
+                .Where(x => x.runescapeEmail.ToLower() == runescapeaccount.ToLower())
                 .First(); // first or error
 
             // Determine relevant computer
             var computerKvp = ClientManager.GetConnectedComputers()
-                .Where(x => x.Value.host == sessionCd.machineName)
+                .Where(x => x.Value.host.ToLower() == sessionCd.machineName.ToLower())
                 .First(); // first or error
 
             // Prepare new session var

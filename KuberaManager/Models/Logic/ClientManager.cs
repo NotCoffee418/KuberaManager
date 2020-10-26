@@ -12,10 +12,13 @@ namespace KuberaManager.Models.Logic
 {
     public class ClientManager
     {
-        public static void StartClient(Account account, Computer computer)
+        public static void StartClient(Account account, Computer computer, int world = -1, string overrideScriptStartupArgs = "")
         {
-            throw new NotImplementedException();
-            // API key in request functions!
+            // Prepare data
+            BotLauncherRequest req = new BotLauncherRequest(account, computer, world, overrideScriptStartupArgs);
+            
+            // Send request
+            RspeerPostRequest("api/botLauncher/send", req).GetAwaiter().GetResult();
         }
 
         public static void StopClient(Session session)
@@ -31,10 +34,8 @@ namespace KuberaManager.Models.Logic
         {
             if (storedConnectedComputers == null)
             {
-                string response = RspeerGetRequest("api/botLauncher/connected")
-                    .GetAwaiter().GetResult();
-
-                storedConnectedComputers = JsonConvert.DeserializeObject<ConnectedComputers>(response);
+                storedConnectedComputers = RspeerGetRequest<ConnectedComputers>
+                    ("api/botLauncher/connected").GetAwaiter().GetResult();
             }
             return storedConnectedComputers;
         }
@@ -45,10 +46,8 @@ namespace KuberaManager.Models.Logic
         {
             if (storedConnectedClients == null)
             {
-                string response = RspeerGetRequest("api/botLauncher/connectedClients")
-                    .GetAwaiter().GetResult();
-
-                var data = JsonConvert.DeserializeObject<ConnectedClients>(response);
+                storedConnectedClients = RspeerGetRequest<ConnectedClients>
+                    ("api/botLauncher/connectedClients").GetAwaiter().GetResult();
             }
             return storedConnectedClients;
         }
@@ -73,18 +72,16 @@ namespace KuberaManager.Models.Logic
             }
         }
 
-        private static async Task<dynamic> RspeerGetRequest(string path)
+        private static async Task<T> RspeerGetRequest<T>(string path)
         {
-            dynamic result;
             using (var client = new HttpClient())
             {
                 var request = new HttpRequestMessage(HttpMethod.Get, new Uri($"https://services.rspeer.org/{path}"));
                 request.Headers.Add("ApiClient", Config.Get<string>("RspeerApiKey1"));
                 var response = await client.SendAsync(request);
                 string json = await response.Content.ReadAsStringAsync();
-                result = JsonConvert.DeserializeObject(json);
+                return JsonConvert.DeserializeObject<T>(json);
             }
-            return result;
         }
     }
 }

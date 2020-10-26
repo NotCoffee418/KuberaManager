@@ -7,10 +7,13 @@ namespace KuberaManager.Models.Data.RspeerApiStructure
 {
     public class ConnectedComputers : Dictionary<string, ConnectedComputers.ConnectedComputerData>
     {
-        public struct ConnectedComputerData
+        public class ConnectedComputerData
         {
             public string ip { get; set; }
             public string host { get; set; }
+            public string platform { get; set; }
+            public string type { get; set; }
+            public dynamic userInfo { get; set; }
 
             // Additional Info
             // "platform": "Windows_NT",
