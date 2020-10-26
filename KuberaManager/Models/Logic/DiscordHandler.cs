@@ -13,14 +13,16 @@ namespace KuberaManager.Models.Logic
     {
         static HttpClient client = new HttpClient();
 
-        public static void PostMessage(string msg) => PostMessageTask(msg).GetAwaiter().GetResult();
+        public static void PostMessage(string msg, bool tts = false) 
+            => PostMessageTask(msg, tts).GetAwaiter().GetResult();
 
-        private static async Task PostMessageTask(string msg)
+        private static async Task PostMessageTask(string msg, bool tts)
         {
             string webhookToken = Config.Get<string>("DiscordApiKey");
-            string json = JsonConvert.SerializeObject(new Dictionary<string, string>
+            string json = JsonConvert.SerializeObject(new Dictionary<string, dynamic>
             {
                 { "content", msg },
+                { "tts", tts },
             });
             var content = new StringContent(json, Encoding.UTF8, "application/json");
             var response = await client.PostAsync("https://discordapp.com/api/webhooks/" + webhookToken, content);

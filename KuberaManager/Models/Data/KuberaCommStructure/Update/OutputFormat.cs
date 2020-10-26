@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace KuberaManager.Models.Logic.Api.Update
+namespace KuberaManager.Models.Data.KuberaCommStructure.Update
 {
     /// <summary>
     /// JSON that will be returned to RSPeer Clients.

@@ -1,9 +1,12 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace KuberaManager.Models.Logic.Api.Update
+namespace KuberaManager.Models.Data.KuberaCommStructure.Update
 {
     /// <summary>
     /// POST request that will be sent by RSPeer clients
@@ -30,7 +33,7 @@ namespace KuberaManager.Models.Logic.Api.Update
         /// <summary>
         /// Nullable, required for some statuses
         /// </summary>
-        public string Details { get; set; }
+        public JsonElement Details { get; set; }
 
         /// <summary>
         /// The RS account sending the request
@@ -47,6 +50,17 @@ namespace KuberaManager.Models.Logic.Api.Update
                 "report-banned"
             };
             return validStatuses.Contains(Status);
+        }
+
+        /// <summary>
+        /// Use to return value from the Details dictionary
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public T GetDetails<T>()
+        {
+            return JsonConvert.DeserializeObject<T>(this.Details.GetRawText());
         }
     }
 }

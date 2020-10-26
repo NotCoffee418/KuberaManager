@@ -4,9 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using KuberaManager.Models.Database;
 using KuberaManager.Models.Logic;
-using KuberaManager.Models.Logic.Api.Update;
+using KuberaManager.Models.Data.KuberaCommStructure.Update;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using KuberaManager.Models.Data.KuberaCommStructure;
+using KuberaManager.Models.Data.KuberaCommStructure.DetailsStructure;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -99,13 +101,18 @@ namespace KuberaManager.Controllers.Api
                     break;
 
                 case "discord-notify":
-                    if (input.Details == null || input.Details == "")
+                    try
                     {
-                        output.Errors.Add("discord-notify failed due to lack of details field.");
-                        relevantSession.IsFinished = true;
+                        // Get details
+                        DiscordMessageStructure details = input.GetDetails<DiscordMessageStructure>();
+
+                        // Send message
+                        DiscordHandler.PostMessage($"{input.RunescapeAccount}: {details.message}", details.tts);
                     }
-                    else
-                        DiscordHandler.PostMessage($"{input.RunescapeAccount}: {input.Details}");
+                    catch (Exception ex)
+                    {
+                        output.Errors.Add("discord-notify failed to invalid request structure. Must conform to DiscordMessageStructure.");
+                    }
                     break;
 
                 default:
