@@ -39,18 +39,11 @@ namespace KuberaManager.Controllers.Api
         [HttpPost]
         public OutputFormat Post([FromBody] InputFormat input)
         {
-            // Validate Input data
+            // Prepare result
             var output = new OutputFormat();
-            if (input.RunescapeAccount == null || input.RunescapeAccount == "" || !input.HasValidStatus())
-            {
-                output.Errors.Add("Invalid API request. Missing or invalid information. Case sensitive.");
-                return output;
-            }
-
-
-            Session relevantSession = Session.FromAccount(input.RunescapeAccount);
 
             // not sure how this is useful but it's here.
+            Session relevantSession = Session.FromAccount(input.RunescapeAccount);
             if (input.Errors.Count > 0)
             {
                 output.Errors.Add("Recieved an error from the client. End session.");
@@ -58,18 +51,38 @@ namespace KuberaManager.Controllers.Api
                 return output;
             }
 
+
             switch (input.Status)
             {
                 case "update":
+                    // Demand account
+                    if (relevantSession == null)
+                    {
+                        output.Errors.Add("No username was provided in the request. Failed to execute.");
+                        return output;
+                    }
                     Scenario scen = Brain.DetermineScenario(relevantSession);
                     output.Scenario = scen.Name;
                     break;
 
                 case "stopping":
+                    // Demand account
+                    if (relevantSession == null)
+                    {
+                        output.Errors.Add("No username was provided in the request. Failed to execute.");
+                        return output;
+                    }
                     relevantSession.ReportFinished();
                     break;
 
                 case "report-banned":
+                    // Demand account
+                    if (relevantSession == null)
+                    {
+                        output.Errors.Add("No username was provided in the request. Failed to execute.");
+                        return output;
+                    }
+
                     // Update banned state in database
                     using (var db = new kuberaDbContext())
                     {
@@ -91,11 +104,12 @@ namespace KuberaManager.Controllers.Api
                         output.Errors.Add("discord-notify failed due to lack of details field.");
                         relevantSession.IsFinished = true;
                     }
-                    else DiscordHandler.PostMessage(input.Details);
+                    else
+                        DiscordHandler.PostMessage($"{input.RunescapeAccount}: {input.Details}");
                     break;
 
                 default:
-                    output.Errors.Add("NANI!?");
+                    output.Errors.Add("Invalid API request. Invalid status.");
                     relevantSession.ReportFinished();
                     break;
             }

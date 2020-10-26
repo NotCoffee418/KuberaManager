@@ -12,10 +12,10 @@ namespace KuberaManager.Models.Logic
 {
     public class ClientManager
     {
-        public static void StartClient(Account account, Computer computer, int world = -1, string overrideScriptStartupArgs = "")
+        public static void StartClient(Account account, Computer computer, int world = -1, bool isManualSession = false)
         {
             // Prepare data
-            BotLauncherRequest req = new BotLauncherRequest(account, computer, world, overrideScriptStartupArgs);
+            BotLauncherRequest req = new BotLauncherRequest(account, computer, world, isManualSession);
             
             // Send request
             RspeerPostRequest("api/botLauncher/send", req).GetAwaiter().GetResult();
@@ -23,9 +23,9 @@ namespace KuberaManager.Models.Logic
 
         public static void StopClient(Session session)
         {
-            throw new NotImplementedException();
-            // API key in request functions!
-
+            // Stop request only uses URL, no body
+            RspeerPostRequest($"api/botLauncher/sendNew?message=:kill&tag={session.RspeerSessionTag}", null)
+                .GetAwaiter().GetResult();
         }
 
         // Store in memory during this request
@@ -62,12 +62,15 @@ namespace KuberaManager.Models.Logic
         /// <returns></returns>
         private static async Task RspeerPostRequest(string path, dynamic data)
         {
-            string json = JsonConvert.SerializeObject(data);
             using (var client = new HttpClient())
             {
                 var request = new HttpRequestMessage(HttpMethod.Post, new Uri($"https://services.rspeer.org/{path}"));
                 request.Headers.Add("ApiClient", Config.Get<string>("RspeerApiKey1"));
-                request.Content = new StringContent(json, Encoding.UTF8, "application/json"); ;
+                if (data != null)
+                {
+                    string json = JsonConvert.SerializeObject(data);
+                    request.Content = new StringContent(json, Encoding.UTF8, "application/json"); ;
+                }
                 var response = await client.SendAsync(request);
             }
         }

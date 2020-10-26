@@ -43,7 +43,8 @@ namespace KuberaManager.Models.Logic.Api.Update
             {
                 "stopping",
                 "update",
-                "discord-notify"
+                "discord-notify",
+                "report-banned"
             };
             return validStatuses.Contains(Status);
         }

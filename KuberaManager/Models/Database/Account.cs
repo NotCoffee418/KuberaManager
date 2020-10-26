@@ -43,6 +43,11 @@ namespace KuberaManager.Models.Database
         [Display(Name = "Preferred Activities", Description = "Will perform these actions unless manually overwritten.")]
         public List<Scenario> PreferredActivities { get; set; }
 
+        /// <summary>
+        /// returns and creates account if not exist
+        /// </summary>
+        /// <param name="runescapeaccount"></param>
+        /// <returns></returns>
         public static Account FromLogin(string runescapeaccount)
         {
             Account result = null;
@@ -69,6 +74,21 @@ namespace KuberaManager.Models.Database
                 DiscordHandler.PostMessage($"New account '{runescapeaccount}' detected. You must manually define the password & enabled before Brain will assign tasks to it.");
 
             return result;
+        }
+
+        /// <summary>
+        /// Returns account or null from ID. No creating.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public static Account FromId(int id)
+        {
+            using (var db = new kuberaDbContext())
+            {
+                return db.Accounts
+                    .Where(x => x.Id == id)
+                    .FirstOrDefault();
+            }
         }
 
 
