@@ -68,5 +68,82 @@ namespace KuberaManager.Controllers.Api
                     .FirstOrDefault();
             }
         }
+
+        [HttpGet]
+        public string CreateSpoofJob()
+        {
+            return "/sessionId/scenarioId?/" + Environment.NewLine +
+                "Timetables inferred from session. Using full session duration";
+        }
+        [HttpGet("{sessionId}/{scenarioId?}")]
+        public dynamic CreateSpoofJob(int sessionId, int scenarioId = 1)
+        {
+            if (sessionId == 0)
+                return "missing session id. Create it first";
+
+            Session sess = Session.FromId(sessionId);
+
+            // Create job
+            Job job = new Job()
+            {
+                SessionId = sessionId,
+                ActiveScenarioId = scenarioId,
+                IsFinished = sess.IsFinished,
+                StartTime = sess.StartTime, //
+                TargetDuration = sess.TargetDuration //
+            };
+
+            // Add to DB & return
+            using (var db = new kuberaDbContext())
+            {
+                // save
+                db.Jobs.Add(job);
+                db.SaveChanges();
+
+                // return added
+                return db.Jobs
+                    .Where(x => x.SessionId == sess.Id)
+                    .OrderByDescending(x => x.Id)
+                    .FirstOrDefault();
+            }
+        }
+
+        [HttpGet]
+        public string WipeAllSessionsJobs()
+        {
+            return "This will DELETE ALL JOBS AND SESSIONS IN THE DB!" + Environment.NewLine +
+                "Use arg 'yesimsureplsdeletealloftehthings' to run it.";
+        }
+
+        [HttpGet("{validationStr}")]
+        public dynamic WipeAllSessionsJobs(string validationStr)
+        {
+            if (validationStr != "yesimsureplsdeletealloftehthings")
+                return "Invalid validation string. Nothing was wiped.";
+
+            try
+            {
+                // Delete all things
+                using (var db = new kuberaDbContext())
+                {
+                    // Get & remove sessions
+                    var allSessions = db.Sessions.ToList();
+                    db.Sessions.RemoveRange(allSessions);
+
+
+                    // Get & remove jobs
+                    var allJobs = db.Jobs.ToList();
+                    db.Jobs.RemoveRange(allJobs);
+
+                    // write
+                    db.SaveChanges();
+                }
+                return "Done. yeeted all the things.";
+            }
+            catch (Exception ex)
+            {
+                return "Failed: " + ex.Message;
+            }
+        }
     }
 }

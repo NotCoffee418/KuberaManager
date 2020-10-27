@@ -196,7 +196,7 @@
                                 <!-- Test Functions-->
                                 <li class="nav-item has-treeview">
                                     <a href="#" class="nav-link">
-                                        <i class="nav-icon fas fa-database"></i>
+                                        <i class="nav-icon fas fa-vials"></i>
                                         <p>
                                             Test Functions
                                             <i class="right fas fa-angle-left"></i>
@@ -206,10 +206,23 @@
 
                                         <li class="nav-item">
                                             <a asp-controller="DevTest" asp-action="CreateSpoofSession" class="nav-link">
-                                                <i class="nav-icon fas fa-user"></i>
+                                                <i class="nav-icon fas fa-vial"></i>
                                                 <p>CreateSpoofSessions</p>
                                             </a>
                                         </li>
+                                        <li class="nav-item">
+                                            <a asp-controller="DevTest" asp-action="CreateSpoofJob" class="nav-link">
+                                                <i class="nav-icon fas fa-vial"></i>
+                                                <p>CreateSpoofJob</p>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a asp-controller="DevTest" asp-action="WipeAllSessionsJobs" class="nav-link">
+                                                <i class="nav-icon fas fa-vial"></i>
+                                                <p>WipeAllSessionsJobs</p>
+                                            </a>
+                                        </li>
+
 
                                     </ul>
                                 </li>
