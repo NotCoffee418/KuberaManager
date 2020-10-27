@@ -197,7 +197,13 @@
 
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
-
+            @if (ViewBag.Notification != null)
+            {
+                <div class="alert alert-light alert-dismissible fade show">
+                    <strong>Info:</strong> @ViewBag.Notification
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                </div>
+            }
             <!-- Main content -->
             <section class="content">
 
