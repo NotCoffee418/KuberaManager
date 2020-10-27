@@ -13,6 +13,7 @@ namespace KuberaManager.Models.Data
 {
     public class AdminPassword
     {
+        [Display(Name = "Administrator Password")]
         [Required(AllowEmptyStrings = false, ErrorMessage = "Password cannot be empty.")]
         [StringLength(30, MinimumLength = 8)]
         public string AdminPassPlain { get; set; }
