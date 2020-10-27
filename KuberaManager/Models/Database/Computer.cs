@@ -69,6 +69,16 @@ namespace KuberaManager.Models.Database
             return comp;
         }
 
+        public static Computer ById(int id)
+        {
+            using (var db = new kuberaDbContext())
+            {
+                return db.Computers
+                    .Where(x => x.Id == id)
+                    .FirstOrDefault();
+            }
+        }
+
 
         /// <summary>
         /// Returns an available computer to use for a new session

@@ -8,9 +8,11 @@ using Microsoft.Extensions.Logging;
 using KuberaManager.Models;
 using KuberaManager.Models.Database;
 using KuberaManager.Models.Logic;
+using Microsoft.AspNetCore.Authorization;
 
 namespace KuberaManager.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;

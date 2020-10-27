@@ -24,6 +24,7 @@ namespace KuberaManager.Models.Database
         public virtual DbSet<Computer> Computers { get; set; }
         public virtual DbSet<Scenario> Scenarios { get; set; }
         public virtual DbSet<Session> Sessions { get; set; }
+        public virtual DbSet<Job> Jobs { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

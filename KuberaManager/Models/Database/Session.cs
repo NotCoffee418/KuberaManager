@@ -103,6 +103,16 @@ namespace KuberaManager.Models.Database
             return sess;
         }
 
+        internal static Session FromId(int sessionId)
+        {
+            using (var db = new kuberaDbContext())
+            {
+                return db.Sessions
+                    .Where(x => x.Id == sessionId)
+                    .FirstOrDefault();
+            }
+        }
+
         internal void ReportFinished()
         {
             using (var db = new kuberaDbContext())
@@ -126,6 +136,10 @@ namespace KuberaManager.Models.Database
             return StartTime + TargetDuration > DateTime.Now;
         }
 
+        public Job FindCurrentJob()
+        {
+            throw new NotImplementedException();
+        }
         #endregion
     }
 }

@@ -26,7 +26,7 @@ namespace KuberaManager.Controllers
         public async Task<ActionResult> Login(AdminPassword viewModel, string ReturnUrl)
         {
 
-            if (!viewModel.IsCorrectPassword())
+            if (viewModel.AdminPassPlain == null ||!viewModel.IsCorrectPassword())
             {
                 return Unauthorized();
             }
