@@ -172,7 +172,7 @@
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a asp-controller="Computers" asp-action="Index"class="nav-link">
+                                        <a asp-controller="Computers" asp-action="Index" class="nav-link">
                                             <i class="nav-icon fas fa-desktop"></i>
                                             <p>Computers</p>
                                         </a>
@@ -185,6 +185,37 @@
                                     </li>
                                 </ul>
                             </li>
+
+
+                            @if (KuberaManager.Models.Database.Config.Get<bool?>("DeveloperMode") != null &&
+                               KuberaManager.Models.Database.Config.Get<bool>("DeveloperMode"))
+                            {
+
+                                <li class="nav-header">Developer Tools</li>
+
+                                <!-- Test Functions-->
+                                <li class="nav-item has-treeview">
+                                    <a href="#" class="nav-link">
+                                        <i class="nav-icon fas fa-database"></i>
+                                        <p>
+                                            Test Functions
+                                            <i class="right fas fa-angle-left"></i>
+                                        </p>
+                                    </a>
+                                    <ul class="nav nav-treeview">
+
+                                        <li class="nav-item">
+                                            <a asp-controller="DevTest" asp-action="CreateSpoofSessions" class="nav-link">
+                                                <i class="nav-icon fas fa-user"></i>
+                                                <p>CreateSpoofSessions</p>
+                                            </a>
+                                        </li>
+
+                                    </ul>
+                                </li>
+                                
+
+                            }
                         }
 
 

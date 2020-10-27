@@ -83,7 +83,7 @@ namespace KuberaManager.Models.Database
                 {
                     var config = db.Set<Config>();
                     foreach (var key in keysToAdd)
-                        config.Add(new Config { ConfKey = key.Name, ConfValue = null });
+                        config.Add(new Config { ConfKey = key.Name, ConfValue = key.DefaultValue});
                     db.SaveChanges();
                 }
 
