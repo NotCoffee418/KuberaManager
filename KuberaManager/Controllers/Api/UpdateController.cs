@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using KuberaManager.Models.Data.KuberaCommStructure;
 using KuberaManager.Models.Data.KuberaCommStructure.DetailsStructure;
+using Microsoft.EntityFrameworkCore;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -112,6 +113,29 @@ namespace KuberaManager.Controllers.Api
                     catch (Exception ex)
                     {
                         output.Errors.Add("discord-notify failed to invalid request structure. Must conform to DiscordMessageStructure.");
+                    }
+                    break;
+
+                case "report-skills":
+                    try
+                    {
+                        // Decode levels
+                        Levels levels = input.GetDetails<Levels>();
+
+                        // Store account id
+                        levels.AccountId = Account.FromLogin(input.RunescapeAccount).Id;
+
+                        using (var db = new kuberaDbContext())
+                        {
+                            // Insert or update
+                            db.Entry(levels).State = levels.AccountId == 0 ?
+                                EntityState.Added : EntityState.Modified;
+                            db.SaveChanges();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        output.Errors.Add("report-skills error storing provided skill levels. " + ex.Message);
                     }
                     break;
 

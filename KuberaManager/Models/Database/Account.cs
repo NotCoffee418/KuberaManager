@@ -221,5 +221,14 @@ namespace KuberaManager.Models.Database
                     .FirstOrDefault();
             }
         }
+
+        /// <summary>
+        /// Gets known levels. Nullable
+        /// </summary>
+        /// <returns></returns>
+        public Levels GetLevels()
+        {
+            return Levels.FromAccount(Id);
+        }
     }
 }
