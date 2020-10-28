@@ -1,4 +1,7 @@
 ﻿/* -- Dashboard -- */
+#skillBoxContainer {
+    max-width:300px;
+}
 .skill-img {
     width: 25px;
     height: 25px;
