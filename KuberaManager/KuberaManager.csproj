@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <Folder Include="Models\ViewModels\" />
+    <Folder Include="wwwroot\img\skill-icons\" />
   </ItemGroup>
 
 </Project>

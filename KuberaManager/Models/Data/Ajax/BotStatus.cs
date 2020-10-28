@@ -9,7 +9,8 @@ namespace KuberaManager.Models.Data.Ajax
     public class BotStatus
     {
         public bool IsRunning { get; set; } = false;
-        public string Account { get; set; }
+        public int AccountId { get; set; }
+        public string Login { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime StopTime { get; set; }
         public int PercentageComplete { 
@@ -49,7 +50,8 @@ namespace KuberaManager.Models.Data.Ajax
                 {
                     // Prepare row
                     BotStatus bs = new BotStatus();
-                    bs.Account = acc.Login;
+                    bs.Login = acc.Login;
+                    bs.AccountId = acc.Id;
 
                     // Grab account's session if any
                     var accSess = currSessions

@@ -145,17 +145,5 @@ namespace KuberaManager.Controllers.Api
                 return "Failed: " + ex.Message;
             }
         }
-
-        [HttpGet]
-        public string GetLevels()
-        {
-            return "/accountId";
-        }
-
-        [HttpGet("{accountId}")]
-        public dynamic GetLevels(int accountId)
-        {
-            return Levels.FromAccount(accountId);
-        }
     }
 }

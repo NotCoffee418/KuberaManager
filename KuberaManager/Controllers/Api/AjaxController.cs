@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using KuberaManager.Models.Data.Ajax;
+using KuberaManager.Models.Database;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,6 +21,12 @@ namespace KuberaManager.Controllers.Api
         public List<BotStatus> AllBotStatus()
         {
             return BotStatus.GetAllBotStatus();
+        }
+
+        [HttpGet("{accountId}")]
+        public Levels GetLevels(int accountId)
+        {
+            return Levels.FromAccount(accountId);
         }
     }
 }
