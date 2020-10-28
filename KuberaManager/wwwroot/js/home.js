@@ -50,17 +50,24 @@ function loadAllBotStatus() {
                 // Account
                 html += "<td>";
                 if (row["isRunning"])
-                    html += "<i class='nav-icon fas fa-circle text-success'></i>";
-                else html += "<i class='nav-icon far fa-circle text-warning'></i>";
+                    html += "<i class='nav-icon fas fa-circle text-success mr-1'></i>";
+                else html += "<i class='nav-icon far fa-circle text-warning mr-1'></i>";
                 html += " " + row.login + "</td>";
 
 
                 // Session (progress)
                 // startTime, stopTime exist if you can convert to ppl format
-                html += "<td><div class='progress progress-xs mt-2'><div class='progress-bar progress-bar-info' style='width: " +
-                    row["percentageComplete"] + "%'></div></div><span data-target-time='" + row.stopTime + "' class='countdownTimer'>"
-                    + getCountdownTimestamp(row.stopTime) + "</span></td>";
-                //getTimestampFromDt(row.stopTime)
+                html += "<td><div class='row'>";
+                if (row["isRunning"]) {
+                    // Progress bar
+                    html += "<div class='col-lg-12 col-xl-7'>" +
+                        "<div class='progress progress-xs mt-2'><div class='progress-bar progress-bar-info' style='width: " +
+                        (100 - row["percentageComplete"]) + "%'></div></div></div>";
+
+                    // Timer
+                    html += "<div class='col-lg-12 col-xl-5'><span data-target-time='" + row.stopTime + "' class='countdownTimer'>" + getCountdownTimestamp(row.stopTime) + "</span></div>";
+                }
+                html += "</div></td>";
 
                 // Job
                 html += "<td>" + (row["activeJob"] == null ? "" : row["activeJob"]) + "</td>";
