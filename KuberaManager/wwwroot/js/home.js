@@ -5,6 +5,11 @@ $(document).ready(() => {
     setInterval(() => {
         refreshAll();
     }, 60000);
+
+    // Start timers for countdowns
+    setInterval(() => {
+        updateCountdownTimers();
+    }, 1000);
 });
 
 
@@ -15,7 +20,19 @@ function refreshAll() {
 
 
 // --- Variables --- //
-var lastSelectedAccountId = 0;
+var lastSelectedAccountId = 0;28800000
+
+
+// --- Helpers --- //
+function getCountdownTimestamp(targetTime) {
+    // calculate remaining time
+    var diff = Math.abs(new Date(targetTime) - new Date());
+    if (diff < 0 || new Date(targetTime) <= new Date(0)) return ""; // only if it's not negative
+    dt = new Date(diff);
+
+    // Format h?h:mm:ss & return
+    return dt.getHours() + ":" + ("0" + dt.getMinutes()).slice(-2) + ":" + ("0" + dt.getSeconds()).slice(-2) ;
+}
 
 // --- Individual load functions --- //
 function loadAllBotStatus() {
@@ -41,7 +58,9 @@ function loadAllBotStatus() {
                 // Session (progress)
                 // startTime, stopTime exist if you can convert to ppl format
                 html += "<td><div class='progress progress-xs mt-2'><div class='progress-bar progress-bar-info' style='width: " +
-                    row["percentageComplete"] + "%'></div></div></td>";
+                    row["percentageComplete"] + "%'></div></div><span data-target-time='" + row.stopTime + "' class='countdownTimer'>"
+                    + getCountdownTimestamp(row.stopTime) + "</span></td>";
+                //getTimestampFromDt(row.stopTime)
 
                 // Job
                 html += "<td>" + (row["activeJob"] == null ? "" : row["activeJob"]) + "</td>";
@@ -110,5 +129,15 @@ function loadAccountLevels(accountId, login) {
             // Set the skills
             $("#skillBoxContainer").html(html);
         }
+    });
+}
+
+
+/// Called every second. Updates countdowns in account Activity window.
+function updateCountdownTimers() {
+    $(".countdownTimer").each((k, span) => {
+        targetTime = $(span).data("target-time");
+        counter = getCountdownTimestamp(targetTime);
+        $(span).html(counter);
     });
 }
