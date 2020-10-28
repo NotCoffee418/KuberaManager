@@ -89,14 +89,23 @@ function loadAccountLevels(accountId, login) {
             $("#skillContainerTitle").html(login);
 
             // Prepare container contents
-            var html = "";
             $("#skillBoxContainer").empty();
+            var html = "<div class='row'>";
+            var totalLevel = 0;
             $.each(data, function (skill, level) {
                 // skip account id, append skill
-                if (skill != "accountId")
-                    html += "<div class='skillBox'><img class='skillIcon' src='/img/skill-icons/" + skill +
+                if (skill != "accountId") {
+                    totalLevel += level;
+                    html += "<div class='col-md-4 border border-dark rounded'><img class='skill-img mr-2' src='/img/skill-icons/" + skill +
                         ".webp'><span class='skillLevel'>" + level + "</span></div>";
+                }
             });
+
+            // Append total level
+            html += "<div class='col-md-4 border border-dark rounded'><i class='fas fa-arrow-alt-circle-up mr-2 skill-img'></i><strong>" + totalLevel + "</strong></div>"
+
+            // Close row
+            html += "</div>";
 
             // Set the skills
             $("#skillBoxContainer").html(html);
