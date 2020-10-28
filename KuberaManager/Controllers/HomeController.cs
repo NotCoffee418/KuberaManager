@@ -37,6 +37,9 @@ namespace KuberaManager.Controllers
                 ViewBag.Notification = ex.Message;
             }
 
+            // Include page JS
+            ViewBag.PageScript = "home.js";
+
             return View();
         }
 

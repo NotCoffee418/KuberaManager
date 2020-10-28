@@ -188,7 +188,7 @@
 
 
                             @if (KuberaManager.Models.Database.Config.Get<bool?>("DeveloperMode") != null &&
-                               KuberaManager.Models.Database.Config.Get<bool>("DeveloperMode"))
+                              KuberaManager.Models.Database.Config.Get<bool>("DeveloperMode"))
                             {
 
                                 <li class="nav-header">Developer Tools</li>
@@ -232,7 +232,7 @@
 
                                     </ul>
                                 </li>
-                                
+
 
                             }
                         }
@@ -283,6 +283,7 @@
         <!-- /.control-sidebar -->
     </div>
     <!-- ./wrapper -->
+
     <!-- Include essentials-->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
@@ -293,5 +294,11 @@
     <!-- Override JS -->
     <script src="~/js/site.js" asp-append-version="true"></script>
     @RenderSection("Scripts", required: false)
+
+    <!-- Bottom Html -->
+    @if (ViewBag.PageScript != null)
+    {
+        <script src="~/js/@ViewBag.PageScript" asp-append-version="true"></script>
+    }
 </body>
 </html>

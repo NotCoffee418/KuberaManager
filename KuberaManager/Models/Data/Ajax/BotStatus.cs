@@ -16,12 +16,12 @@ namespace KuberaManager.Models.Data.Ajax
             get
             {
                 // 0 if inactive session
-                if (StartTime == null || StopTime == null)
+                if (StartTime == default(DateTime) || StopTime == default(DateTime))
                     return 0;
 
                 // Calculate the result
-                double total = DateTime.Compare(StartTime, StopTime);
-                double elapsed = DateTime.Compare(StartTime, DateTime.Now);
+                double total = StopTime.Subtract(StartTime).TotalSeconds;
+                double elapsed = StopTime.Subtract(DateTime.Now).TotalSeconds;
                 double percentage = (elapsed / total) * 100;
                 return (int)Math.Round(percentage);
             }
@@ -71,6 +71,8 @@ namespace KuberaManager.Models.Data.Ajax
                         Job job = accSess.FindCurrentJob();
                         bs.ActiveJob = job.ActiveScenarioObj.Name;
                     }
+
+                    result.Add(bs);
                 }
             }
             return result;

@@ -138,7 +138,12 @@ namespace KuberaManager.Models.Database
 
         public Job FindCurrentJob()
         {
-            throw new NotImplementedException();
+            using (var db = new kuberaDbContext())
+            {
+                return db.Jobs
+                    .Where(x => x.SessionId == Id)
+                    .FirstOrDefault();
+            }
         }
         #endregion
     }

@@ -1,5 +1,30 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Dashboard";
 }
 
-Nothing to see here yet!
+<h1>Dashboard</h1>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Account Activity</h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body p-0">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Account</th>
+                            <th>Session</th>
+                            <th>Job</th>
+                            <th>Host</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbodyAllBotStatus" />
+                </table>
+            </div>
+            <!-- /.card-body -->
+        </div>
+    </div>
+</div>
