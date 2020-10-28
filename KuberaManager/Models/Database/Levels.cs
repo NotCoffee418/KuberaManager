@@ -11,31 +11,77 @@ namespace KuberaManager.Models.Database
     {
         [Key]
         [ForeignKey("Account")]
+        [Column("AccountId", Order = 0)]
         public int AccountId { get; set; }
 
-        public int Magic { get; set; }
-        public int Slayer { get; set; }
-        public int Strength { get; set; }
-        public int Defence { get; set; }
-        public int Fletching { get; set; }
-        public int Fishing { get; set; }
-        public int Mining { get; set; }
-        public int Herblore { get; set; }
-        public int Hitpoints { get; set; }
-        public int Smithing { get; set; }
-        public int Woodcutting { get; set; }
-        public int Prayer { get; set; }
-        public int Ranged { get; set; }
+        [Column("Attack", Order = 1)]
         public int Attack { get; set; }
-        public int Crafting { get; set; }
-        public int Farming { get; set; }
-        public int Firemaking { get; set; }
-        public int Runecrafting { get; set; }
-        public int Construction { get; set; }
-        public int Cooking { get; set; }
+
+        [Column("Hitpoints", Order = 2)]
+        public int Hitpoints { get; set; }
+
+        [Column("Mining", Order = 3)]
+        public int Mining { get; set; }
+
+        [Column("Strength", Order = 4)]
+        public int Strength { get; set; }
+
+        [Column("Agility", Order = 5)]
         public int Agility { get; set; }
-        public int Hunter { get; set; }
+
+        [Column("Smithing", Order = 6)]
+        public int Smithing { get; set; }
+
+        [Column("Defence", Order = 7)]
+        public int Defence { get; set; }
+
+        [Column("Herblore", Order = 8)]
+        public int Herblore { get; set; }
+
+        [Column("Fishing", Order = 9)]
+        public int Fishing { get; set; }
+
+        [Column("Ranged", Order = 10)]
+        public int Ranged { get; set; }
+
+        [Column("Thieving", Order = 11)]
         public int Thieving { get; set; }
+
+        [Column("Cooking", Order = 12)]
+        public int Cooking { get; set; }
+
+        [Column("Prayer", Order = 13)]
+        public int Prayer { get; set; }
+
+        [Column("Crafting", Order = 14)]
+        public int Crafting { get; set; }
+
+        [Column("Firemaking", Order = 15)]
+        public int Firemaking { get; set; }
+
+        [Column("Magic", Order = 16)]
+        public int Magic { get; set; }
+
+        [Column("Fletching", Order = 17)]
+        public int Fletching { get; set; }
+
+        [Column("Woodcutting", Order = 18)]
+        public int Woodcutting { get; set; }
+
+        [Column("Runecrafting", Order = 19)]
+        public int Runecrafting { get; set; }
+
+        [Column("Slayer", Order = 20)]
+        public int Slayer { get; set; }
+
+        [Column("Farming", Order = 21)]
+        public int Farming { get; set; }
+
+        [Column("Construction", Order = 22)]
+        public int Construction { get; set; }
+
+        [Column("Hunter", Order = 23)]
+        public int Hunter { get; set; }
 
         public static Levels FromAccount(int id)
         {
