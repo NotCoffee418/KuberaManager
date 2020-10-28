@@ -143,95 +143,104 @@
                         @if (User.Identity.IsAuthenticated)
                         {
                             <!-- Configuration menus if logged in-->
-                            <li class="nav-header">Configuration</li>
+                        <li class="nav-header">Configuration</li>
 
-                            <!-- Config button -->
-                            <li class="nav-item">
-                                <a class="nav-link" asp-controller="Config" asp-action="Index">
-                                    <i class="nav-icon fas fa-cog"></i>
-                                    <p>
-                                        Config
-                                    </p>
-                                </a>
-                            </li>
+ <!-- Config button -->
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Config" asp-action="Index">
+                                <i class="nav-icon fas fa-cog"></i>
+                                <p>
+                                    Config
+                                </p>
+                            </a>
+                        </li>
 
-                            <!-- Database menu & submenus-->
-                            <li class="nav-item has-treeview">
-                                <a href="#" class="nav-link">
-                                    <i class="nav-icon fas fa-database"></i>
-                                    <p>
-                                        Database
-                                        <i class="right fas fa-angle-left"></i>
-                                    </p>
-                                </a>
-                                <ul class="nav nav-treeview">
-                                    <li class="nav-item">
-                                        <a asp-controller="Accounts" asp-action="Index" class="nav-link">
-                                            <i class="nav-icon fas fa-user"></i>
-                                            <p>Accounts</p>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a asp-controller="Computers" asp-action="Index" class="nav-link">
-                                            <i class="nav-icon fas fa-desktop"></i>
-                                            <p>Computers</p>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a asp-controller="Scenarios" asp-action="Index" class="nav-link">
-                                            <i class="nav-icon fas fa-tasks"></i>
-                                            <p>Scenarios</p>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
+ <!-- Database menu & submenus-->
+                        <li class="nav-item has-treeview">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-database"></i>
+                                <p>
+                                    Database
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a asp-controller="Accounts" asp-action="Index" class="nav-link">
+                                        <i class="nav-icon fas fa-user"></i>
+                                        <p>Accounts</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a asp-controller="Computers" asp-action="Index" class="nav-link">
+                                        <i class="nav-icon fas fa-desktop"></i>
+                                        <p>Computers</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a asp-controller="Scenarios" asp-action="Index" class="nav-link">
+                                        <i class="nav-icon fas fa-tasks"></i>
+                                        <p>Scenarios</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Hangfire" asp-action="Index">
+                                <i class="nav-icon fas fa-fire"></i>
+                                <p>
+                                    Hangfire
+                                </p>
+                            </a>
+                        </li>
 
 
-                            @if (KuberaManager.Models.Database.Config.Get<bool?>("DeveloperMode") != null &&
+                        @if (KuberaManager.Models.Database.Config.Get<bool?>("DeveloperMode") != null &&
                               KuberaManager.Models.Database.Config.Get<bool>("DeveloperMode"))
                             {
 
-                                <li class="nav-header">Developer Tools</li>
+                        <li class="nav-header">Developer Tools</li>
 
-                                <!-- Test Functions-->
-                                <li class="nav-item has-treeview">
-                                    <a href="#" class="nav-link">
-                                        <i class="nav-icon fas fa-vials"></i>
-                                        <p>
-                                            Test Functions
-                                            <i class="right fas fa-angle-left"></i>
-                                        </p>
+                        <!-- Test Functions-->
+                        <li class="nav-item has-treeview">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-vials"></i>
+                                <p>
+                                    Test Functions
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+
+                                <li class="nav-item">
+                                    <a href="/api/ajax/getlevels/1" class="nav-link">
+                                        <i class="nav-icon fas fa-vial"></i>
+                                        <p>GetLevels</p>
                                     </a>
-                                    <ul class="nav nav-treeview">
-
-                                        <li class="nav-item">
-                                            <a href="/api/ajax/getlevels/1" class="nav-link">
-                                                <i class="nav-icon fas fa-vial"></i>
-                                                <p>GetLevels</p>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a asp-controller="DevTest" asp-action="CreateSpoofSession" class="nav-link">
-                                                <i class="nav-icon fas fa-vial"></i>
-                                                <p>CreateSpoofSessions</p>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a asp-controller="DevTest" asp-action="CreateSpoofJob" class="nav-link">
-                                                <i class="nav-icon fas fa-vial"></i>
-                                                <p>CreateSpoofJob</p>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a asp-controller="DevTest" asp-action="WipeAllSessionsJobs" class="nav-link">
-                                                <i class="nav-icon fas fa-vial"></i>
-                                                <p>WipeAllSessionsJobs</p>
-                                            </a>
-                                        </li>
-
-
-                                    </ul>
                                 </li>
+                                <li class="nav-item">
+                                    <a asp-controller="DevTest" asp-action="CreateSpoofSession" class="nav-link">
+                                        <i class="nav-icon fas fa-vial"></i>
+                                        <p>CreateSpoofSessions</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a asp-controller="DevTest" asp-action="CreateSpoofJob" class="nav-link">
+                                        <i class="nav-icon fas fa-vial"></i>
+                                        <p>CreateSpoofJob</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a asp-controller="DevTest" asp-action="WipeAllSessionsJobs" class="nav-link">
+                                        <i class="nav-icon fas fa-vial"></i>
+                                        <p>WipeAllSessionsJobs</p>
+                                    </a>
+                                </li>
+
+
+                            </ul>
+                        </li>
 
 
                             }

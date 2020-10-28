@@ -110,7 +110,7 @@ namespace KuberaManager.Controllers.Api
                         // Send message
                         DiscordHandler.PostMessage($"{input.RunescapeAccount}: {details.message}", details.tts);
                     }
-                    catch (Exception ex)
+                    catch
                     {
                         output.Errors.Add("discord-notify failed to invalid request structure. Must conform to DiscordMessageStructure.");
                     }
