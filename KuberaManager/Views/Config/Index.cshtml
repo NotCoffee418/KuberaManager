@@ -17,22 +17,27 @@
             <th>
                 @Html.DisplayNameFor(model => model.ConfValue)
             </th>
-            <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.ConfKey)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ConfValue)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id=item.ConfKey })
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            @if (@KuberaManager.Models.Data.ConfigData.IsShown(item.ConfKey))
+            {
+                <tr>
+                    <td data-original-title="999" data-container="body" data-toggle="tooltip" data-placement="bottom"
+                        title="@KuberaManager.Models.Data.ConfigData.GetDescription(item.ConfKey)">
+                        @Html.DisplayFor(modelItem => item.ConfKey)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ConfValue)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = item.ConfKey })
+                    </td>
+                </tr>
+            }
+        }
     </tbody>
 </table>
+* Hover over a ConfKey to view it's description

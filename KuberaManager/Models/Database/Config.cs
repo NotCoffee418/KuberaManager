@@ -65,8 +65,7 @@ namespace KuberaManager.Models.Database
         public static void CheckUpdateConfigVersion()
         {
             // Get application's config version
-            var cd = new ConfigData();
-            int applicationVersion = cd.Keys
+            int applicationVersion = ConfigData.Keys
                 .OrderByDescending(x => x.ConfigVersion)
                 .First().ConfigVersion;
 
@@ -76,7 +75,7 @@ namespace KuberaManager.Models.Database
             // Install new keys if needed
             if (applicationVersion > databaseVersion)
             {
-                var keysToAdd = cd.Keys.Where(x => x.ConfigVersion > databaseVersion);
+                var keysToAdd = ConfigData.Keys.Where(x => x.ConfigVersion > databaseVersion);
 
                 // Add values
                 using (var db = new kuberaDbContext())
