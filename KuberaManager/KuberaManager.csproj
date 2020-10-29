@@ -25,6 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Models\Logic\ScenarioLogic\Scenarios\Quests\" />
     <Folder Include="Models\ViewModels\" />
     <Folder Include="wwwroot\img\skill-icons\" />
   </ItemGroup>
