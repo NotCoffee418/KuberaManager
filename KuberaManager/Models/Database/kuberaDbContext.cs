@@ -26,6 +26,7 @@ namespace KuberaManager.Models.Database
         public virtual DbSet<Session> Sessions { get; set; }
         public virtual DbSet<Job> Jobs { get; set; }
         public virtual DbSet<Levels> Levels { get; set; }
+        public virtual DbSet<AccountCompletionData> AccountCompletionData { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

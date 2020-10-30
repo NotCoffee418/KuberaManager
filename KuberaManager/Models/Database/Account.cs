@@ -1,4 +1,5 @@
-﻿using KuberaManager.Models.Logic;
+﻿using KuberaManager.Models.Data;
+using KuberaManager.Models.Logic;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -229,6 +230,25 @@ namespace KuberaManager.Models.Database
         public Levels GetLevels()
         {
             return Levels.FromAccount(Id);
+        }
+
+        /// <summary>
+        /// Return all of this account's definitions
+        /// </summary>
+        /// <returns></returns>
+        public List<CompletionDataDefinition> GetDefinitions()
+        {
+            return AccountCompletionData.GetDefinitions(Id);
+        }
+
+        public bool HasDefinition(CompletionDataDefinition def)
+        {
+            return AccountCompletionData.AccountHasDefinition(Id, def);
+        }
+
+        public void AddDefinition(CompletionDataDefinition def)
+        {
+            AccountCompletionData.AddDefinition(Id, def);
         }
     }
 }
