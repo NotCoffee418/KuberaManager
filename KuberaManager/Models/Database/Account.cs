@@ -24,6 +24,10 @@ namespace KuberaManager.Models.Database
         public string Password { get; set; }
 
         [Required]
+        [DefaultValue(false)]
+        public bool IsMember { get; set; }
+
+        [Required]
         [DefaultValue(true)]
         public bool IsEnabled { get; set; }
 
@@ -40,9 +44,6 @@ namespace KuberaManager.Models.Database
         [DefaultValue(23)]
         [Display(Name = "Stop Time of Day", Description = "Preferred time of the day to stop 0-23. Logic is that an account should have consistent playing habits.")]
         public int PrefStopTimeDay { get; set; } = 23;
-
-        [Display(Name = "Preferred Activities", Description = "Will perform these actions unless manually overwritten.")]
-        public List<Scenario> PreferredActivities { get; set; }
 
         /// <summary>
         /// returns and creates account if not exist

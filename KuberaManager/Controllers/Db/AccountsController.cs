@@ -55,7 +55,7 @@ namespace KuberaManager.Controllers.Db
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Login,Password,IsEnabled,IsBanned,PrefStartTimeDay,PrefStopTimeDay")] Account account)
+        public async Task<IActionResult> Create([Bind("Id,Login,Password,IsEnabled,IsMember,IsBanned,PrefStartTimeDay,PrefStopTimeDay")] Account account)
         {
             if (ModelState.IsValid)
             {
@@ -87,7 +87,7 @@ namespace KuberaManager.Controllers.Db
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Login,Password,IsEnabled,IsBanned,PrefStartTimeDay,PrefStopTimeDay")] Account account)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Login,Password,IsEnabled,IsMember,IsBanned,PrefStartTimeDay,PrefStopTimeDay")] Account account)
         {
             if (id != account.Id)
             {

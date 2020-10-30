@@ -13,6 +13,6 @@ namespace KuberaManager.Models.Logic.ScenarioLogic.Requirements
         public bool DoesMeetCondition(Account acc);
 
         // Scenario to run INSTEAD, in order to meet requirements
-        public ScenarioBase GetFulfillScenario();
+        public ScenarioBase GetFulfillScenario(Account acc);
     }
 }

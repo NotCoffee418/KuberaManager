@@ -1,20 +1,23 @@
-﻿using System;
+﻿using KuberaManager.Helpers;
+using KuberaManager.Models.Database;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
-namespace KuberaManager.Models.Data
+namespace KuberaManager.Models.Logic.ScenarioLogic.Scenarios.Assigners
 {
-    public class QuestIdentifier
+    public class QuestAssigner
     {
-        // Static prepare AllQuestIdentifiers & store in memory
-        private static List<QuestIdentifier> _allQuestIdentifiers = null;
-        public static List<QuestIdentifier> AllQuestIdentifiers {
+        private static List<Quest> _allQuestIdentifiers = null;
+        private static List<Quest> AllQuests
+        {
             get
             {
                 if (_allQuestIdentifiers == null)
                 {
-                    _allQuestIdentifiers = new List<QuestIdentifier>()
+                    _allQuestIdentifiers = new List<Quest>()
                     {
                         C(130, "BLACK_KNIGHTS_FORTRESS", true),
                         C(29, "COOKS_ASSISTANT", true),
@@ -43,50 +46,37 @@ namespace KuberaManager.Models.Data
             }
         }
 
-        #region Non-static properties
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public bool IsFreeToPlay { get; set; }
-        #endregion
-
-        // Shortcut method to populate AllQuestIdentifiers
-        private static QuestIdentifier C(int id, string name, bool isFreeToPlay)
+        // Helper function for cleanliness
+        private static Quest C(int varp, string questName, bool isFreeToPlay)
         {
-            return new QuestIdentifier()
-            {
-                Id = id,
-                Name = name,
-                IsFreeToPlay = isFreeToPlay
-            };
+            return new Quest(varp, questName, isFreeToPlay);
         }
 
 
-        public static QuestIdentifier ById(int id)
+        public static Quest GetRandomEligibleQuest(Account account)
         {
-            return AllQuestIdentifiers
-                .Where(x => x.Id == id)
+            // Get eligible quests
+            var eligibleQuests = AllQuests
+                .Where(q => account.IsMember || q.IsFreeToPlay)
+                .ToList();
+
+            // return random quest
+            int rand = RandomHelper.GetRandom(0, eligibleQuests.Count() - 1);
+            return eligibleQuests[rand];
+        }
+
+        public static Quest ByVarp(int id)
+        {
+            return AllQuests
+                .Where(x => x.Varp == id)
                 .FirstOrDefault();
         }
 
-        public static QuestIdentifier ByName(string name)
+        public static Quest ByName(string name)
         {
-            return AllQuestIdentifiers
-                .Where(x => x.Name == name)
+            return AllQuests
+                .Where(x => x.QuestName == name)
                 .FirstOrDefault();
-        }
-
-        public static List<QuestIdentifier> GetAllFreeToPlay()
-        {
-            return AllQuestIdentifiers
-                .Where(x => x.IsFreeToPlay)
-                .ToList();
-        }
-
-        public static List<QuestIdentifier> GetAllForMembers()
-        {
-            return AllQuestIdentifiers
-                .Where(x => !x.IsFreeToPlay)
-                .ToList();
         }
     }
 }

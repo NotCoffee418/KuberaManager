@@ -1,5 +1,7 @@
-﻿using KuberaManager.Models.Database;
+﻿using KuberaManager.Models.Data;
+using KuberaManager.Models.Database;
 using KuberaManager.Models.Logic.ScenarioLogic.Scenarios;
+using KuberaManager.Models.Logic.ScenarioLogic.Scenarios.Assigners;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,12 +13,12 @@ namespace KuberaManager.Models.Logic.ScenarioLogic.Requirements
     {
         public bool DoesMeetCondition(Account acc)
         {
-            throw new NotImplementedException();
+            return acc.HasDefinition(CompletionDataDefinition.TwentyHoursPlaytime);
         }
 
-        public ScenarioBase GetFulfillScenario()
+        public ScenarioBase GetFulfillScenario(Account acc)
         {
-            throw new NotImplementedException();
+            return QuestAssigner.GetRandomEligibleQuest(acc);
         }
     }
 }
