@@ -145,5 +145,38 @@ namespace KuberaManager.Controllers.Api
                 return "Failed: " + ex.Message;
             }
         }
+
+        [HttpGet]
+        public string WipeAllStoredAccountLevels()
+        {
+            return "This will DELETE ALL JOBS AND SESSIONS IN THE DB!" + Environment.NewLine +
+                "Use arg 'yesimsureplsdeletealloftehthings' to run it.";
+        }
+
+        [HttpGet("{validationStr}")]
+        public dynamic WipeAllStoredAccountLevels(string validationStr)
+        {
+            if (validationStr != "yesimsureplsdeletealloftehthings")
+                return "Invalid validation string. Nothing was wiped.";
+
+            try
+            {
+                // Delete all things
+                using (var db = new kuberaDbContext())
+                {
+                    // Get & remove sessions
+                    var allLevels = db.Levels.ToList();
+                    db.Levels.RemoveRange(allLevels);
+
+                    // write
+                    db.SaveChanges();
+                }
+                return "Done. yeeted all the things.";
+            }
+            catch (Exception ex)
+            {
+                return "Failed: " + ex.Message;
+            }
+        }
     }
 }

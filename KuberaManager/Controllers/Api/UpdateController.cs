@@ -122,20 +122,13 @@ namespace KuberaManager.Controllers.Api
                         // Decode levels
                         Levels levels = input.GetDetails<Levels>();
 
-                        // Store account id
+                        // Store account id & save
                         levels.AccountId = Account.FromLogin(input.RunescapeAccount).Id;
-
-                        using (var db = new kuberaDbContext())
-                        {
-                            // Insert or update
-                            db.Entry(levels).State = levels.AccountId == 0 ?
-                                EntityState.Added : EntityState.Modified;
-                            db.SaveChanges();
-                        }
+                        levels.Save();
                     }
                     catch (Exception ex)
                     {
-                        output.Errors.Add("report-skills error storing provided skill levels. " + ex.Message);
+                        output.Errors.Add("report-skills error storing provided skill levels. This can occcur when account is not registered in the database." + ex.Message);
                     }
                     break;
 

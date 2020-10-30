@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -83,6 +84,29 @@ namespace KuberaManager.Models.Database
         [Column("Hunter", Order = 23)]
         public int Hunter { get; set; }
 
+
+        public void Save()
+        {
+            if (AccountId == 0)
+                throw new Exception("Account ID must be defined to store levels");
+
+            using (var db = new kuberaDbContext())
+            {
+                try // Dodgy save method
+                {
+                    db.Levels.Update(this);
+                    db.SaveChanges();
+                }
+                // Doesn't exist yet. Insert instead
+                catch (DbUpdateConcurrencyException)
+                {
+                    db.Levels.Add(this);
+                    db.SaveChanges();
+                }
+            }
+        }
+
+        #region Static Methods
         public static Levels FromAccount(int id)
         {
             using (var db = new kuberaDbContext())
@@ -92,5 +116,7 @@ namespace KuberaManager.Models.Database
                     .FirstOrDefault();
             }
         }
+
+        #endregion
     }
 }
