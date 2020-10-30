@@ -15,7 +15,8 @@ namespace KuberaManager.Models.Logic.ScenarioLogic.Scenarios
             ScenarioName = "Quest"; // For scenario
             QuestName = questName; // assigns to Argument
             Varp = varp;
-            IsFreeToPlay = IsFreeToPlay;
+            IsFreeToPlay = isFreeToPlay;
+            CompletionDefinition = def;
         }
 
         public virtual string QuestName

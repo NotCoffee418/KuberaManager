@@ -1,4 +1,7 @@
-﻿using KuberaManager.Models.Database;
+﻿using KuberaManager.Models.Data;
+using KuberaManager.Models.Database;
+using KuberaManager.Models.Logic.ScenarioLogic.Scenarios;
+using KuberaManager.Models.Logic.ScenarioLogic.Scenarios.Assigners;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -25,9 +28,25 @@ namespace KuberaManagerUnitTests
         }
 
         [Test]
-        public void IsCompletedByAccount_something()
+        public void IsCompletedByAccount_ArbitraryQuest_TrueAndFalseCorrectly()
         {
-            Assert.Fail("NIY");
+            // Prepare account
+            _TestHelper.DbCreateMockAccounts(1);
+            Account acc = Account.FromId(1);
+
+            // Grab arbitrary quest
+            Quest q = QuestAssigner.ByVarp(2561);
+
+            // Verify that account returns false correctly
+            Assert.IsFalse(acc.HasDefinition(q.CompletionDefinition));
+            Assert.IsFalse(q.IsCompletedByAccount(acc));
+
+            // Mark quest as complete
+            acc.AddDefinition(q.CompletionDefinition);
+
+            // Verify that true returns correctly
+            Assert.IsTrue(acc.HasDefinition(q.CompletionDefinition));
+            Assert.IsTrue(q.IsCompletedByAccount(acc));
         }
 
 
