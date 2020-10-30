@@ -214,7 +214,7 @@ namespace KuberaManager.Models.Database
             {
                 return TimeSpan.FromSeconds(
                     db.Sessions
-                        .Where(x => x.Id == this.Id)
+                        .Where(x => x.AccountId == this.Id)
                         .Sum(x => x.TargetDuration.TotalSeconds)
                     );
             }
