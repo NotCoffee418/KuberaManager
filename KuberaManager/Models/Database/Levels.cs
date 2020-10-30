@@ -106,6 +106,15 @@ namespace KuberaManager.Models.Database
             }
         }
 
+        public int GetTotalLevel()
+        {
+            return Agility + Attack + Construction + Cooking + Crafting + Defence + Farming +
+                Firemaking + Fishing + Fletching + Herblore + Hitpoints + Hunter + Magic +
+                Mining + Prayer + Ranged + Runecrafting + Slayer + Smithing + Strength +
+                Thieving + Woodcutting;
+        }
+
+
         #region Static Methods
         public static Levels FromAccount(int id)
         {
