@@ -13,7 +13,20 @@ namespace KuberaManager.Models.Logic.ScenarioLogic.Requirements
     {
         public bool DoesMeetCondition(Account acc)
         {
-            return acc.HasDefinition(CompletionDataDefinition.TwentyHoursPlaytime);
+            // Check if we have completiondefinition set
+            if (acc.HasDefinition(CompletionDataDefinition.TwentyHoursPlaytime))
+                return true;
+
+            // Otherwise calculate play time
+            TimeSpan playTime = acc.GetTotalPlayedTime();
+            bool hasMoreThanTwentyOneHours = playTime > TimeSpan.FromHours(21);
+
+            // Set completiondefinition if condition is newly met
+            if (hasMoreThanTwentyOneHours)
+                acc.AddDefinition(CompletionDataDefinition.TwentyHoursPlaytime);
+
+            // Return result
+            return hasMoreThanTwentyOneHours;
         }
 
         public ScenarioBase GetFulfillScenario(Account acc)

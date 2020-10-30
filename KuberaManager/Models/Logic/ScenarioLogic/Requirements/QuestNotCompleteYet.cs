@@ -1,0 +1,31 @@
+﻿using KuberaManager.Models.Database;
+using KuberaManager.Models.Logic.ScenarioLogic.Scenarios;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace KuberaManager.Models.Logic.ScenarioLogic.Requirements
+{
+    public class QuestNotCompleteYet : IRequirement
+    {
+        public QuestNotCompleteYet(Quest quest)
+        {
+            Quest = quest;
+        }
+
+        private Quest Quest { get; set; }
+
+        public bool DoesMeetCondition(Account acc)
+        {
+            // return false if we did it
+            return !acc.HasDefinition(Quest.CompletionDefinition);
+        }
+
+        public ScenarioBase GetFulfillScenario(Account acc)
+        {
+            // Quest is already done... Whatdoyawhant??
+            return null;
+        }
+    }
+}

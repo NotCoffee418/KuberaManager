@@ -208,6 +208,18 @@ namespace KuberaManager.Models.Database
             return _todayPlayedTime.Value;
         }
 
+        public TimeSpan GetTotalPlayedTime()
+        {
+            using (var db = new kuberaDbContext())
+            {
+                return TimeSpan.FromSeconds(
+                    db.Sessions
+                        .Where(x => x.Id == this.Id)
+                        .Sum(x => x.TargetDuration.TotalSeconds)
+                    );
+            }
+        }
+
         /// <summary>
         /// If this account has a session not flagged as IsFinished
         /// </summary>
