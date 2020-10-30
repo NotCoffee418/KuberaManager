@@ -1,4 +1,6 @@
-﻿using System;
+﻿using KuberaManager.Models.Data;
+using KuberaManager.Models.Database;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,7 +9,7 @@ namespace KuberaManager.Models.Logic.ScenarioLogic.Scenarios
 {
     public class Quest : ScenarioBase
     {
-        public Quest(int varp, string questName, bool isFreeToPlay) 
+        public Quest(int varp, string questName, bool isFreeToPlay, CompletionDataDefinition def) 
             : base()
         {
             ScenarioName = "Quest"; // For scenario
@@ -23,5 +25,11 @@ namespace KuberaManager.Models.Logic.ScenarioLogic.Scenarios
         }
         public bool IsFreeToPlay { get; set; }
         public int Varp { get; set; }
+        public CompletionDataDefinition CompletionDefinition { get; set; }
+
+        public bool IsCompletedByAccount(Account acc)
+        {
+            return acc.HasDefinition(CompletionDefinition);
+        }
     }
 }

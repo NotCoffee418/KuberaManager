@@ -1,4 +1,5 @@
 ﻿using KuberaManager.Helpers;
+using KuberaManager.Models.Data;
 using KuberaManager.Models.Database;
 using System;
 using System.Collections.Generic;
@@ -19,27 +20,30 @@ namespace KuberaManager.Models.Logic.ScenarioLogic.Scenarios.Assigners
                 {
                     _allQuestIdentifiers = new List<Quest>()
                     {
-                        C(130, "BLACK_KNIGHTS_FORTRESS", true),
-                        C(29, "COOKS_ASSISTANT", true),
-                        C(6071, "THE_CORSAIR_CURSE", true),
-                        C(2561, "DEMON_SLAYER", true),
-                        C(31, "DORICS_QUEST", true),
-                        C(176, "DRAGON_SLAYER", true),
-                        C(32, "ERNEST_THE_CHICKEN", true),
-                        C(2378, "GOBLIN_DIPLOMACY", true),
-                        C(160, "IMP_CATCHER", true),
-                        C(122, "THE_KNIGHTS_SWORD", true),
-                        C(3468, "MISTHALIN_MYSTERY", true),
-                        C(71, "PIRATES_TREASURE", true),
-                        C(273, "PRINCE_ALI_RESCUE", true),
-                        C(107, "THE_RESTLESS_GHOST", true),
-                        C(144, "ROMEO_AND_JULIET", true),
-                        C(63, "RUNE_MYSTERIES", true),
-                        C(179, "SHEEP_SHEARER", true),
-                        C(145, "SHIELD_OF_ARRAV", true),
-                        C(178, "VAMPIRE_SLAYER", true),
-                        C(67, "WITCHS_POTION", true),
+                        // Free to play
+                        C(130, "BLACK_KNIGHTS_FORTRESS", true, CompletionDataDefinition.QUEST_BLACK_KNIGHTS_FORTRESS),
+                        C(29, "COOKS_ASSISTANT", true, CompletionDataDefinition.QUEST_COOKS_ASSISTANT),
+                        C(6071, "THE_CORSAIR_CURSE", true, CompletionDataDefinition.QUEST_THE_CORSAIR_CURSE),
+                        C(2561, "DEMON_SLAYER", true, CompletionDataDefinition.QUEST_DEMON_SLAYER),
+                        C(31, "DORICS_QUEST", true, CompletionDataDefinition.QUEST_DORICS_QUEST),
+                        C(176, "DRAGON_SLAYER", true, CompletionDataDefinition.QUEST_DRAGON_SLAYER),
+                        C(32, "ERNEST_THE_CHICKEN", true, CompletionDataDefinition.QUEST_ERNEST_THE_CHICKEN),
+                        C(2378, "GOBLIN_DIPLOMACY", true, CompletionDataDefinition.QUEST_GOBLIN_DIPLOMACY),
+                        C(160, "IMP_CATCHER", true, CompletionDataDefinition.QUEST_IMP_CATCHER),
+                        C(122, "THE_KNIGHTS_SWORD", true, CompletionDataDefinition.QUEST_THE_KNIGHTS_SWORD),
+                        C(3468, "MISTHALIN_MYSTERY", true, CompletionDataDefinition.QUEST_MISTHALIN_MYSTERY),
+                        C(71, "PIRATES_TREASURE", true, CompletionDataDefinition.QUEST_PIRATES_TREASURE),
+                        C(273, "PRINCE_ALI_RESCUE", true, CompletionDataDefinition.QUEST_PRINCE_ALI_RESCUE),
+                        C(107, "THE_RESTLESS_GHOST", true, CompletionDataDefinition.QUEST_THE_RESTLESS_GHOST),
+                        C(144, "ROMEO_AND_JULIET", true, CompletionDataDefinition.QUEST_ROMEO_AND_JULIET),
+                        C(63, "RUNE_MYSTERIES", true, CompletionDataDefinition.QUEST_RUNE_MYSTERIES),
+                        C(179, "SHEEP_SHEARER", true, CompletionDataDefinition.QUEST_SHEEP_SHEARER),
+                        C(145, "SHIELD_OF_ARRAV", true, CompletionDataDefinition.QUEST_SHIELD_OF_ARRAV),
+                        C(178, "VAMPIRE_SLAYER", true, CompletionDataDefinition.QUEST_VAMPIRE_SLAYER),
+                        C(67, "WITCHS_POTION", true, CompletionDataDefinition.QUEST_WITCHS_POTION),
 
+                        // Members
+                        // ...
                     };
                 }
                 return _allQuestIdentifiers;
@@ -47,9 +51,9 @@ namespace KuberaManager.Models.Logic.ScenarioLogic.Scenarios.Assigners
         }
 
         // Helper function for cleanliness
-        private static Quest C(int varp, string questName, bool isFreeToPlay)
+        private static Quest C(int varp, string questName, bool isFreeToPlay, CompletionDataDefinition def)
         {
-            return new Quest(varp, questName, isFreeToPlay);
+            return new Quest(varp, questName, isFreeToPlay, def);
         }
 
 
