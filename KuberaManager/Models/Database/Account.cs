@@ -62,7 +62,7 @@ namespace KuberaManager.Models.Database
             using (var db = new kuberaDbContext())
             {
                 result = db.Accounts
-                    .Where(x => x.Login == runescapeaccount)
+                    .Where(x => x.Login.ToLower() == runescapeaccount.ToLower())
                     .FirstOrDefault();
                 if (result == null)
                 {

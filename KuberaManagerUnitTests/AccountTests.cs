@@ -39,6 +39,20 @@ namespace KuberaManagerUnitTests
         }
 
         [Test]
+        public void FromLogin_ValidLoginMismatchedCases_ExcpectAccount()
+        {
+            // Create test accounts.
+            _TestHelper.DbCreateMockAccounts(1);
+
+            // Get acct with abnormal cases
+            Account acct = Account.FromLogin("TeStAcCoUnT1@mockup.faKE");
+
+            //validate result
+            Assert.IsNotNull(acct);
+            Assert.AreEqual("testAccount1@mockup.fake".ToLower(), acct.Login.ToLower());
+        }
+
+        [Test]
         public void GetTodayPlayedTime_FourSessionsToday_ExpectFourHours()
         {
             // Create test accounts.
