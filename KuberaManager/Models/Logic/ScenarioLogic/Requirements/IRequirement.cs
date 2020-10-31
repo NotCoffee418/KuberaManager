@@ -9,6 +9,10 @@ namespace KuberaManager.Models.Logic.ScenarioLogic.Requirements
 {
     public interface IRequirement
     {
+        // Determines if this requirement should be fulfilled as a priority
+        // Basically, no shuffle, always do it first when true
+        public bool IsPriority { get; set; }
+
         // Implements a check to see if requirements are met
         public bool DoesMeetCondition(Account acc);
 

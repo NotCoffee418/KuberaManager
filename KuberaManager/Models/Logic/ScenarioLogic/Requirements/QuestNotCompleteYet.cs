@@ -14,6 +14,8 @@ namespace KuberaManager.Models.Logic.ScenarioLogic.Requirements
             Quest = quest;
         }
 
+        public bool IsPriority { get; set; } = false;
+
         private Quest Quest { get; set; }
 
         public bool DoesMeetCondition(Account acc)
