@@ -17,6 +17,9 @@ namespace KuberaManager.Models.Logic.ScenarioLogic.Scenarios
             Varp = varp;
             IsFreeToPlay = isFreeToPlay;
             CompletionDefinition = def;
+
+            // Quests should always run until completion
+            AlwaysRunsUntilComplete = true;
         }
 
         public virtual string QuestName

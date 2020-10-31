@@ -39,9 +39,21 @@ namespace KuberaManager.Models.Logic
             throw new NotImplementedException();
         }
 
+        // pseudo:
+        // Check Account.ContinueScenario prio, run it and NULL it if exist
+        // else Figure out new job
         internal static Job GetNewJob()
         {
             throw new NotImplementedException();
         }
+
+        // pseudo:
+        // if past session exp time
+        //   if ScenarioBase.AlwaysRunUntilComplete
+        //      store job in Account.ContinueScenario
+        public static bool ShouldStopSessionCheck(Account acc)
+        {
+            throw new NotImplementedException();
+        } 
     }
 }

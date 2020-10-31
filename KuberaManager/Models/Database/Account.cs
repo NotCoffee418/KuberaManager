@@ -45,6 +45,11 @@ namespace KuberaManager.Models.Database
         [Display(Name = "Stop Time of Day", Description = "Preferred time of the day to stop 0-23. Logic is that an account should have consistent playing habits.")]
         public int PrefStopTimeDay { get; set; } = 23;
 
+        [AllowNull]
+        [DefaultValue(null)]
+        [Display(Name ="ContinueScenario", Description = "Will finish running the specified scenario next time this account plays. Value is a scenario identifier.")]
+        public string ContinueScenario { get; set; } = null;
+
         /// <summary>
         /// returns and creates account if not exist
         /// </summary>
