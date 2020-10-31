@@ -3,6 +3,7 @@ using KuberaManager.Models.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.Configuration;
+using KuberaManager.Models.PageModels;
 
 namespace KuberaManager.Models.Database
 {
@@ -64,5 +65,7 @@ namespace KuberaManager.Models.Database
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+
+        public DbSet<KuberaManager.Models.PageModels.ManualSession> ManualSession { get; set; }
     }
 }

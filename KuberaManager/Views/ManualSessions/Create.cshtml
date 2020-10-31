@@ -1,0 +1,45 @@
+﻿@model KuberaManager.Models.PageModels.ManualSession
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h4>Start Manual Session</h4>
+<strong>WARNING: This This may break stuff such as Requirements.HasTwentyHoursPlayed for that account.</strong>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="ComputerId" class="control-label"></label>
+                <input asp-for="ComputerId" class="form-control" />
+                <span asp-validation-for="ComputerId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SelectedScenario" class="control-label"></label>
+                <input asp-for="SelectedScenario" class="form-control" />
+                <span asp-validation-for="SelectedScenario" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="StopManuallly" /> @Html.DisplayNameFor(model => model.StopManuallly)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="RunUntil" class="control-label"></label>
+                <input asp-for="RunUntil" class="form-control" />
+                <span asp-validation-for="RunUntil" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

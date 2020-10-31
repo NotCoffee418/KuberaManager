@@ -10,6 +10,8 @@ namespace KuberaManager.Models.Logic.ScenarioLogic.Requirements
 {
     public class HasHunderedSkillPoints : IRequirement
     {
+        public bool IsPriority { get; set; } = true;
+
         public bool DoesMeetCondition(Account acc)
         {
             // Grab from definition

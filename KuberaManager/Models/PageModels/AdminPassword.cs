@@ -9,7 +9,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace KuberaManager.Models.Data
+namespace KuberaManager.Models.PageModels
 {
     public class AdminPassword
     {

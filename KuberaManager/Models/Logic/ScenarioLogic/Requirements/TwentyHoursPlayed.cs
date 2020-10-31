@@ -11,6 +11,8 @@ namespace KuberaManager.Models.Logic.ScenarioLogic.Requirements
 {
     public class TwentyHoursPlayed : IRequirement
     {
+        public bool IsPriority { get; set; } = true;
+
         public bool DoesMeetCondition(Account acc)
         {
             // Check if we have completiondefinition set

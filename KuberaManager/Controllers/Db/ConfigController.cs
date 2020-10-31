@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using System.IO;
 using KuberaManager.Models.Database;
-using KuberaManager.Models.Data;
+using KuberaManager.Models.PageModels;
 using Microsoft.AspNetCore.Authorization;
 
 namespace KuberaManager.Controllers.Db
