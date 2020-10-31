@@ -21,6 +21,7 @@ namespace KuberaManager.Models.Logic.ScenarioLogic.Scenarios.Assigners
                     _allQuestIdentifiers = new List<Quest>()
                     {
                         // Free to play
+                        C(281, "TUTORIAL_ISLAND", true, CompletionDataDefinition.TutorialComplete),
                         C(130, "BLACK_KNIGHTS_FORTRESS", true, CompletionDataDefinition.QUEST_BLACK_KNIGHTS_FORTRESS),
                         C(29, "COOKS_ASSISTANT", true, CompletionDataDefinition.QUEST_COOKS_ASSISTANT),
                         C(6071, "THE_CORSAIR_CURSE", true, CompletionDataDefinition.QUEST_THE_CORSAIR_CURSE),
