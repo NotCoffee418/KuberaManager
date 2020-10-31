@@ -16,12 +16,11 @@ namespace KuberaManager.Models.Data.KuberaCommStructure.Update
         // Empty or error descriptiopn
         public List<string> Errors { get; set; } = new List<string>();
 
-        // when true, client should stop
-        public bool IsStopRequest { get; set; } = false;
-
         // Which scenario should be running. Null is acceptable.
-        public string Scenario { get; set; }
+        public string Instruction { get; set; }
 
-
+        // Additional Information
+        // vague documentation can be found in java ResponseFormat comments
+        public Dictionary<string, dynamic> Data { get; set; } = new Dictionary<string, dynamic>();
     }
 }

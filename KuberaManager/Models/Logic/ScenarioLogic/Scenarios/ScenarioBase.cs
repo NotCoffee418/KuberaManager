@@ -9,9 +9,17 @@ namespace KuberaManager.Models.Logic.ScenarioLogic.Scenarios
 {
     public abstract class ScenarioBase
     {
+        // Properties
+        public string Identifier { get { return $"{ScenarioName}.{ScenarioArgument}".Replace(" ", ""); } }
         public string ScenarioName { get; set; }
         public string ScenarioArgument { get; set; }
         public List<IRequirement> Requirements { get; set; } = new List<IRequirement>();
         public bool AlwaysRunsUntilComplete { get; set; } = false;
+
+        // Methods
+        public override string ToString()
+        {
+            return Identifier;
+        }
     }
 }

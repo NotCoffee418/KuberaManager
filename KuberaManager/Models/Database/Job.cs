@@ -19,8 +19,7 @@ namespace KuberaManager.Models.Database
         public int SessionId { get; set; }
 
         [AllowNull]
-        [ForeignKey("Scenario")]
-        public int ActiveScenarioId { get; set; }
+        public string ScenarioIdentifier { get; set; }
 
         [Required]
         public DateTime StartTime { get; set; }
@@ -29,20 +28,10 @@ namespace KuberaManager.Models.Database
         public TimeSpan TargetDuration { get; set; }
 
         [Required]
+        public bool ForceRunUntilComplete { get; set; } = false;
+
+        [Required]
         [DefaultValue(false)]
         public bool IsFinished { get; set; } = false;
-
-
-
-        public Session SessionObj 
-        { get { return Session.FromId(SessionId); } }
-        public Scenario ActiveScenarioObj 
-        { get { return Scenario.FromId(ActiveScenarioId); } }
-
-
-        public static Job ForceSetNewJob()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

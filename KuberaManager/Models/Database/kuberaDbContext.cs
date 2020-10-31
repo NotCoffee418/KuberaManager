@@ -22,7 +22,6 @@ namespace KuberaManager.Models.Database
         public virtual DbSet<Config> Configs { get; set; }
         public virtual DbSet<Account> Accounts { get; set; }
         public virtual DbSet<Computer> Computers { get; set; }
-        public virtual DbSet<Scenario> Scenarios { get; set; }
         public virtual DbSet<Session> Sessions { get; set; }
         public virtual DbSet<Job> Jobs { get; set; }
         public virtual DbSet<Levels> Levels { get; set; }
@@ -59,13 +58,6 @@ namespace KuberaManager.Models.Database
             modelBuilder.Entity<Computer>(entity =>
             {
                 entity.Property(e => e.Hostname).IsRequired();
-            });
-
-            modelBuilder.Entity<Scenario>(entity =>
-            {
-                entity.HasIndex(e => e.Id);
-
-                entity.Property(e => e.Name).IsRequired();
             });
 
             OnModelCreatingPartial(modelBuilder);

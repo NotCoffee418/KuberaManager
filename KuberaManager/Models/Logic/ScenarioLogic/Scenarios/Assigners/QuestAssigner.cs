@@ -12,7 +12,7 @@ namespace KuberaManager.Models.Logic.ScenarioLogic.Scenarios.Assigners
     public class QuestAssigner
     {
         private static List<Quest> _allQuestIdentifiers = null;
-        private static List<Quest> AllQuests
+        public static List<Quest> AllQuests
         {
             get
             {

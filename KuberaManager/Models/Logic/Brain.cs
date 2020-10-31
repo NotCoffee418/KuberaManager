@@ -1,4 +1,5 @@
 ﻿using KuberaManager.Models.Database;
+using KuberaManager.Models.Logic.ScenarioLogic.Scenarios;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,7 @@ namespace KuberaManager.Models.Logic
 {
     public class Brain
     {
-        public static Scenario DetermineScenario(Session sess)
+        public static ScenarioBase DetermineScenario(Session sess)
         {
             throw new NotImplementedException();
         }
@@ -30,6 +31,16 @@ namespace KuberaManager.Models.Logic
 
             //
 
+            throw new NotImplementedException();
+        }
+
+        internal static bool DoesClientNeedJobUpdate()
+        {
+            throw new NotImplementedException();
+        }
+
+        internal static Job GetNewJob()
+        {
             throw new NotImplementedException();
         }
     }

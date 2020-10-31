@@ -72,11 +72,11 @@ namespace KuberaManager.Controllers.Api
         [HttpGet]
         public string CreateSpoofJob()
         {
-            return "/sessionId/scenarioId?/" + Environment.NewLine +
+            return "/sessionId/scenarioIdentifier/" + Environment.NewLine +
                 "Timetables inferred from session. Using full session duration";
         }
         [HttpGet("{sessionId}/{scenarioId?}")]
-        public dynamic CreateSpoofJob(int sessionId, int scenarioId = 1)
+        public dynamic CreateSpoofJob(int sessionId, string scenarioIdentifier)
         {
             if (sessionId == 0)
                 return "missing session id. Create it first";
@@ -87,7 +87,7 @@ namespace KuberaManager.Controllers.Api
             Job job = new Job()
             {
                 SessionId = sessionId,
-                ActiveScenarioId = scenarioId,
+                ScenarioIdentifier = scenarioIdentifier,
                 IsFinished = sess.IsFinished,
                 StartTime = sess.StartTime, //
                 TargetDuration = sess.TargetDuration //

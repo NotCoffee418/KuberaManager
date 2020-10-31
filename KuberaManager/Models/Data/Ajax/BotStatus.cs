@@ -72,7 +72,7 @@ namespace KuberaManager.Models.Data.Ajax
                         // Add job data
                         Job job = accSess.FindCurrentJob();
                         if (job != null)
-                            bs.ActiveJob = job.ActiveScenarioObj.Name;
+                            bs.ActiveJob = job.ScenarioIdentifier;
                     }
 
                     result.Add(bs);

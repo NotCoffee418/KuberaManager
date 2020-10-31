@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using KuberaManager.Models.Data.KuberaCommStructure;
 using KuberaManager.Models.Data.KuberaCommStructure.DetailsStructure;
 using Microsoft.EntityFrameworkCore;
+using KuberaManager.Models.Logic.ScenarioLogic.Scenarios;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -64,8 +65,30 @@ namespace KuberaManager.Controllers.Api
                         output.Errors.Add("No username was provided in the request. Failed to execute.");
                         return output;
                     }
-                    Scenario scen = Brain.DetermineScenario(relevantSession);
-                    output.Scenario = scen.Name;
+
+                    // Determine if client needs to be told what it's new job is
+                    bool needsUpdate = Brain.DoesClientNeedJobUpdate();
+                    if (needsUpdate)
+                    {
+                        // Get new job's data
+                        Job job = Brain.GetNewJob();
+                        ScenarioBase scen = ScenarioHelper.ByIdentifier(job.ScenarioIdentifier);
+
+                        // Prepare output data
+                        output.Instruction = "change-scenario";
+                        output.Data.Add("scenario-name", scen.ScenarioName);
+                        output.Data.Add("scenario-argument", scen.ScenarioArgument);
+
+                        // Define run-until-complete and run-until-time if thats false
+                        output.Data.Add("run-until-complete", job.ForceRunUntilComplete);
+                        if (!job.ForceRunUntilComplete)
+                            output.Data.Add("", job.StartTime.Add(job.TargetDuration));
+
+                        // All set! report
+                        return output;
+                    }
+                    // Still doing the same old. Don't send update
+                    else output.Instruction = "none";
                     break;
 
                 case "stopping":
