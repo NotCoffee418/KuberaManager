@@ -221,6 +221,11 @@ namespace KuberaManager.Models.Database
             return true;
         }
 
+        internal void SaveCurrentAction(string text)
+        {
+            EventLog.AddEntry(this.Id, text);
+        }
+
         public Job FindCurrentJob()
         {
             using (var db = new kuberaDbContext())

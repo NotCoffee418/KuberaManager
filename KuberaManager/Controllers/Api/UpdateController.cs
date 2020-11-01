@@ -171,6 +171,16 @@ namespace KuberaManager.Controllers.Api
                     }
                     break;
 
+                case "report-current-action":
+                    // Demand account
+                    if (relevantSession == null)
+                    {
+                        output.Errors.Add("No username was provided in the request. Failed to execute.");
+                        return output;
+                    }
+                    relevantSession.SaveCurrentAction(input.GetDetails<string>());
+                    break;
+
                 default:
                     output.Errors.Add("Invalid API request. Invalid status.");
                     relevantSession.ReportFinished();
