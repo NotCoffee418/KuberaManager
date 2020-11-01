@@ -62,7 +62,8 @@ namespace KuberaManager.Models.Logic.ScenarioLogic.Scenarios.Assigners
         {
             // Get eligible quests
             var eligibleQuests = AllQuests
-                .Where(q => account.IsMember || q.IsFreeToPlay)
+                .Where(q => account.IsMember || q.IsFreeToPlay) // Is eligible
+                .Where(q => !account.HasDefinition(q.CompletionDefinition)) // Hasn't completed yet
                 .ToList();
 
             // return random quest

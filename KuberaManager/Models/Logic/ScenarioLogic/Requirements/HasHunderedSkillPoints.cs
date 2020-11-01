@@ -1,6 +1,7 @@
 ﻿using KuberaManager.Models.Data;
 using KuberaManager.Models.Database;
 using KuberaManager.Models.Logic.ScenarioLogic.Scenarios;
+using KuberaManager.Models.Logic.ScenarioLogic.Scenarios.Assigners;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,7 +39,7 @@ namespace KuberaManager.Models.Logic.ScenarioLogic.Requirements
 
         public ScenarioBase GetFulfillScenario(Account acc)
         {
-            throw new NotImplementedException();
+            return QuestAssigner.GetRandomEligibleQuest(acc);
         }
     }
 }
