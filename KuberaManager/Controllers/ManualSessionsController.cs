@@ -8,18 +8,14 @@ using Microsoft.EntityFrameworkCore;
 using KuberaManager.Models.Database;
 using KuberaManager.Models.PageModels;
 using Microsoft.AspNetCore.Authorization;
+using KuberaManager.Models.Logic.ScenarioLogic.Scenarios;
+using KuberaManager.Models.Logic;
 
 namespace KuberaManager.Controllers
 {
     [Authorize(Roles = "Admin")]
     public class ManualSessionsController : Controller
     {
-        private readonly kuberaDbContext _context;
-
-        public ManualSessionsController(kuberaDbContext context)
-        {
-            _context = context;
-        }
 
         // GET: ManualSessions
         public IActionResult Index()
@@ -30,6 +26,7 @@ namespace KuberaManager.Controllers
         // GET: ManualSessions/Create
         public IActionResult Create()
         {
+            PrepareDisplayData();
             return View();
         }
 
@@ -38,15 +35,56 @@ namespace KuberaManager.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("AccountId,ComputerId,SelectedScenario,StopManuallly,RunUntil")] ManualSession manualSession)
+        public async Task<IActionResult> Create([Bind("AccountId,ComputerId,SelectedScenario,StopManually,RunUntil")] ManualSession ms)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(manualSession);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                Brain.StartNewClient(ms.AccountId, ms.SelectedScenario, ms.ComputerId, ms.StopManually, ms.RunUntil);
+                return Redirect("/");
             }
-            return View(manualSession);
+
+            PrepareDisplayData();
+            return View(ms);
+        }
+
+        private void PrepareDisplayData()
+        {
+            // Init
+            List<Account> accList = null;
+            List<Computer> compList = null;
+            List<ScenarioBase> scenList = null;
+
+            // Get data
+            using (var db = new kuberaDbContext())
+            {
+                // Get eligible accounts
+                accList = db.Accounts
+                    .Where(x => !x.IsBanned)
+                    .Where(x => x.IsEnabled)
+                    .ToList();
+
+                // Get eligible computers
+                compList = db.Computers
+                    .ToList();
+
+                // Get scenarios
+                scenList = ScenarioHelper.AllScenarios;
+            }
+
+            // Accounts
+            ViewBag.Accounts = new List<SelectListItem>();
+            foreach (Account acc in accList)
+                ViewBag.Accounts.Add(new SelectListItem { Value = acc.Id.ToString(), Text = acc.Login });
+
+            // Computers
+            ViewBag.Computers = new List<SelectListItem>();
+            foreach (Computer comp in compList)
+                ViewBag.Computers.Add(new SelectListItem { Value = comp.Id.ToString(), Text = comp.Hostname });
+
+            // Scenarios
+            ViewBag.Scenarios = new List<SelectListItem>();
+            foreach (ScenarioBase scen in scenList)
+                ViewBag.Scenarios.Add(new SelectListItem { Value = scen.Identifier, Text = scen.Identifier });
         }
     }
 }

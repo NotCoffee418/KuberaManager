@@ -14,7 +14,7 @@ namespace KuberaManager.Models.PageModels
         public int AccountId { get; set; }
         public int ComputerId { get; set; }
         public string SelectedScenario { get; set; }
-        public bool StopManuallly { get; set; } = false;
+        public bool StopManually { get; set; } = true;
         public DateTime RunUntil { get; set; } = DateTime.Now.AddHours(1);
     }
 }

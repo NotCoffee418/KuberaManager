@@ -22,8 +22,11 @@ namespace KuberaManager.Models.Logic
 
         // input args etc need to be defined
         // false means we can't do it for some reason
-        public static bool StartNewClient()
+        public static bool StartNewClient(int accountId, string selectedScenario, int computerId, bool stopManually, DateTime runUntil)
         {
+
+            throw new NotImplementedException();
+
             // Get available computer. return if none is available
             Computer availableComputer = Computer.GetAvailableComputer();
             if (availableComputer == null)
@@ -31,7 +34,6 @@ namespace KuberaManager.Models.Logic
 
             //
 
-            throw new NotImplementedException();
         }
 
         internal static bool DoesClientNeedJobUpdate()
