@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using KuberaManager.Models.Database;
+using KuberaManager.Models.Logic.ScenarioLogic.Scenarios;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -82,15 +83,17 @@ namespace KuberaManager.Controllers.Api
                 return "missing session id. Create it first";
 
             Session sess = Session.FromId(sessionId);
+            ScenarioBase scen = ScenarioHelper.ByIdentifier(scenarioIdentifier);
 
             // Create job
             Job job = new Job()
             {
                 SessionId = sessionId,
                 ScenarioIdentifier = scenarioIdentifier,
+                ForceRunUntilComplete = scen.AlwaysRunsUntilComplete,
                 IsFinished = sess.IsFinished,
-                StartTime = sess.StartTime, //
-                TargetDuration = sess.TargetDuration //
+                StartTime = sess.StartTime,
+                TargetDuration = sess.TargetDuration
             };
 
             // Add to DB & return

@@ -103,9 +103,18 @@ namespace KuberaManager.Models.Logic
             return TimeSpan.FromSeconds(randSeconds);
         }
 
-        internal static bool DoesClientNeedJobUpdate()
+        /// <summary>
+        /// Closes job if needed. Returns status
+        /// </summary>
+        /// <param name="sess"></param>
+        /// <returns></returns>
+        internal static bool DoesClientNeedJobUpdate(Session session)
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException(); // logic check
+            Job currentJob = session.FindCurrentJob();
+            if (currentJob == null)
+                return true;
+            else return currentJob.ShouldStop();
         }
 
         // pseudo:

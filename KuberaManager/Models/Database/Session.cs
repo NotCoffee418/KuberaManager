@@ -167,9 +167,58 @@ namespace KuberaManager.Models.Database
         #endregion
 
         #region Non-static
+
+        /// <summary>
+        /// Determines if session should stop.
+        /// Handles marking IsFinished and storing Account.ContinueScenario.
+        /// </summary>
+        /// <returns></returns>
         public bool ShouldStop()
         {
-            return StartTime + TargetDuration > DateTime.Now;
+            // Keep going, do nothing.
+            bool isPastExpTime = StartTime.Add(TargetDuration) < DateTime.Now;
+            if (!isPastExpTime)
+                return false;
+
+            // watch?v=W6oQUDFV2C0
+            if (IsFinished)
+                return true;
+
+            // Update job & account status
+            Job currentJob = FindCurrentJob();
+            if (currentJob != null)
+            {
+                // Store current job to be continued on next login if needed
+                if (currentJob.ForceRunUntilComplete)
+                {
+                    Account acc = Account.FromId(AccountId);
+                    using (var db = new kuberaDbContext())
+                    {
+                        db.Attach(acc);
+                        acc.ContinueScenario = currentJob.ScenarioIdentifier;
+                        db.SaveChanges();
+                    }
+                }
+
+                // Mark JOB as finished
+                using (var db = new kuberaDbContext())
+                {
+                    db.Attach(currentJob);
+                    currentJob.IsFinished = true;
+                    db.SaveChanges();
+                }
+            }
+
+            // Mark SESSION as finished
+            using (var db = new kuberaDbContext())
+            {
+                db.Attach(this);
+                this.IsFinished = true;
+                db.SaveChanges();
+            }
+
+            // Report that we should stop
+            return true;
         }
 
         public Job FindCurrentJob()
@@ -178,6 +227,8 @@ namespace KuberaManager.Models.Database
             {
                 return db.Jobs
                     .Where(x => x.SessionId == Id)
+                    .Where(x => x.IsFinished == false)
+                    .OrderByDescending(x => x.Id)
                     .FirstOrDefault();
             }
         }
