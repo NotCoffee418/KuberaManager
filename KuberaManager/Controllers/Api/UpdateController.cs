@@ -66,8 +66,21 @@ namespace KuberaManager.Controllers.Api
                         return output;
                     }
 
-                    // -- HANDLE STOPPING SESSION --//
-
+                    // -- HANDLE STOPPING SESSION & JOB --//
+                    Job currentJob = relevantSession.FindCurrentJob();
+                    if (relevantSession.ShouldStop())
+                    {
+                        // Tell client to stop
+                        relevantSession.ReportFinished();
+                        output.Instruction = "stop-session";
+                        return output;
+                    }
+                    else if (currentJob.ShouldStop())
+                    {
+                        currentJob.MarkCompleted();
+                        currentJob = relevantSession.FindCurrentJob(); // redefine
+                        output.Instruction = "stop-job"; // can be overridden by change-scenario 
+                    }
 
                     // -- HANDLE CHANGING JOB ASSIGNMENT --//
                     // Interpret Details variable(s)
@@ -85,7 +98,6 @@ namespace KuberaManager.Controllers.Api
                     }
 
                     // Determine needsNewJob
-                    Job currentJob = relevantSession.FindCurrentJob();
                     bool needsNewJob = false;
 
                     // Check if CLIENT says we need a new job
