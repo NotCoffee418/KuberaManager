@@ -44,7 +44,7 @@ namespace KuberaManager.Models.Database
         /// </summary>
         /// <param name="runescapeaccount"></param>
         /// <returns>null or session</returns>
-        public static Session FromAccount(string runescapeaccount)
+        public static Session FromAccount(string runescapeaccount, bool createNewAllowed = true)
         {
             // Get runescape account
             Account account = Account.FromLogin(runescapeaccount);
@@ -55,7 +55,8 @@ namespace KuberaManager.Models.Database
                 Session foundSession = db.Sessions
                     .Where(x => x.IsFinished == false)
                     .Where(x => x.AccountId == account.Id)
-                    .Where(x => x.LastUpdateTime < DateTime.Now.AddHours(-1)) // last update must be less than an hour old.
+                    .Where(x => x.StartTime.Add(x.TargetDuration) > DateTime.Now) // session must not be past target duration
+                    .Where(x => x.LastUpdateTime > DateTime.Now.AddMinutes(-10)) // last update must be less than 10 minutes
                     .OrderByDescending(x => x.LastUpdateTime)
                     .FirstOrDefault();
 
@@ -69,6 +70,9 @@ namespace KuberaManager.Models.Database
             }
 
             /// We're still here. Session was not found. Create new one & return.
+            if (!createNewAllowed || kuberaDbContext.IsUnitTesting)
+                return null; // Can't unittest ClientManager stuff
+
             // Determine Get relevant session data
             var sessionCd = ClientManager.GetConnectedClients()
                 .Where(x => x.runescapeEmail.ToLower() == runescapeaccount.ToLower())
@@ -103,7 +107,7 @@ namespace KuberaManager.Models.Database
             return sess;
         }
 
-        internal static Session FromId(int sessionId)
+        public static Session FromId(int sessionId)
         {
             using (var db = new kuberaDbContext())
             {
@@ -113,7 +117,7 @@ namespace KuberaManager.Models.Database
             }
         }
 
-        internal void ReportFinished()
+        public  void ReportFinished()
         {
             using (var db = new kuberaDbContext())
             {
@@ -128,6 +132,38 @@ namespace KuberaManager.Models.Database
             }
         }
 
+        public void ReportHeartbeat()
+        {
+            using (var db = new kuberaDbContext())
+            {
+                this.LastUpdateTime = DateTime.Now;
+                db.SaveChanges();
+            }
+        }
+
+        /// <summary>
+        /// Gets the duration of the session until now.
+        /// Best estimate for actual session length.
+        /// </summary>
+        public TimeSpan GetDuration()
+        {
+            DateTime endTime = LastUpdateTime;            
+            if (LastUpdateTime == default(DateTime))
+            {
+                // Session never had a heartbeat but is expired.
+                // Assume session never actually ran!
+                if (StartTime.Add(TargetDuration) < DateTime.Now)
+                    return TimeSpan.Zero;
+
+                // Session is so new it has no heartbeat yet
+                else endTime = DateTime.Now;
+            }
+                
+
+            // If session never reported a heartbeat but is expired
+
+            return endTime.Subtract(StartTime);
+        }
         #endregion
 
         #region Non-static

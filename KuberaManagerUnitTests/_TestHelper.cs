@@ -62,16 +62,23 @@ namespace KuberaManagerUnitTests
             }
 
             // Create
+            Session sess = new Session()
+            {
+                AccountId = acctId,
+                ActiveComputer = 1,
+                TargetDuration = overrideDuration.HasValue ? overrideDuration.Value : TimeSpan.FromHours(1),
+                StartTime = startTime,
+                IsFinished = isFinished,
+            };
+
+            // Set last update to simulate real bot
+            var endTime = sess.StartTime.Add(sess.TargetDuration);
+            sess.LastUpdateTime = endTime < DateTime.Now ? endTime : DateTime.Now.AddSeconds(-5);
+
+            // Add to db
             using (var db = new kuberaDbContext())
             {
-                db.Sessions.Add(new Session()
-                {
-                    AccountId = acctId,
-                    ActiveComputer = 1,
-                    TargetDuration = overrideDuration.HasValue ? overrideDuration.Value : TimeSpan.FromHours(1),
-                    StartTime = startTime,
-                    IsFinished = isFinished,
-                });
+                db.Sessions.Add(sess);
 
                 // Save
                 db.SaveChanges();

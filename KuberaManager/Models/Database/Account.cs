@@ -220,7 +220,7 @@ namespace KuberaManager.Models.Database
                 return TimeSpan.FromSeconds(
                     db.Sessions
                         .Where(x => x.AccountId == this.Id)
-                        .Sum(x => x.TargetDuration.TotalSeconds)
+                        .Sum(x => x.GetDuration().TotalSeconds)
                     );
             }
         }

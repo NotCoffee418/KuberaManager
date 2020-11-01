@@ -66,6 +66,9 @@ namespace KuberaManager.Controllers.Api
                         return output;
                     }
 
+                    // Keep alive
+                    relevantSession.ReportHeartbeat();
+
                     // Determine if client needs to be told what it's new job is
                     bool needsUpdate = Brain.DoesClientNeedJobUpdate();
                     if (needsUpdate)
