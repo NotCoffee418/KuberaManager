@@ -36,9 +36,9 @@ namespace KuberaManager.Models.Data.KuberaCommStructure.Update
         public JsonElement Details { get; set; }
 
         /// <summary>
-        /// The RS account sending the request
+        /// The session ID for the request
         /// </summary>
-        public string RunescapeAccount { get; set; }
+        public int Session { get; set; }
 
         internal bool HasValidStatus()
         {

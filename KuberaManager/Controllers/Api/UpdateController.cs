@@ -47,7 +47,7 @@ namespace KuberaManager.Controllers.Api
             var output = new OutputFormat();
 
             // not sure how this is useful but it's here.
-            Session relevantSession = Session.FromAccount(input.RunescapeAccount);
+            Session relevantSession = Session.FromId(input.Session);
             if (input.Errors.Count > 0)
             {
                 output.Errors.Add("Recieved an error from the client. End session.");
@@ -62,10 +62,11 @@ namespace KuberaManager.Controllers.Api
                     // Demand account
                     if (relevantSession == null)
                     {
-                        output.Errors.Add("No username was provided in the request. Failed to execute.");
+                        output.Errors.Add($"Invalid session id '{input.Session}' was provided in the request. Failed to execute.");
                         return output;
                     }
 
+                    // Handle stop signal if needed
                     // Keep session alive
                     relevantSession.ReportHeartbeat();
 
@@ -134,7 +135,8 @@ namespace KuberaManager.Controllers.Api
                         DiscordMessageStructure details = input.GetDetails<DiscordMessageStructure>();
 
                         // Send message
-                        DiscordHandler.PostMessage($"{input.RunescapeAccount}: {details.message}", details.tts);
+                        Account acc = Account.FromId(relevantSession.AccountId);
+                        DiscordHandler.PostMessage($"{acc.Login}: {details.message}", details.tts);
                     }
                     catch
                     {
@@ -149,7 +151,7 @@ namespace KuberaManager.Controllers.Api
                         Levels levels = input.GetDetails<Levels>();
 
                         // Store account id & save
-                        levels.AccountId = Account.FromLogin(input.RunescapeAccount).Id;
+                        levels.AccountId = relevantSession.AccountId;
                         levels.Save();
                     }
                     catch (Exception ex)
