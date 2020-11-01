@@ -16,8 +16,12 @@ namespace KuberaManager.Models.Logic
         /// </summary>
         internal static void ScheduledSessionStarter()
         {
-            return;
-            //throw new NotImplementedException();
+            // Do nothing if brain is not enabled
+            if (!Config.Get<bool>("BrainEnabled"))
+                return;
+
+            // Start one session if needed (one per minute because RSpeer may bork)
+            throw new NotImplementedException();
         }
 
         // pseudo:

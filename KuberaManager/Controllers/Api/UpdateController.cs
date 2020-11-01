@@ -131,12 +131,16 @@ namespace KuberaManager.Controllers.Api
                 case "discord-notify":
                     try
                     {
+                        // Determine display name by session if provided
+                        string displayName = "Unknown";
+                        if (relevantSession != null)
+                            displayName = Account.FromId(relevantSession.AccountId).Login;
+
                         // Get details
                         DiscordMessageStructure details = input.GetDetails<DiscordMessageStructure>();
 
                         // Send message
-                        Account acc = Account.FromId(relevantSession.AccountId);
-                        DiscordHandler.PostMessage($"{acc.Login}: {details.message}", details.tts);
+                        DiscordHandler.PostMessage($"{displayName}: {details.message}", details.tts);
                     }
                     catch
                     {
@@ -147,6 +151,13 @@ namespace KuberaManager.Controllers.Api
                 case "report-skills":
                     try
                     {
+                        // Demand account
+                        if (relevantSession == null)
+                        {
+                            output.Errors.Add("No username was provided in the request. Failed to execute.");
+                            return output;
+                        }
+
                         // Decode levels
                         Levels levels = input.GetDetails<Levels>();
 
