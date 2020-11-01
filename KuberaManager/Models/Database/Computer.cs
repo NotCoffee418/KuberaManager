@@ -47,7 +47,7 @@ namespace KuberaManager.Models.Database
             using (var db = new kuberaDbContext())
             {
                 comp = db.Computers
-                    .Where(x => x.Hostname == hostName)
+                    .Where(x => x.Hostname.ToLower() == hostName.ToLower())
                     .FirstOrDefault();
                 if (comp != null)
                     return comp;
@@ -117,7 +117,7 @@ namespace KuberaManager.Models.Database
         public string GetTag()
         {
             return ClientManager.GetConnectedComputers()
-                .Where(x => x.Value.host == Hostname)
+                .Where(x => x.Value.host.ToLower() == Hostname.ToLower())
                 .FirstOrDefault().Key;
         }
 

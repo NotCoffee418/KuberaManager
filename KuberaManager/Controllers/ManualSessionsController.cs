@@ -35,7 +35,7 @@ namespace KuberaManager.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("AccountId,ComputerId,SelectedScenario,StopManually,RunUntil")] ManualSession ms)
+        public IActionResult Create([Bind("AccountId,ComputerId,SelectedScenario,StopManually,RunUntil")] ManualSession ms)
         {
             if (ModelState.IsValid)
             {

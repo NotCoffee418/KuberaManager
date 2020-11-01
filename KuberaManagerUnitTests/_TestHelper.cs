@@ -42,7 +42,7 @@ namespace KuberaManagerUnitTests
                 // Save
                 db.SaveChanges();
             }
-            
+
         }
 
 
@@ -72,6 +72,41 @@ namespace KuberaManagerUnitTests
                     StartTime = startTime,
                     IsFinished = isFinished,
                 });
+
+                // Save
+                db.SaveChanges();
+            }
+        }
+
+
+        public static void DbCreateMockComputers(int enabled = 10, int disabled = 2)
+        {
+            kuberaDbContext.IsUnitTesting = true;
+            using (var db = new kuberaDbContext())
+            {
+                // enabled computers
+                for (int i = 0; i < enabled; i++)
+                {
+                    int ident = i + 1;
+                    Computer comp = new Computer()
+                    {
+                        Hostname = "mockComputer" + ident,
+                        IsEnabled = true
+                    };
+                    db.Computers.Add(comp);
+                }
+
+                // disabled computers
+                for (int i = 0; i < disabled; i++)
+                {
+                    int ident = i + 1;
+                    Computer comp = new Computer()
+                    {
+                        Hostname = "mockComputer" + ident,
+                        IsEnabled = false
+                    };
+                    db.Computers.Add(comp);
+                }
 
                 // Save
                 db.SaveChanges();

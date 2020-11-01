@@ -18,6 +18,10 @@ namespace KuberaManager.Models.Logic
 
         private static async Task PostMessageTask(string msg, bool tts)
         {
+            if (kuberaDbContext.IsUnitTesting)
+                return; // Don't post when unittesting
+
+            // Post message
             string webhookToken = Config.Get<string>("DiscordApiKey");
             string json = JsonConvert.SerializeObject(new Dictionary<string, dynamic>
             {
