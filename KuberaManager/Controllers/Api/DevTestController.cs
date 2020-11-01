@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using KuberaManager.Models.Data.Ajax;
 using KuberaManager.Models.Database;
 using KuberaManager.Models.Logic.ScenarioLogic.Scenarios;
 using Microsoft.AspNetCore.Authorization;
@@ -180,6 +181,18 @@ namespace KuberaManager.Controllers.Api
             {
                 return "Failed: " + ex.Message;
             }
+        }
+
+        [HttpGet]
+        public string GetSessionEventLog()
+        {
+            return "/sessionId";
+        }
+
+        [HttpGet("{sessionId}")]
+        public List<EventLogDisplayFormat> GetSessionEventLog(int sessionId)
+        {
+            return EventLog.GetSessionDisplayLogs(sessionId);
         }
     }
 }
