@@ -66,13 +66,42 @@ namespace KuberaManager.Controllers.Api
                         return output;
                     }
 
-                    // Handle stop signal if needed
-                    // Keep session alive
-                    relevantSession.ReportHeartbeat();
+                    // -- HANDLE STOPPING SESSION --//
+
+
+                    // -- HANDLE CHANGING JOB ASSIGNMENT --//
+                    // Interpret Details variable(s)
+                    bool clientRequestsNewJob = false;
+                    try
+                    {
+                        // This might bork
+                        var detailsData = input.GetDetails<Dictionary<string, bool>>();
+                        clientRequestsNewJob = detailsData["request-new-job"];
+                    }
+                    catch
+                    {
+                        output.Errors.Add($"Failed to interpret details as Dictionary<string, bool>.");
+                        return output;
+                    }
+
+                    // Determine needsNewJob
+                    Job currentJob = relevantSession.FindCurrentJob();
+                    bool needsNewJob = false;
+
+                    // Check if CLIENT says we need a new job
+                    if (clientRequestsNewJob && currentJob != null)
+                    {
+                        currentJob.MarkCompleted();
+                        needsNewJob = true;
+                    }
+                    // Check if SERVER says we need a new job
+                    else if (Brain.DoesClientNeedJobUpdate(relevantSession))
+                    {
+                        needsNewJob = true;
+                    }
 
                     // Determine if client needs to be told what it's new job is
-                    bool needsUpdate = Brain.DoesClientNeedJobUpdate(relevantSession);
-                    if (needsUpdate)
+                    if (needsNewJob)
                     {
                         // Get new job's data
                         Job job = Brain.FindNewJob(relevantSession);
@@ -83,16 +112,14 @@ namespace KuberaManager.Controllers.Api
                         output.Data.Add("scenario-name", scen.ScenarioName);
                         output.Data.Add("scenario-argument", scen.ScenarioArgument);
 
-                        // Define run-until-complete and run-until-time if thats false
-                        output.Data.Add("run-until-complete", job.ForceRunUntilComplete);
-                        if (!job.ForceRunUntilComplete)
-                            output.Data.Add("", job.StartTime.Add(job.TargetDuration));
-
                         // All set! report
                         return output;
                     }
                     // Still doing the same old. Don't send update
                     else output.Instruction = "none";
+
+                    // Keep session alive
+                    relevantSession.ReportHeartbeat();
                     break;
 
                 case "stopping":

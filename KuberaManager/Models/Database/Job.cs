@@ -43,18 +43,38 @@ namespace KuberaManager.Models.Database
             if (!ForceRunUntilComplete && endTime < DateTime.Now)
             {
                 // Mark current job as finished
-                using (var db = new kuberaDbContext())
-                {
-                    IsFinished = true;
-                    db.Update(this);
-                    db.SaveChanges();
-                }
+                MarkCompleted();
 
                 // Return status
                 return true;
             }
             // Still here, no close conditions met. Keep going.
             else return false;
+        }
+
+        internal void MarkCompleted()
+        {
+            // Set account completion definition if applicable
+            ScenarioBase scen = ScenarioHelper.ByIdentifier(ScenarioIdentifier);
+
+            // For quests..
+            if (scen.GetType().Equals(typeof(Quest)))
+            {
+                // Set account definition
+                Session sess = Session.FromId(SessionId);
+                AccountCompletionData.AddDefinition(
+                    sess.AccountId, ((Quest)scen).CompletionDefinition);
+            }
+            // else if ...
+            // Any new scenario types with account definitions should be added here
+
+            // Mark Job as IsFinished
+            using (var db = new kuberaDbContext())
+            {
+                IsFinished = true;
+                db.Update(this);
+                db.SaveChanges();
+            }
         }
     }
 }
