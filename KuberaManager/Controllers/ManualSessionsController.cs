@@ -39,7 +39,8 @@ namespace KuberaManager.Controllers
         {
             if (ModelState.IsValid)
             {
-                Brain.StartNewClient(ms.AccountId, ms.SelectedScenario, ms.ComputerId, ms.StopManually, ms.RunUntil);
+                TimeSpan runUntil = ms.RunUntil.Subtract(DateTime.Now);
+                Brain.StartNewClient(ms.AccountId, ms.SelectedScenario, ms.ComputerId, runUntil, true);
                 return Redirect("/");
             }
 

@@ -68,7 +68,7 @@ namespace KuberaManager.Models.Database
                     return foundSession;
                 }
             }
-
+#warning move this to it's own thing and return null here always.
             /// We're still here. Session was not found. Create new one & return.
             if (!createNewAllowed || kuberaDbContext.IsUnitTesting)
                 return null; // Can't unittest ClientManager stuff
@@ -92,7 +92,7 @@ namespace KuberaManager.Models.Database
                 IsFinished = false,
                 StartTime = DateTime.Now,
                 LastUpdateTime = DateTime.Now,
-                TargetDuration = Brain.GetTargetDuration(account),
+                TargetDuration = Brain.GetRandomSessionDuration(account),
                 RspeerSessionTag = sessionCd.tag,
                 ActiveComputer = Computer.ByHostname(sessionCd.machineName).Id
             };

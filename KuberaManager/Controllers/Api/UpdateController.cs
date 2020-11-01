@@ -74,7 +74,7 @@ namespace KuberaManager.Controllers.Api
                     if (needsUpdate)
                     {
                         // Get new job's data
-                        Job job = Brain.GetNewJob();
+                        Job job = Brain.FindNewJob(relevantSession);
                         ScenarioBase scen = ScenarioHelper.ByIdentifier(job.ScenarioIdentifier);
 
                         // Prepare output data
