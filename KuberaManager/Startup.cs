@@ -105,6 +105,10 @@ namespace KuberaManager
             {
                 Authorization = new[] { new HangfireAuthorizationFilter() }
             });
+
+            // Hangfire scheduled tasks
+            RecurringJob.AddOrUpdate(() => ScheduledTasks.RunHourlyJobs(), Cron.Hourly);
+            RecurringJob.AddOrUpdate(() => ScheduledTasks.RunMinutelyJobs(), Cron.Minutely);
         }
     }
 }

@@ -11,6 +11,30 @@ namespace KuberaManager.Models.Logic
 {
     public class Brain
     {
+        /// <summary>
+        /// Called minutely, starts new sessions if needed
+        /// </summary>
+        internal static void ScheduledSessionStarter()
+        {
+            return;
+            //throw new NotImplementedException();
+        }
+
+        // pseudo:
+        // if past session exp time
+        //   if ScenarioBase.AlwaysRunUntilComplete
+        //      store job in Account.ContinueScenario
+        /// <summary>
+        /// Runs hourly, cleans sessions that didn't close correctly.
+        /// </summary>
+        /// <param name="acc"></param>
+        /// <returns></returns>
+        public static bool ScheduledSessionJanitor()
+        {
+            return false;
+            //throw new NotImplementedException();
+        }
+
         public static ScenarioBase DetermineScenario(Session sess)
         {
             throw new NotImplementedException();
@@ -88,15 +112,6 @@ namespace KuberaManager.Models.Logic
         // Check Account.ContinueScenario prio, run it and NULL it if exist
         // else Figure out new job
         internal static Job FindNewJob(Session sess)
-        {
-            throw new NotImplementedException();
-        }
-
-        // pseudo:
-        // if past session exp time
-        //   if ScenarioBase.AlwaysRunUntilComplete
-        //      store job in Account.ContinueScenario
-        public static bool ShouldStopSessionCheck(Account acc)
         {
             throw new NotImplementedException();
         }
