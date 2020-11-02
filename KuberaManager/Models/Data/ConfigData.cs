@@ -38,6 +38,7 @@ namespace KuberaManager.Models.Data
             new KeyData("DeveloperMode", 4, "False", "Enables dev tools for creating spoof data (True/False)"),
             new KeyData("BrainEnabled", 5, "False", "Determines if bots should start automatically (True/False)"),
             new KeyData("AllowRspeerApiCalls", 6, "False", "Determines if API calls should actually fire or send discord message instead. WARN: Get requests still go through."),
+            new KeyData("ApiUrlOverride", 7, "", "-apiUrl shipped to our jar. Leave empty for default. Format: 'https://mysite.com'"),
         };
 
         public static string GetDescription(string confKey)
