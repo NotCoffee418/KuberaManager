@@ -44,12 +44,12 @@ namespace KuberaManager.Models.Database
         /// </summary>
         /// <param name="runescapeaccount"></param>
         /// <returns>null or session</returns>
-        public static Session FromAccount(string runescapeaccount, bool createNewAllowed = true)
+        public static Session FromAccount(string runescapeaccount)
         {
             // Get runescape account
             Account account = Account.FromLogin(runescapeaccount);
 
-            // Attempt to find existing session or create new one
+            // Find valid & active session
             using (var db = new kuberaDbContext())
             {
                 Session foundSession = db.Sessions
@@ -60,31 +60,18 @@ namespace KuberaManager.Models.Database
                     .OrderByDescending(x => x.LastUpdateTime)
                     .FirstOrDefault();
 
-                // if session is known, change LastUpdateTime and return
-                if (foundSession != null)
-                {
-                    foundSession.LastUpdateTime = DateTime.Now;
-                    db.SaveChanges();
-                    return foundSession;
-                }
+                // Found session or null
+                return foundSession;
             }
-#warning move this to it's own thing and return null here always.
-            /// We're still here. Session was not found. Create new one & return.
-            if (!createNewAllowed || kuberaDbContext.IsUnitTesting)
-                return null; // Can't unittest ClientManager stuff
+        }
 
-            // Determine Get relevant session data
-            var sessionCd = ClientManager.GetConnectedClients()
-                .Where(x => x.runescapeEmail.ToLower() == runescapeaccount.ToLower())
-                .FirstOrDefault();
-            if (sessionCd == null)
-                return null;
-
-            // Determine relevant computer
-            var computerKvp = ClientManager.GetConnectedComputers()
-                .Where(x => x.Value.host.ToLower() == sessionCd.machineName.ToLower())
-                .FirstOrDefault();
-
+        /// <summary>
+        /// Adds a session to DB with input data + Brain determined duration. Doesn't launch it.
+        /// </summary>
+        /// <param name="account"></param>
+        /// <param name="computer"></param>
+        public static void Create(Account account, Computer computer)
+        {
             // Prepare new session var
             Session sess = new Session()
             {
@@ -93,18 +80,15 @@ namespace KuberaManager.Models.Database
                 StartTime = DateTime.Now,
                 LastUpdateTime = DateTime.Now,
                 TargetDuration = Brain.GetRandomSessionDuration(account),
-                RspeerSessionTag = sessionCd.tag,
-                ActiveComputer = Computer.ByHostname(sessionCd.machineName).Id
+                ActiveComputer = computer.Id
             };
-            
+
             // Save new session to database & return
             using (var db = new kuberaDbContext())
             {
                 db.Sessions.Add(sess);
                 db.SaveChanges();
             }
-
-            return sess;
         }
 
         public static Session FromId(int sessionId)

@@ -20,8 +20,21 @@ namespace KuberaManager.Models.Logic
             if (!Config.Get<bool>("BrainEnabled"))
                 return;
 
-            // Start one session if needed (one per minute because RSpeer may bork)
-            throw new NotImplementedException();
+            // Determine if we have a free slot, return if not
+            Computer computer = Computer.GetAvailableComputer();
+            if (computer == null)
+                return;
+
+            // Get available account, return if none
+            Account account = Account.GetAvailableAccount();
+            if (account == null)
+                return;
+
+            // Create a new session with the gathered info.
+            Session.Create(account, computer);
+
+            // Launch the session
+            ClientManager.StartClient(account, computer);
         }
 
         // pseudo:
