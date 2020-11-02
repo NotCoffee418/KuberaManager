@@ -1,5 +1,6 @@
 ﻿using KuberaManager.Models.Data;
 using KuberaManager.Models.Logic;
+using KuberaManager.Models.Logic.ScenarioLogic.Scenarios.Assigners;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -267,6 +268,38 @@ namespace KuberaManager.Models.Database
         public void AddDefinition(CompletionDataDefinition def)
         {
             AccountCompletionData.AddDefinition(Id, def);
+        }
+
+        internal void UpdateQuestCompletionData(Dictionary<int, bool> questStatusDict)
+        {
+            // Select complete quests only
+            int[] completeQuests = questStatusDict
+                .Where(x => x.Value == true)
+                .Select(x => x.Key)
+                .ToArray();
+
+            // Get definitions for complete quests
+            var completeDefs = new List<CompletionDataDefinition>();
+            foreach (int qVarp in completeQuests)
+                try
+                {
+                    completeDefs.Add(QuestAssigner.ByVarp(qVarp).CompletionDefinition);
+                }
+                catch
+                {
+                    string errorMsg = $"Failed to get CompletionDataDefinition for quest with varp {qVarp}. Is the quest defined in the server?";
+                    DiscordHandler.PostMessage(errorMsg);
+                    throw new Exception(errorMsg);
+                }
+
+            // Get the currently known account definitions
+            var currentAccountDefinitions = GetDefinitions();
+
+            // Find definitions that aren't stored in account yet & add them
+            completeDefs
+                .Where(x => !currentAccountDefinitions.Contains(x))
+                .ToList()
+                .ForEach(x => AddDefinition(x));
         }
     }
 }

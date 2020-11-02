@@ -138,7 +138,7 @@ namespace KuberaManager.Controllers.Api
                     // Demand account
                     if (relevantSession == null)
                     {
-                        output.Errors.Add("No username was provided in the request. Failed to execute.");
+                        output.Errors.Add("Session ID provided in the request does not exist. Failed to execute.");
                         return output;
                     }
                     relevantSession.ReportFinished();
@@ -148,7 +148,7 @@ namespace KuberaManager.Controllers.Api
                     // Demand account
                     if (relevantSession == null)
                     {
-                        output.Errors.Add("No username was provided in the request. Failed to execute.");
+                        output.Errors.Add("Session ID provided in the request does not exist. Failed to execute.");
                         return output;
                     }
 
@@ -193,7 +193,7 @@ namespace KuberaManager.Controllers.Api
                         // Demand account
                         if (relevantSession == null)
                         {
-                            output.Errors.Add("No username was provided in the request. Failed to execute.");
+                            output.Errors.Add("Session ID provided in the request does not exist. Failed to execute.");
                             return output;
                         }
 
@@ -214,15 +214,28 @@ namespace KuberaManager.Controllers.Api
                     // Demand account
                     if (relevantSession == null)
                     {
-                        output.Errors.Add("No username was provided in the request. Failed to execute.");
+                        output.Errors.Add("Session ID provided in the request does not exist. Failed to execute.");
                         return output;
                     }
                     relevantSession.SaveCurrentAction(input.GetDetails<string>());
                     break;
+                case "report-quest-complete":
+                    if (relevantSession == null)
+                    {
+                        output.Errors.Add("Session ID provided in the request does not exist. Failed to execute.");
+                        return output;
+                    }
+
+                    // Grab the dictionary
+                    var questStatusDict = input.GetDetails<Dictionary<int, bool>>();
+
+                    // Get acct & save
+                    Account acc = Account.FromId(relevantSession.AccountId);
+                    acc.UpdateQuestCompletionData(questStatusDict);
+                    break;
 
                 default:
-                    output.Errors.Add("Invalid API request. Invalid status.");
-                    relevantSession.ReportFinished();
+                    output.Errors.Add("This API request is not implemented.");
                     break;
             }
 
