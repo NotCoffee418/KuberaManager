@@ -159,7 +159,6 @@ namespace KuberaManager.Models.Database
             if (_todayPlayedTime.HasValue)
                 return _todayPlayedTime.Value;
 
-
             // one day var
             DateTime dayAgo = DateTime.Now.AddDays(-1);
 
@@ -174,9 +173,12 @@ namespace KuberaManager.Models.Database
 
                 // Sum of relevant durations
                 if (previousSessions.Count() > 0)
-                    totalSeconds = previousSessions
-                        .Select(x => x.TargetDuration.TotalSeconds)
-                        .Sum();
+                {
+                    foreach (var sess in previousSessions)
+                        if (sess.StartTime != default(DateTime) && sess.LastUpdateTime != default(DateTime))
+                            totalSeconds += sess.LastUpdateTime.Subtract(sess.StartTime).TotalSeconds;
+
+                }                    
 
                 /// Append session that was ongoing 24 hours ago
                 var possiblyOngoingYdayFilter1 = db.Sessions
