@@ -16,7 +16,7 @@ namespace KuberaManager.Hangfire
             BackgroundJob.Enqueue(() => FindRspeerSessionTag(account));
         }
 
-        private static void FindRspeerSessionTag(Account account)
+        public static void FindRspeerSessionTag(Account account)
         {
             Session sess = null;
 

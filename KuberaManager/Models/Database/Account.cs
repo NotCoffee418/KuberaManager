@@ -166,25 +166,25 @@ namespace KuberaManager.Models.Database
             using (var db = new kuberaDbContext())
             {
                 /// Calculate time played from finished sessions
-                totalSeconds = db.Sessions
+                var previousSessions = db.Sessions
                     .Where(x => x.AccountId == this.Id)
+                    .Where(x => x.IsFinished) // Only include finished sessions in first check
+                    .Where(x => x.StartTime > dayAgo); // if session started within the past day
 
-                    // Only include finished sessions in first check
-                    .Where(x => x.IsFinished)
-
-                    // if session started within the past day
-                    .Where(x => x.StartTime > dayAgo)
-
-                    // Sum of relevant durations
-                    .Sum(x => x.TargetDuration.TotalSeconds);
-
+                // Sum of relevant durations
+                if (previousSessions.Count() > 0)
+                    totalSeconds = previousSessions
+                        .Select(x => x.TargetDuration.TotalSeconds)
+                        .Sum();
 
                 /// Append session that was ongoing 24 hours ago
-                var possiblyOngoingYday = db.Sessions
+                var possiblyOngoingYdayFilter1 = db.Sessions
                     .Where(x => x.AccountId == this.Id)
                     .Where(x => x.IsFinished)
+                    .ToList();
 
-                    // Grab first session based on END time
+                // Grab first session based on END time
+                var possiblyOngoingYday = possiblyOngoingYdayFilter1
                     .Where(x => x.StartTime.Add(x.TargetDuration) > dayAgo)
                     .OrderBy(x => x.StartTime)
                     .FirstOrDefault();

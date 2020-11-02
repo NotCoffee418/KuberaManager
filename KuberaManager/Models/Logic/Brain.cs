@@ -57,9 +57,10 @@ namespace KuberaManager.Models.Logic
                     .ToList();
 
                 // Find bork jobs
-                var borkJobs = db.Jobs
+                var selectJobs = db.Jobs
                     .Where(x => !x.IsFinished)
-                    .Where(x => x.ForceRunUntilComplete)
+                    .Where(x => !x.ForceRunUntilComplete);
+                var borkJobs = selectJobs
                     .Where(x => x.StartTime.Add(x.TargetDuration) < DateTime.Now.AddHours(-2))
                     .ToList();
 
@@ -90,11 +91,6 @@ namespace KuberaManager.Models.Logic
                     DiscordHandler.PostMessage($"Session: {job.SessionId} Job: {job.Id}");
                 }
             }
-        }
-
-        public static ScenarioBase DetermineScenario(Session sess)
-        {
-            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -167,7 +163,6 @@ namespace KuberaManager.Models.Logic
         /// <returns></returns>
         internal static bool DoesClientNeedJobUpdate(Session session)
         {
-            throw new NotImplementedException(); // logic check
             Job currentJob = session.FindCurrentJob();
             if (currentJob == null)
                 return true;
@@ -184,24 +179,23 @@ namespace KuberaManager.Models.Logic
 
         // input args etc need to be defined
         // false means we can't do it for some reason
-        // Should be suitable for automatic and manual session starting.
-        // Any missing information eeds to be calculated in another function
-        public static bool StartNewClient(int accountId, string selectedScenario, int computerId, TimeSpan targetDuration, bool isManualSession = false)
+        public static void ManualSessionStarter(int accountId, string selectedScenario, int computerId)
         {
-            try
-            {
-                // Get data from input
-                Account account = Account.FromId(accountId);
-                ScenarioBase scenario = ScenarioHelper.ByIdentifier(selectedScenario);
-                Computer computer = Computer.ById(computerId);
+            // Get data from input
+            Account account = Account.FromId(accountId);
+            ScenarioBase scenario = ScenarioHelper.ByIdentifier(selectedScenario);
+            Computer computer = Computer.ById(computerId);
 
-                throw new NotImplementedException();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message); // logger me
-                return false;
-            }
+            // Create a new session with the gathered info.
+            Session.Create(account, computer);
+
+            // Launch the session
+            ClientManager.StartClient(account, computer, isManualSession: true);
+
+            // Background job to get session tag on launch
+            BackgroundJobs.Launch_FindRspeerSessionTag(account);
+
+            // catch & logger me
         }
     }
 }

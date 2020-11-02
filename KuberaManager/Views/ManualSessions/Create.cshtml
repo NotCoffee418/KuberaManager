@@ -29,17 +29,6 @@
                 <select asp-for="ComputerId" asp-items="ViewBag.Computers" class="form-control"></select>
             </div>
 
-
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="StopManually" /> @Html.DisplayNameFor(model => model.StopManually)
-                </label>
-            </div>
-            <div class="form-group">
-                <label asp-for="RunUntil" class="control-label"></label>
-                <input asp-for="RunUntil" class="form-control" />
-                <span asp-validation-for="RunUntil" class="text-danger"></span>
-            </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>

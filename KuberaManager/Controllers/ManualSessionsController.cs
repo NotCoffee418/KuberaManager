@@ -35,12 +35,11 @@ namespace KuberaManager.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create([Bind("AccountId,ComputerId,SelectedScenario,StopManually,RunUntil")] ManualSession ms)
+        public IActionResult Create([Bind("AccountId,ComputerId,SelectedScenario")] ManualSession ms)
         {
             if (ModelState.IsValid)
             {
-                TimeSpan runUntil = ms.RunUntil.Subtract(DateTime.Now);
-                Brain.StartNewClient(ms.AccountId, ms.SelectedScenario, ms.ComputerId, runUntil, true);
+                Brain.ManualSessionStarter(ms.AccountId, ms.SelectedScenario, ms.ComputerId);
                 return Redirect("/");
             }
 
