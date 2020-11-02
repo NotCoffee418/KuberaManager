@@ -41,6 +41,27 @@ namespace KuberaManager.Models.Logic
             BackgroundJobs.Launch_FindRspeerSessionTag(account);
         }
 
+        // input args etc need to be defined
+        // false means we can't do it for some reason
+        public static void ManualSessionStarter(int accountId, string selectedScenario, int computerId)
+        {
+            // Get data from input
+            Account account = Account.FromId(accountId);
+            ScenarioBase scenario = ScenarioHelper.ByIdentifier(selectedScenario);
+            Computer computer = Computer.ById(computerId);
+
+            // Create a new session with the gathered info.
+            Session.Create(account, computer);
+
+            // Launch the session
+            ClientManager.StartClient(account, computer, isManualSession: true);
+
+            // Background job to get session tag on launch
+            BackgroundJobs.Launch_FindRspeerSessionTag(account);
+
+            // catch & logger me
+        }
+
         /// <summary>
         /// Lazy bork check. Report on discord when sessions or jobs don't close correctly + close them.
         /// </summary>
@@ -175,27 +196,6 @@ namespace KuberaManager.Models.Logic
         internal static Job FindNewJob(Session sess)
         {
             throw new NotImplementedException();
-        }
-
-        // input args etc need to be defined
-        // false means we can't do it for some reason
-        public static void ManualSessionStarter(int accountId, string selectedScenario, int computerId)
-        {
-            // Get data from input
-            Account account = Account.FromId(accountId);
-            ScenarioBase scenario = ScenarioHelper.ByIdentifier(selectedScenario);
-            Computer computer = Computer.ById(computerId);
-
-            // Create a new session with the gathered info.
-            Session.Create(account, computer);
-
-            // Launch the session
-            ClientManager.StartClient(account, computer, isManualSession: true);
-
-            // Background job to get session tag on launch
-            BackgroundJobs.Launch_FindRspeerSessionTag(account);
-
-            // catch & logger me
         }
     }
 }
