@@ -12,7 +12,7 @@ namespace KuberaManager.Hangfire
         public static void RunHourlyJobs()
         {
             // Cleans sessions that didn't close correctly
-            Brain.ScheduledSessionJanitor();
+            Brain.ScheduledJanitor();
         }
 
         public static void RunMinutelyJobs()

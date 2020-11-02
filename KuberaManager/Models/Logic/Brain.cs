@@ -41,19 +41,55 @@ namespace KuberaManager.Models.Logic
             BackgroundJobs.Launch_FindRspeerSessionTag(account);
         }
 
-        // pseudo:
-        // if past session exp time
-        //   if ScenarioBase.AlwaysRunUntilComplete
-        //      store job in Account.ContinueScenario
         /// <summary>
-        /// Runs hourly, cleans sessions that didn't close correctly.
+        /// Lazy bork check. Report on discord when sessions or jobs don't close correctly + close them.
         /// </summary>
         /// <param name="acc"></param>
         /// <returns></returns>
-        public static bool ScheduledSessionJanitor()
+        public static void ScheduledJanitor()
         {
-            return false;
-            //throw new NotImplementedException();
+            using (var db = new kuberaDbContext())
+            {
+                // Find borked sessions
+                var borkSession = db.Sessions
+                    .Where(x => !x.IsFinished)
+                    .Where(x => x.LastUpdateTime < DateTime.Now.AddHours(-2))
+                    .ToList();
+
+                // Find bork jobs
+                var borkJobs = db.Jobs
+                    .Where(x => !x.IsFinished)
+                    .Where(x => x.ForceRunUntilComplete)
+                    .Where(x => x.StartTime.Add(x.TargetDuration) < DateTime.Now.AddHours(-2))
+                    .ToList();
+
+                // Warn discord TTS
+                if (borkSession.Count() > 0 || borkJobs.Count() > 0)
+                    DiscordHandler.PostMessage("Manager: Founds sessions that didn't close correctly.", tts:true);
+                
+                // No problems, go home
+                else return;
+
+                // Kill sessions
+                foreach (var sess in borkSession)
+                {
+                    db.Attach(sess);
+                    sess.IsFinished = true;
+                    db.SaveChanges();
+
+                    DiscordHandler.PostMessage($"Session: {sess.Id} Account: {sess.AccountId}");
+                }
+
+                // Kill jobs
+                foreach (var job in borkJobs)
+                {
+                    db.Attach(job);
+                    job.IsFinished = true;
+                    db.SaveChanges();
+
+                    DiscordHandler.PostMessage($"Session: {job.SessionId} Job: {job.Id}");
+                }
+            }
         }
 
         public static ScenarioBase DetermineScenario(Session sess)
