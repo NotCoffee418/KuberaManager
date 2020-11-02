@@ -36,10 +36,11 @@ namespace KuberaManager.Models.Database
                     TextId = textId,
                     Timestamp = DateTime.Now
                 });
+                db.SaveChanges();
             }
         }
 
-        internal static List<EventLogDisplayFormat> GetSessionDisplayLogs(int sessionId)
+        public static List<EventLogDisplayFormat> GetSessionDisplayLogs(int sessionId)
         {
             // Get account name for session
             Session sess = Session.FromId(sessionId);

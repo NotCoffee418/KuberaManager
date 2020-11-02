@@ -27,19 +27,18 @@ namespace KuberaManager.Models.Database
                     .FirstOrDefault();
 
                 // If it doesn't exist, create it
-                db.EventLogTexts.Add(new EventLogText()
+                if (txt == null)
                 {
-                    Text = text
-                });
-
-                // Check it again
-                txt = db.EventLogTexts
-                    .Where(x => x.Text == text)
-                    .First(); // first or exception
+                    db.EventLogTexts.Add(new EventLogText()
+                    {
+                        Text = text
+                    });
+                    db.SaveChanges();
+                }
             }
 
-            // Return result
-            return txt.Id;
+            // Return result or try again if newly created
+            return txt == null ? GetId(text) : txt.Id;
         }
 
         public static string FromId(int id)
