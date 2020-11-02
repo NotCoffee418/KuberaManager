@@ -157,7 +157,7 @@ namespace KuberaManager.Models.Logic
         /// <param name="session"></param>
         /// <param name="scenario"></param>
         /// <returns>Zero means exit</returns>
-        public static TimeSpan GetRandomJobDuration(Account account, Session session, ScenarioBase scenario)
+        public static TimeSpan GetRandomJobDuration(Session session, ScenarioBase scenario)
         {
             // Determine remaining time in session
             TimeSpan maxTime = session.StartTime.Add(session.TargetDuration).Subtract(DateTime.Now);

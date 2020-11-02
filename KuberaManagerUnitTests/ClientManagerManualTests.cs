@@ -43,14 +43,14 @@ namespace KuberaManagerUnitTests
             Account acc = Account.FromLogin("testAccount1@mockup.fake");
             Config.Set<string>("RspeerApiKey1", RspeerApiKey);
 
+            // Find relevant session
+            Session sess = Session.FromAccount(acc.Login);
+
             // Start client
-            ClientManager.StartClient(acc, Comp);
+            ClientManager.StartClient(acc, Comp, sess);
 
             // Wait 20 seconds and shut down
             Thread.Sleep(20000);
-
-            // Find relevant session
-            Session sess = Session.FromAccount(acc.Login);
 
             //Stop client
             ClientManager.StopClient(sess);

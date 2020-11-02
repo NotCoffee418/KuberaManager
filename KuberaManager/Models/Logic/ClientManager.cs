@@ -15,7 +15,6 @@ namespace KuberaManager.Models.Logic
         public static void StartClient(Account account, Computer computer, Session session, int world = -1, bool isManualSession = false)
         {
             // Prepare data
-            string managerArg = isManualSession ? "manual" : session.Id.ToString();
             BotLauncherRequest req = new BotLauncherRequest(account, computer, session, world, isManualSession);
             
             // Send request
@@ -54,7 +53,7 @@ namespace KuberaManager.Models.Logic
         }
 
 
-        HttpClient client = new HttpClient();
+        readonly HttpClient client = new HttpClient();
         /// <summary>
         /// 
         /// </summary>
@@ -72,7 +71,7 @@ namespace KuberaManager.Models.Logic
                     string json = JsonConvert.SerializeObject(data);
                     request.Content = new StringContent(json, Encoding.UTF8, "application/json"); ;
                 }
-                var response = await client.SendAsync(request);
+                await client.SendAsync(request);
             }
         }
 
