@@ -1,4 +1,5 @@
-﻿using KuberaManager.Helpers;
+﻿using KuberaManager.Hangfire;
+using KuberaManager.Helpers;
 using KuberaManager.Models.Database;
 using KuberaManager.Models.Logic.ScenarioLogic.Scenarios;
 using Microsoft.Extensions.Logging;
@@ -35,6 +36,9 @@ namespace KuberaManager.Models.Logic
 
             // Launch the session
             ClientManager.StartClient(account, computer);
+
+            // Background job to get session tag on launch
+            BackgroundJobs.Launch_FindRspeerSessionTag(account);
         }
 
         // pseudo:

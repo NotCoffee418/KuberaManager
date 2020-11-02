@@ -38,6 +38,7 @@ namespace KuberaManager.Models.Database
         [DefaultValue(true)]
         public bool IsFinished { get; set; }
 
+
         #region Static
         /// <summary>
         /// Find Session based on RS login email
@@ -101,7 +102,11 @@ namespace KuberaManager.Models.Database
             }
         }
 
-        public  void ReportFinished()
+        #endregion
+
+        #region Non-static
+
+        public void ReportFinished()
         {
             using (var db = new kuberaDbContext())
             {
@@ -131,7 +136,7 @@ namespace KuberaManager.Models.Database
         /// </summary>
         public TimeSpan GetDuration()
         {
-            DateTime endTime = LastUpdateTime;            
+            DateTime endTime = LastUpdateTime;
             if (LastUpdateTime == default(DateTime))
             {
                 // Session never had a heartbeat but is expired.
@@ -142,15 +147,20 @@ namespace KuberaManager.Models.Database
                 // Session is so new it has no heartbeat yet
                 else endTime = DateTime.Now;
             }
-                
 
             // If session never reported a heartbeat but is expired
-
             return endTime.Subtract(StartTime);
         }
-        #endregion
 
-        #region Non-static
+        public void UpdateTag(string tag)
+        {
+            using (var db = new kuberaDbContext())
+            {
+                db.Attach(this);
+                RspeerSessionTag = tag;
+                db.SaveChanges();
+            }
+        }
 
         /// <summary>
         /// Determines if session should stop.
