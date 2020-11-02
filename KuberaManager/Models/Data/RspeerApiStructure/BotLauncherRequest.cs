@@ -17,7 +17,7 @@ namespace KuberaManager.Models.Data.RspeerApiStructure
 
             string apiUrlOverride = Config.Get<string>("ApiUrlOverride");
             if (apiUrlOverride != null && apiUrlOverride != "")
-                scriptStartupArgs += $" -apiUrl {apiUrlOverride}"
+                scriptStartupArgs += $" -apiUrl {apiUrlOverride}";
 
             // Prepare clientstructure
             ClientStructure clientStruct = new ClientStructure()

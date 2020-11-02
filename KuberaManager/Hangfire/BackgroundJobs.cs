@@ -49,13 +49,6 @@ namespace KuberaManager.Hangfire
                     sess.UpdateTag(client.tag);
                     return;
                 }
-
-                // Attempt to relaunch every 90 seconds (twice)
-                if (i % 15 == 0) 
-                {
-                    Computer comp = Computer.ById(sess.ActiveComputer);
-                    ClientManager.StartClient(account, comp, sess);
-                }
             }
 
             // Still here. Report bork on discord
