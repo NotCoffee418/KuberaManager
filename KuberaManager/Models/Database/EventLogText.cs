@@ -29,10 +29,13 @@ namespace KuberaManager.Models.Database
                 // If it doesn't exist, create it
                 if (txt == null)
                 {
-                    db.EventLogTexts.Add(new EventLogText()
+                    txt = new EventLogText()
                     {
                         Text = text
-                    });
+                    };
+
+                    db.Attach(txt);
+                    db.EventLogTexts.Add(txt);
                     db.SaveChanges();
                 }
             }

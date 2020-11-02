@@ -62,6 +62,14 @@ namespace KuberaManager.Models.Logic
         /// <returns></returns>
         private static async Task RspeerPostRequest(string path, dynamic data)
         {
+            // Send spoof request
+            if (!Config.Get<bool>("AllowRspeerApiCalls"))
+            {
+                SpoofRequest("Post", path, data);
+                return;
+            }
+
+            // Send request
             using (var client = new HttpClient())
             {
                 var request = new HttpRequestMessage(HttpMethod.Post, new Uri($"https://services.rspeer.org/{path}"));
@@ -77,6 +85,14 @@ namespace KuberaManager.Models.Logic
 
         private static async Task<T> RspeerGetRequest<T>(string path)
         {
+            // Send spoof request
+            if (!Config.Get<bool>("AllowRspeerApiCalls"))
+            {
+                SpoofRequest("Get", path, null);
+                // NOT RETURNING, SENDING REGARDLESS
+            }
+
+            // Send request
             using (var client = new HttpClient())
             {
                 var request = new HttpRequestMessage(HttpMethod.Get, new Uri($"https://services.rspeer.org/{path}"));
@@ -85,6 +101,18 @@ namespace KuberaManager.Models.Logic
                 string json = await response.Content.ReadAsStringAsync();
                 return JsonConvert.DeserializeObject<T>(json);
             }
+        }
+
+        // Sends a discord message instead of a real request
+        private static void SpoofRequest(string type, string path, dynamic data)
+        {
+            // Prepare msg
+            string msg = $"Spoof RSPeer Api Request: {type}" + Environment.NewLine +
+                $"Path: {path}" + Environment.NewLine +
+                $"Data: " + (data == null ? "" : JsonConvert.SerializeObject(data)) +
+                (type == "Get" ? "WARN: Get requests do go through" : "");
+
+            DiscordHandler.PostMessage(msg);
         }
     }
 }

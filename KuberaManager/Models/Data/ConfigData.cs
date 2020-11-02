@@ -37,6 +37,7 @@ namespace KuberaManager.Models.Data
             new KeyData("MaxHoursPerDay", 3, "8", "Maximum hours per day an account will run."),
             new KeyData("DeveloperMode", 4, "False", "Enables dev tools for creating spoof data (True/False)"),
             new KeyData("BrainEnabled", 5, "False", "Determines if bots should start automatically (True/False)"),
+            new KeyData("AllowRspeerApiCalls", 6, "False", "Determines if API calls should actually fire or send discord message instead. WARN: Get requests still go through."),
         };
 
         public static string GetDescription(string confKey)
