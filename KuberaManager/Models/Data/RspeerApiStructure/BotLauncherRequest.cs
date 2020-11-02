@@ -9,11 +9,11 @@ namespace KuberaManager.Models.Data.RspeerApiStructure
 {
     public class BotLauncherRequest
     {
-        public BotLauncherRequest(Account account, Computer computer, int _world = -1, bool isManualSession = false)
+        public BotLauncherRequest(Account account, Computer computer, Session session, int _world = -1, bool isManualSession = false)
         {
             // Define script startup args
             string scriptStartupArgs = "-manager " +
-                (isManualSession ? "manual" : "auto");
+                (isManualSession ? "manual" : session.Id.ToString());
 
             // Prepare clientstructure
             ClientStructure clientStruct = new ClientStructure()

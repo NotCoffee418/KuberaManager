@@ -17,6 +17,12 @@ namespace KuberaManager.Controllers.Api
     public class DevTestController : ControllerBase
     {
         [HttpGet]
+        public dynamic ManualTest()
+        {
+            return Computer.GetAvailableComputer();
+        }
+
+        [HttpGet]
         public string CreateSpoofSession()
         {
             return "/accountId/status(brain|active|today|old)/durationHours";

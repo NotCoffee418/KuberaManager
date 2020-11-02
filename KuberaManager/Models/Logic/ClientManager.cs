@@ -12,10 +12,11 @@ namespace KuberaManager.Models.Logic
 {
     public class ClientManager
     {
-        public static void StartClient(Account account, Computer computer, int world = -1, bool isManualSession = false)
+        public static void StartClient(Account account, Computer computer, Session session, int world = -1, bool isManualSession = false)
         {
             // Prepare data
-            BotLauncherRequest req = new BotLauncherRequest(account, computer, world, isManualSession);
+            string managerArg = isManualSession ? "manual" : session.Id.ToString();
+            BotLauncherRequest req = new BotLauncherRequest(account, computer, session, world, isManualSession);
             
             // Send request
             RspeerPostRequest("api/botLauncher/send", req).GetAwaiter().GetResult();

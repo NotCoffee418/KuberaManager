@@ -1,4 +1,5 @@
-﻿using KuberaManager.Models.Logic;
+﻿using KuberaManager.Models.Data.RspeerApiStructure;
+using KuberaManager.Models.Logic;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -90,11 +91,13 @@ namespace KuberaManager.Models.Database
             Computer result = null;
             using (var db = new kuberaDbContext())
             {
-                result = db.Computers
+                var filter = db.Computers
                     // Only if confifured to be on
                     .Where(x => x.IsEnabled)
+                    .ToList();
 
-                    // Only if we haven't reached the max allowed sessions on that computer yet
+                // Only if we haven't reached the max allowed sessions on that computer yet
+                result = filter
                     .Where(x => db.Sessions
                         .Where(y => y.IsFinished == false)
                         .Where(y => y.ActiveComputer == x.Id)
@@ -121,6 +124,14 @@ namespace KuberaManager.Models.Database
                 .FirstOrDefault().Key;
         }
 
-
+        // 
+        internal static void DetectComputers()
+        {
+            using (var db = new kuberaDbContext())
+            {
+                foreach (var clientComp in ClientManager.GetConnectedComputers())
+                    ByHostname(clientComp.Value.host);
+            }            
+        }
     }
 }

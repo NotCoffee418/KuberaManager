@@ -150,5 +150,11 @@ namespace KuberaManager.Controllers.Db
         {
             return _context.Computers.Any(e => e.Id == id);
         }
+
+        public async Task<IActionResult> AutoDetect()
+        {
+            Computer.DetectComputers();
+            return Redirect("/Computers");
+        }
     }
 }

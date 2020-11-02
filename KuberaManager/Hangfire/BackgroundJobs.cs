@@ -1,4 +1,5 @@
 ﻿using Hangfire;
+using KuberaManager.Models.Data.RspeerApiStructure;
 using KuberaManager.Models.Database;
 using KuberaManager.Models.Logic;
 using System;
@@ -21,7 +22,7 @@ namespace KuberaManager.Hangfire
             Session sess = null;
 
             // Try for 5 minutes
-            for (int i = 0; i < 36; i++)
+            for (int i = 1; i < 36; i++) // start at 1 to avoid duplicate launch
             {
                 // Wait 5 seconds before all attempts
                 Thread.Sleep(5000);
@@ -35,9 +36,12 @@ namespace KuberaManager.Hangfire
                 }
 
                 // Try to find session tag
-                var client = ClientManager.GetConnectedClients()
-                    .Where(x => x.runescapeEmail.ToLower() == account.Login.ToLower())
-                    .FirstOrDefault();
+                ConnectedClients.ClientData client = null;
+                var allClients = ClientManager.GetConnectedClients();
+                if (allClients != null)
+                    client = allClients
+                        .Where(x => x.runescapeEmail.ToLower() == account.Login.ToLower())
+                        .FirstOrDefault();
 
                 // Found it! Save tag & return.
                 if (client != null)
@@ -50,7 +54,7 @@ namespace KuberaManager.Hangfire
                 if (i % 15 == 0) 
                 {
                     Computer comp = Computer.ById(sess.ActiveComputer);
-                    ClientManager.StartClient(account, comp);
+                    ClientManager.StartClient(account, comp, sess);
                 }
             }
 

@@ -33,9 +33,10 @@ namespace KuberaManager.Models.Logic
 
             // Create a new session with the gathered info.
             Session.Create(account, computer);
+            Session session = account.GetActiveSession();
 
             // Launch the session
-            ClientManager.StartClient(account, computer);
+            ClientManager.StartClient(account, computer, session);
 
             // Background job to get session tag on launch
             BackgroundJobs.Launch_FindRspeerSessionTag(account);
@@ -54,7 +55,7 @@ namespace KuberaManager.Models.Logic
             Session.Create(account, computer);
 
             // Launch the session
-            ClientManager.StartClient(account, computer, isManualSession: true);
+            ClientManager.StartClient(account, computer, session:null, isManualSession: true);
 
             // Background job to get session tag on launch
             BackgroundJobs.Launch_FindRspeerSessionTag(account);
@@ -80,7 +81,9 @@ namespace KuberaManager.Models.Logic
                 // Find bork jobs
                 var selectJobs = db.Jobs
                     .Where(x => !x.IsFinished)
-                    .Where(x => !x.ForceRunUntilComplete);
+                    .Where(x => !x.ForceRunUntilComplete)
+                    .ToList();
+
                 var borkJobs = selectJobs
                     .Where(x => x.StartTime.Add(x.TargetDuration) < DateTime.Now.AddHours(-2))
                     .ToList();
