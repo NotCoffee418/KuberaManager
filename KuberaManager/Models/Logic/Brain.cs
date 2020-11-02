@@ -185,7 +185,7 @@ namespace KuberaManager.Models.Logic
         /// </summary>
         /// <param name="sess"></param>
         /// <returns></returns>
-        internal static bool DoesClientNeedJobUpdate(Session session)
+        public static bool DoesClientNeedJobUpdate(Session session)
         {
             Job currentJob = session.FindCurrentJob();
             if (currentJob == null)
@@ -196,9 +196,68 @@ namespace KuberaManager.Models.Logic
         // pseudo:
         // Check Account.ContinueScenario prio, run it and NULL it if exist
         // else Figure out new job
-        internal static Job FindNewJob(Session sess)
+        public static Job FindNewJob(Session sess)
         {
-            throw new NotImplementedException();
+            // Prepare
+            Account account = Account.FromId(sess.AccountId);
+
+            // Determine scenario & duration
+            ScenarioBase scenario = DetermineNextScenario(sess, account);
+            TimeSpan jobDuration = GetRandomJobDuration(sess, scenario);
+
+            // Create new job with gathered data
+            using (var db = new kuberaDbContext())
+            {
+                // Create job
+                db.Jobs.Add(new Job()
+                {
+                    SessionId = sess.Id,
+                    ScenarioIdentifier = scenario.Identifier,
+                    StartTime = DateTime.Now,
+                    TargetDuration = jobDuration,
+                    ForceRunUntilComplete = scenario.AlwaysRunsUntilComplete,
+                    IsFinished = false
+                });
+                db.SaveChanges();
+
+                // Retrieve & return it
+                return db.Jobs
+                    .Where(x => x.IsFinished == false)
+                    .Where(x => x.SessionId == sess.Id)
+                    .OrderByDescending(x => x.Id)
+                    .FirstOrDefault();
+            }
+        }
+
+
+        public static ScenarioBase DetermineNextScenario(Session session, Account account)
+        {
+            // Continue job if remembered for account
+            string continueScenario = account.ContinueScenario;
+            if (continueScenario != null && continueScenario != "")
+            {
+                // Stop remembering it regardless of validity
+                using (var db = new kuberaDbContext())
+                {
+                    db.Attach(account);
+                    account.ContinueScenario = null;
+                    db.SaveChanges();
+                }
+
+                // Not null but invalid
+                if (continueScenario == null)
+                {
+                    DiscordHandler.PostMessage($"Trying to load remembered scenario '{account.ContinueScenario}' as remembered by '{account.Login}' but scenario doesn't exist (anymore?). Cancelling.");
+                    throw new Exception($"Failed to load invalid remembered scenario '{account.ContinueScenario}' for '{account.Login}'.");
+                }
+
+                // Return valid result
+                return ScenarioHelper.ByIdentifier(continueScenario);
+            }
+
+            // No remembered scenario.
+            // Determine which new scenario to run by running
+            return ScenarioHelper.FindViableScenario(account);
         }
     }
 }

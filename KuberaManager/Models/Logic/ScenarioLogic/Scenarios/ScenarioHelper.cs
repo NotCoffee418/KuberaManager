@@ -1,4 +1,5 @@
-﻿using KuberaManager.Models.Logic.ScenarioLogic.Scenarios.Assigners;
+﻿using KuberaManager.Models.Database;
+using KuberaManager.Models.Logic.ScenarioLogic.Scenarios.Assigners;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,6 +40,9 @@ namespace KuberaManager.Models.Logic.ScenarioLogic.Scenarios
                 .FirstOrDefault();
         }
 
-
+        internal static ScenarioBase FindViableScenario(Account account)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
