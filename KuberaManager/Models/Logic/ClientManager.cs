@@ -28,28 +28,17 @@ namespace KuberaManager.Models.Logic
                 .GetAwaiter().GetResult();
         }
 
-        // Store in memory during this request
-        private static ConnectedComputers storedConnectedComputers = null;
+
         public static ConnectedComputers GetConnectedComputers()
         {
-            if (storedConnectedComputers == null)
-            {
-                storedConnectedComputers = RspeerGetRequest<ConnectedComputers>
+            return RspeerGetRequest<ConnectedComputers>
                     ("api/botLauncher/connected").GetAwaiter().GetResult();
-            }
-            return storedConnectedComputers;
         }
 
-        // Store in memory during this request
-        private static ConnectedClients storedConnectedClients = null;
         public static ConnectedClients GetConnectedClients()
         {
-            if (storedConnectedClients == null)
-            {
-                storedConnectedClients = RspeerGetRequest<ConnectedClients>
+            return RspeerGetRequest<ConnectedClients>
                     ("api/botLauncher/connectedClients").GetAwaiter().GetResult();
-            }
-            return storedConnectedClients;
         }
 
 
