@@ -31,6 +31,8 @@ namespace KuberaManager.Logic.ScenarioLogic.Scenarios
         public TimeSpan MinimumRunTime { get; set; } = TimeSpan.FromMinutes(20);
         public TimeSpan MaximumRunTime { get; set; } = TimeSpan.FromMinutes(60);
 
+        public bool MembersOnly { get; set; } = false;
+
         // Methods
         public override string ToString()
         {

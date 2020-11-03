@@ -171,6 +171,12 @@ namespace KuberaManagerUnitTests
         }
 
         [Test]
+        public void FindNewJob_FreeToPlay_NotMemberJob()
+        {
+            throw new NotImplementedException();
+        }
+
+        [Test]
         public void FindNewJob_MissingPrerequisites_ExpectPrereqDefinition()
         {
             throw new NotImplementedException();

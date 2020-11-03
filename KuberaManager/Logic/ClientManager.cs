@@ -4,6 +4,8 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using KuberaManager.Logic;
+using KuberaManager.Logic.ScenarioLogic.Scenarios;
 using KuberaManager.Models.Data.RspeerApiStructure;
 using KuberaManager.Models.Database;
 using Newtonsoft.Json;
@@ -12,9 +14,14 @@ namespace KuberaManager.Models.Logic
 {
     public class ClientManager
     {
-        // world: -1 is random MEMBER world
-        public static void StartClient(Account account, Computer computer, Session session, int world = 155, bool isManualSession = false)
+        public static void StartClient(Account account, Computer computer, Session session, bool isManualSession = false)
         {
+            // Determine a viable world
+            Job job = session.FindCurrentJob();
+            ScenarioBase scen = ScenarioHelper.ByIdentifier(job.ScenarioIdentifier);
+            WorldsSelector ws = new WorldsSelector();
+            int world = ws.SelectWorld(account, scen);
+
             // Prepare data
             BotLauncherRequest req = new BotLauncherRequest(account, computer, session, world, isManualSession);
             
