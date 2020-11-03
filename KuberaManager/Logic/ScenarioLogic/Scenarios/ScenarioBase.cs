@@ -1,11 +1,11 @@
 ﻿using KuberaManager.Models.Database;
-using KuberaManager.Models.Logic.ScenarioLogic.Requirements;
+using KuberaManager.Logic.ScenarioLogic.Requirements;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace KuberaManager.Models.Logic.ScenarioLogic.Scenarios
+namespace KuberaManager.Logic.ScenarioLogic.Scenarios
 {
     public abstract class ScenarioBase
     {

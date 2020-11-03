@@ -7,7 +7,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace KuberaManager.Models.Logic.ScenarioLogic.Scenarios.Assigners
+namespace KuberaManager.Logic.ScenarioLogic.Scenarios.Assigners
 {
     public class QuestAssigner
     {

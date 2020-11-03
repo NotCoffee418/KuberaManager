@@ -1,5 +1,5 @@
 ﻿using KuberaManager.Models.Database;
-using KuberaManager.Models.Logic.ScenarioLogic.Scenarios;
+using KuberaManager.Logic.ScenarioLogic.Scenarios;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;

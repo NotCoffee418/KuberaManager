@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using KuberaManager.Models.Data.Ajax;
 using KuberaManager.Models.Database;
-using KuberaManager.Models.Logic.ScenarioLogic.Scenarios;
+using KuberaManager.Logic.ScenarioLogic.Scenarios;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

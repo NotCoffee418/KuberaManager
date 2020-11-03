@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using KuberaManager.Models.Database;
 using KuberaManager.Models.PageModels;
 using Microsoft.AspNetCore.Authorization;
-using KuberaManager.Models.Logic.ScenarioLogic.Scenarios;
+using KuberaManager.Logic.ScenarioLogic.Scenarios;
 using KuberaManager.Models.Logic;
 
 namespace KuberaManager.Controllers

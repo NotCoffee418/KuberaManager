@@ -1,6 +1,6 @@
 ﻿using KuberaManager.Models.Data;
 using KuberaManager.Models.Logic;
-using KuberaManager.Models.Logic.ScenarioLogic.Scenarios.Assigners;
+using KuberaManager.Logic.ScenarioLogic.Scenarios.Assigners;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;

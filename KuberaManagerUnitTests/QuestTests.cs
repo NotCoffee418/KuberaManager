@@ -1,7 +1,7 @@
 ﻿using KuberaManager.Models.Data;
 using KuberaManager.Models.Database;
-using KuberaManager.Models.Logic.ScenarioLogic.Scenarios;
-using KuberaManager.Models.Logic.ScenarioLogic.Scenarios.Assigners;
+using KuberaManager.Logic.ScenarioLogic.Scenarios;
+using KuberaManager.Logic.ScenarioLogic.Scenarios.Assigners;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;

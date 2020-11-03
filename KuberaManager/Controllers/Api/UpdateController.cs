@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using KuberaManager.Models.Data.KuberaCommStructure;
 using KuberaManager.Models.Data.KuberaCommStructure.DetailsStructure;
 using Microsoft.EntityFrameworkCore;
-using KuberaManager.Models.Logic.ScenarioLogic.Scenarios;
+using KuberaManager.Logic.ScenarioLogic.Scenarios;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
