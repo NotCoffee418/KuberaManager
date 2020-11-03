@@ -12,7 +12,8 @@ namespace KuberaManager.Models.Logic
 {
     public class ClientManager
     {
-        public static void StartClient(Account account, Computer computer, Session session, int world = -1, bool isManualSession = false)
+        // world: -1 is random MEMBER world
+        public static void StartClient(Account account, Computer computer, Session session, int world = 155, bool isManualSession = false)
         {
             // Prepare data
             BotLauncherRequest req = new BotLauncherRequest(account, computer, session, world, isManualSession);
