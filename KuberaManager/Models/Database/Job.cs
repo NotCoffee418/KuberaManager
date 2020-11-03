@@ -52,7 +52,7 @@ namespace KuberaManager.Models.Database
             else return false;
         }
 
-        internal void MarkCompleted()
+        public void MarkCompleted()
         {
             // Set account completion definition if applicable
             ScenarioBase scen = ScenarioHelper.ByIdentifier(ScenarioIdentifier);
@@ -74,6 +74,16 @@ namespace KuberaManager.Models.Database
                 IsFinished = true;
                 db.Update(this);
                 db.SaveChanges();
+            }
+        }
+
+        public static Job FromId(int id)
+        {
+            using (var db = new kuberaDbContext())
+            {
+                return db.Jobs
+                    .Where(x => x.Id == id)
+                    .FirstOrDefault();
             }
         }
     }

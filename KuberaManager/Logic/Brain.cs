@@ -126,7 +126,7 @@ namespace KuberaManager.Models.Logic
         public static TimeSpan GetRandomSessionDuration(Account account)
         {
             // Hardcoded min/max session duration
-            TimeSpan minTime = TimeSpan.FromMinutes(30);
+            TimeSpan minTime = TimeSpan.FromMinutes(15);
             TimeSpan maxTime = TimeSpan.FromHours(3);
 
             // Get max time from config & Subtract time account already played today
