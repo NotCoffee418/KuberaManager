@@ -75,7 +75,7 @@ namespace KuberaManager.Controllers.Api
                         output.Instruction = "stop-session";
                         return output;
                     }
-                    else if (currentJob.ShouldStop())
+                    else if (currentJob != null && currentJob.ShouldStop())
                     {
                         currentJob.MarkCompleted();
                         currentJob = relevantSession.FindCurrentJob(); // redefine
