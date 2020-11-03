@@ -257,7 +257,22 @@ namespace KuberaManager.Models.Logic
 
             // No remembered scenario.
             // Determine which new scenario to run by running
-            return ScenarioHelper.FindViableScenario(account);
+            ScenarioBase newScenario = null;
+
+            // Try 20 times since RNG can lead to dead ends
+            // and stackoverflow exists.
+            for (int i = 0; i < 20; i++)
+            {
+                // Find random eligible scenario or it's requirement
+                newScenario = ScenarioHelper.FindViableScenario(account);
+
+                // We found one, stop looking
+                if (newScenario != null)
+                    break;
+            }
+
+            // return regardless
+            return newScenario;
         }
     }
 }

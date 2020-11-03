@@ -1,4 +1,5 @@
-﻿using KuberaManager.Logic.ScenarioLogic.Scenarios.Assigners;
+﻿using KuberaManager.Logic.ScenarioLogic.Scenarios;
+using KuberaManager.Logic.ScenarioLogic.Scenarios.Assigners;
 using KuberaManager.Models.Database;
 using KuberaManager.Models.Logic;
 using NUnit.Framework;
@@ -155,7 +156,18 @@ namespace KuberaManagerUnitTests
         [Test]
         public void FindNewJob_FreshAccount_ExpectTutorial()
         {
-            throw new NotImplementedException();
+            // Prep data
+            _TestHelper.DbCreateMockAccounts(1);
+            _TestHelper.DbCreateMockSession(1, false, DateTime.Now.AddMinutes(-5), TimeSpan.FromHours(3), false);
+            Session sess = Session.FromId(1);
+
+            // Get new job's data
+            Job job = Brain.FindNewJob(sess);
+            ScenarioBase scen = ScenarioHelper.ByIdentifier(job.ScenarioIdentifier);
+
+            // Assert
+            Assert.AreEqual("Quest", scen.ScenarioName);
+            Assert.AreEqual("TUTORIAL_ISLAND", scen.ScenarioArgument);
         }
 
         [Test]

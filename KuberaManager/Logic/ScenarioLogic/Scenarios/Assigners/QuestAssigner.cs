@@ -1,4 +1,5 @@
 ﻿using KuberaManager.Helpers;
+using KuberaManager.Logic.ScenarioLogic.Requirements;
 using KuberaManager.Models.Data;
 using KuberaManager.Models.Database;
 using System;
@@ -54,7 +55,17 @@ namespace KuberaManager.Logic.ScenarioLogic.Scenarios.Assigners
         // Helper function for cleanliness
         private static Quest C(int varp, string questName, bool isFreeToPlay, CompletionDataDefinition def)
         {
-            return new Quest(varp, questName, isFreeToPlay, def);
+            // Create
+            Quest q = new Quest(varp, questName, isFreeToPlay, def);
+
+            // tutorial island is a base dependency for all quests.
+            // Remove it if the current quest is the tutorial
+            if (varp == 281) // tutorial varp
+                q.Requirements
+                    .RemoveAll(x => x.GetType().Equals(typeof(TutorialComplete)));
+
+            // Ready
+            return q;
         }
 
 

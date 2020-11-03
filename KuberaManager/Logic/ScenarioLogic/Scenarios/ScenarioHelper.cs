@@ -59,7 +59,7 @@ namespace KuberaManager.Logic.ScenarioLogic.Scenarios
         /// <returns></returns>
         public static ScenarioBase FindViableScenario(Account account)
         {
-            // Grab a primary scenario to run
+            // Grab a random primary scenario to run
             if (PrimaryScenarios.Count() == 0)
                 throw new Exception("No primary scenarios are defined. Can't proceed");
             int rand = RandomHelper.GetRandom(0, PrimaryScenarios.Count() - 1);
