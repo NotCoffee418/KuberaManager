@@ -19,7 +19,7 @@ namespace KuberaManager.Models.Logic
             // Determine a viable world
             Job job = session.FindCurrentJob();
             ScenarioBase scen = ScenarioHelper.ByIdentifier(job.ScenarioIdentifier);
-            WorldsSelector ws = new WorldsSelector();
+            WorldSelector ws = new WorldSelector();
             int world = ws.SelectWorld(account, scen);
 
             // Prepare data

@@ -3,6 +3,10 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using KuberaManager.Logic;
+using System.Linq;
+using KuberaManager.Logic.ScenarioLogic.Scenarios;
+using KuberaManager.Logic.ScenarioLogic.Scenarios.Assigners;
 
 namespace KuberaManagerUnitTests
 {
@@ -37,9 +41,84 @@ namespace KuberaManagerUnitTests
         }
 
         [Test]
-        public void SelectWorld_550SkillAccount_ExpectSkillWorld()
+        [TestCase(true)]
+        [TestCase(false)]
+        public void SelectWorld_LowSkillAccount_ExpectRandomWorld(bool asMember)
         {
-            throw new NotImplementedException();
+            // Prepare test data
+            _TestHelper.DbCreateMockAccounts(1);
+            Account acc = Account.FromId(1);
+
+            // Set AsMember
+            using (var db = new kuberaDbContext())
+            {
+                acc.IsMember = asMember;
+                db.Accounts.Update(acc);
+                db.SaveChanges();
+            }
+
+            // Set acceptable world 
+            WorldSelector ws = new WorldSelector();
+            int[] acceptableWorlds = asMember ?
+                WorldSelector.MemberWorldsWithoutRestrictionOrPreference :
+                WorldSelector.FreeToPlayWorldsWithoutRestrictionOrPreference;
+
+            // Find world
+            int world = ws.SelectWorld(acc, QuestAssigner.AllQuests.First());
+
+            // Asserts
+            Assert.NotZero(world);
+            Assert.IsTrue(acceptableWorlds.Contains(world));
+        }
+
+        [Test]
+        [TestCase(true)]
+        [TestCase(false)]
+        public void SelectWorld_550SkillAccount_ExpectFreeSkillWorld(bool asMember)
+        {
+            // Prepare test data
+            _TestHelper.DbCreateMockAccounts(1);
+            Account acc = Account.FromId(1);
+
+            // Set AsMember
+            using (var db = new kuberaDbContext())
+            {
+                acc.IsMember = asMember;
+                db.Accounts.Update(acc);
+                db.SaveChanges();
+            }
+
+            // Validate asMember update
+            Account accUpd = Account.FromId(1);
+            Assert.AreEqual(asMember, accUpd.IsMember);
+            
+            // Set skill level
+            using (var db = new kuberaDbContext())
+            {
+                Levels levels = new Levels()
+                {
+                    AccountId = 1,
+                    Slayer = 550, // spoof total level
+                };
+
+                db.Levels.Add(levels);
+                db.SaveChanges();
+            }
+
+            // Set acceptable world 
+            WorldSelector ws = new WorldSelector();
+            List<int> acceptableWorlds = WorldSelector.RestrictedWorlds
+                .Where(x => 550 >= x.MinSkill)
+                .Where(x => 550 <= x.MaxSkill)
+                .Select(x => x.Number)
+                .ToList();
+
+            // Select world
+            int world = ws.SelectWorld(acc, QuestAssigner.AllQuests.First());
+
+            // Asserts
+            Assert.NotZero(world);
+            Assert.IsTrue(acceptableWorlds.Contains(world));
         }
 
         [Test]

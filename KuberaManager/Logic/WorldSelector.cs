@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace KuberaManager.Logic
 {
-    public class WorldsSelector
+    public class WorldSelector
     {
         public int SelectWorld(Account acc, ScenarioBase scen)
         {
@@ -135,7 +135,7 @@ namespace KuberaManager.Logic
             new World(226, 2200, 99999, true),
         };
 
-        private static readonly int[] MemberWorldsWithoutRestrictionOrPreference = new int[]
+        public static readonly int[] MemberWorldsWithoutRestrictionOrPreference = new int[]
         {
             3,
             12,
@@ -206,7 +206,7 @@ namespace KuberaManager.Logic
 
         };
 
-        private static readonly int[] FreeToPlayWorldsWithoutRestrictionOrPreference = new int[]
+        public static readonly int[] FreeToPlayWorldsWithoutRestrictionOrPreference = new int[]
         {
             35,
             79,
