@@ -70,6 +70,9 @@ namespace KuberaManager.Controllers.Api
                     Job currentJob = relevantSession.FindCurrentJob();
                     if (relevantSession.ShouldStop())
                     {
+                        // Send stop signal
+                        relevantSession.SendStopSignal();
+
                         // Tell client to stop
                         relevantSession.ReportFinished();
                         output.Instruction = "stop-session";

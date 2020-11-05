@@ -106,6 +106,11 @@ namespace KuberaManager.Models.Database
 
         #region Non-static
 
+        public void SendStopSignal()
+        {
+            ClientManager.StopClient(this);
+        }
+
         public void ReportFinished()
         {
             using (var db = new kuberaDbContext())
@@ -215,7 +220,7 @@ namespace KuberaManager.Models.Database
             return true;
         }
 
-        internal void SaveCurrentAction(string text)
+        public void SaveCurrentAction(string text)
         {
             EventLog.AddEntry(this.Id, text);
         }
