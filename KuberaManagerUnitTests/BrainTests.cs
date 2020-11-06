@@ -1,5 +1,7 @@
-﻿using KuberaManager.Logic.ScenarioLogic.Scenarios;
+﻿using KuberaManager.Logic.ScenarioLogic.Requirements;
+using KuberaManager.Logic.ScenarioLogic.Scenarios;
 using KuberaManager.Logic.ScenarioLogic.Scenarios.Assigners;
+using KuberaManager.Models.Data;
 using KuberaManager.Models.Database;
 using KuberaManager.Models.Logic;
 using NUnit.Framework;
@@ -136,21 +138,80 @@ namespace KuberaManagerUnitTests
         }
 
         [Test]
-        public void DoesClientNeedJobUpdate_ExpiredJob_True()
+        public void DoesClientNeedJobUpdate_NeverHadJob_True()
         {
-            throw new NotImplementedException();
+            // Prepare data
+            Config.Set<int>("MaxHoursPerDay", 1);
+            _TestHelper.DbCreateMockAccounts(1, 0);
+            Account acc = Account.FromId(1);
+
+            // Create ongoing session
+            _TestHelper.DbCreateMockSession(1, true, DateTime.Now.AddHours(-1), TimeSpan.FromHours(5), isFinished: false);
+            Session sess = Session.FromId(1);
+
+            // Assert
+            bool result = Brain.DoesClientNeedJobUpdate(sess);
+            Assert.IsTrue(result);
         }
 
         [Test]
-        public void DoesClientNeedJobUpdate_NeverHadJob_True()
+        public void DoesClientNeedJobUpdate_ExpiredJob_True()
         {
-            throw new NotImplementedException();
+            // Prepare data
+            Config.Set<int>("MaxHoursPerDay", 1);
+            _TestHelper.DbCreateMockAccounts(1, 0);
+            Account acc = Account.FromId(1);
+
+            // Create ongoing session
+            _TestHelper.DbCreateMockSession(1, true, DateTime.Now.AddHours(-1), TimeSpan.FromHours(5), isFinished: false);
+            Session sess = Session.FromId(1);
+
+            // Create job
+            using (var db = new kuberaDbContext())
+            {
+                db.Jobs.Add(new Job()
+                {
+                    SessionId = 1,
+                    IsFinished = true,
+                    StartTime = DateTime.Now.AddHours(-5),
+                    TargetDuration = TimeSpan.FromHours(2),
+                });
+                db.SaveChanges();
+            }
+
+            // Assert
+            bool result = Brain.DoesClientNeedJobUpdate(sess);
+            Assert.IsTrue(result);
         }
 
         [Test]
         public void DoesClientNeedJobUpdate_HasJob_False()
         {
-            throw new NotImplementedException();
+            // Prepare data
+            Config.Set<int>("MaxHoursPerDay", 1);
+            _TestHelper.DbCreateMockAccounts(1, 0);
+            Account acc = Account.FromId(1);
+
+            // Create ongoing session
+            _TestHelper.DbCreateMockSession(1, true, DateTime.Now.AddHours(-1), TimeSpan.FromHours(5), isFinished: false);
+            Session sess = Session.FromId(1);
+
+            // Create job
+            using (var db = new kuberaDbContext())
+            {
+                db.Jobs.Add(new Job()
+                {
+                    SessionId = 1,
+                    IsFinished = true,
+                    StartTime = DateTime.Now.AddHours(-1),
+                    TargetDuration = TimeSpan.FromHours(2),
+                });
+                db.SaveChanges();
+            }
+
+            // Assert
+            bool result = Brain.DoesClientNeedJobUpdate(sess);
+            Assert.IsTrue(result);
         }
 
         [Test]
@@ -171,21 +232,25 @@ namespace KuberaManagerUnitTests
         }
 
         [Test]
-        public void FindNewJob_FreeToPlay_NotMemberJob()
+        public void FindNewJob_FreeToPlayTutorialComplete_NotMemberJobNotTutorial()
         {
-            throw new NotImplementedException();
-        }
+            // Prep data
+            _TestHelper.DbCreateMockAccounts(1);
+            _TestHelper.DbCreateMockSession(1, false, DateTime.Now.AddMinutes(-5), TimeSpan.FromHours(3), false);
+            Session sess = Session.FromId(1);
 
-        [Test]
-        public void FindNewJob_MissingPrerequisites_ExpectPrereqDefinition()
-        {
-            throw new NotImplementedException();
-        }
+            // Add account definition
+            Account acc = Account.FromId(1);
+            acc.AddDefinition(CompletionDataDefinition.TutorialComplete);
+            
+            // Get new job's data
+            Job job = Brain.FindNewJob(sess);
+            ScenarioBase scen = ScenarioHelper.ByIdentifier(job.ScenarioIdentifier);
 
-        [Test]
-        public void DetermineNextScenario_InventedCircularRequirements_PreventOverflow()
-        {
-            throw new NotImplementedException();
+            // Assert
+            Assert.NotNull(scen);
+            Assert.AreNotEqual("TUTORIAL_ISLAND", scen.ScenarioArgument);
+            Assert.IsFalse(scen.MembersOnly);
         }
     }
 }

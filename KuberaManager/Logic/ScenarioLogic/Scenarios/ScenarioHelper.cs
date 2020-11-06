@@ -15,10 +15,9 @@ namespace KuberaManager.Logic.ScenarioLogic.Scenarios
         /// This s a list of scenarios bots will end up running.
         /// If they don't meet the requirements, they'll get them first.
         /// </summary>
-        public readonly static List<string> PrimaryScenarios = new List<string>()
-        {
-            "Quest.COOKS_ASSISTANT",
-        };
+        public readonly static List<string> PrimaryScenarios = 
+            QuestAssigner.AllQuests.Select(x => x.ScenarioName).ToList();
+            //{ "Quest.COOKS_ASSISTANT", };
 
 
         // WARNING!! ensure new scenario types are added here
