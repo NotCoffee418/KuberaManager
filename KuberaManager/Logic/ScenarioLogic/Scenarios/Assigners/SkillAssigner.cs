@@ -1,4 +1,5 @@
 ﻿using KuberaManager.Helpers;
+using KuberaManager.Logic.ScenarioLogic.Requirements;
 using KuberaManager.Logic.ScenarioLogic.Scenarios.Types;
 using KuberaManager.Models.Data.Runescape;
 using System;
@@ -28,7 +29,18 @@ namespace KuberaManager.Logic.ScenarioLogic.Scenarios.Assigners
         // Helper function for cleanliness.
         private static SkillScenario C(Skill skill, string argument, int minLevel = 0)
         {
-            return new SkillScenario(skill, argument, minLevel);
+            SkillScenario ss = new SkillScenario(skill, argument, minLevel);
+
+            // Special circumstances such as requirements should be defined here.
+            // NOTE: This does not apply for "SkillRequirement's since they are defined in the constructor
+            switch (argument)
+            {
+                case "BarbLogs":
+                    // This is an example. Feel free to delete.
+                    break;
+            }
+
+            return ss;
         }
 
         /// <summary>

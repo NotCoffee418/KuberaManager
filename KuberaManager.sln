@@ -9,7 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KuberaManagerUnitTests", "K
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{39E67C5E-C15F-4F87-8DE3-A153DF68B4B3}"
 	ProjectSection(SolutionItems) = preProject
-		Adding-Scenarios.md = Adding-Scenarios.md
+		Documentation\Adding-Scenarios.md = Documentation\Adding-Scenarios.md
+		Documentation\Scenario-Requirements.md = Documentation\Scenario-Requirements.md
 	EndProjectSection
 EndProject
 Global

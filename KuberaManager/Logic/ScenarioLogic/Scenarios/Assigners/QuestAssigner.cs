@@ -59,11 +59,16 @@ namespace KuberaManager.Logic.ScenarioLogic.Scenarios.Assigners
             // Create
             QuestScenario q = new QuestScenario(varp, questName, isFreeToPlay, def);
 
-            // tutorial island is a base dependency for all quests.
-            // Remove it if the current quest is the tutorial
-            if (varp == 281) // tutorial varp
-                q.Requirements
-                    .RemoveAll(x => x.GetType().Equals(typeof(TutorialComplete)));
+            // Special cases which have requirements or other custom properties should be defined here
+            switch (questName)
+            {
+                case "TUTORIAL_ISLAND":
+                    // tutorial island is a base dependency for all quests.
+                    // Remove it if the current quest is the tutorial
+                    q.Requirements.RemoveAll(x => x.GetType().Equals(typeof(TutorialComplete)));
+                    break;
+
+            }
 
             // Ready
             return q;
