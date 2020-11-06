@@ -122,15 +122,54 @@ namespace KuberaManagerUnitTests
         }
 
         [Test]
-        public void SelectWorld_1400SkillNonMember_ExpectRandomFree()
+        [TestCase(true, Description = "As member, expect random free world regardless of skill")]
+        [TestCase(false, Description = "As non-member, expect random free world regardless of skill")]
+        public void SelectWorld_1400Skill(bool asMember)
         {
-            throw new NotImplementedException();
-        }
+            // Prepare test data
+            _TestHelper.DbCreateMockAccounts(1);
+            Account acc = Account.FromId(1);
 
-        [Test]
-        public void SelectWorld_1400SkillMember_ExpectMemberSkillWorld()
-        {
-            throw new NotImplementedException();
+            // Set AsMember
+            using (var db = new kuberaDbContext())
+            {
+                acc.IsMember = asMember;
+                db.Accounts.Update(acc);
+                db.SaveChanges();
+            }
+
+            // Validate asMember update
+            Account accUpd = Account.FromId(1);
+
+            // Set skill level
+            using (var db = new kuberaDbContext())
+            {
+                Levels levels = new Levels()
+                {
+                    AccountId = 1,
+                    Slayer = 1400, // spoof total level
+                };
+
+                db.Levels.Add(levels);
+                db.SaveChanges();
+            }
+
+            // Set acceptable world 
+            int[] acceptableWorlds = asMember ?
+                WorldSelector.RestrictedWorlds // Members get member skill list
+                .Where(x => 1250 >= x.MinSkill)
+                .Where(x => 1499 <= x.MaxSkill)
+                .Select(x => x.Number)
+                .ToArray() : 
+            WorldSelector.FreeToPlayWorldsWithoutRestrictionOrPreference; // Free players get random
+
+            // Select world
+            WorldSelector ws = new WorldSelector();
+            int world = ws.SelectWorld(acc, QuestAssigner.AllQuests.First());
+
+            // Asserts
+            Assert.NotZero(world);
+            Assert.IsTrue(acceptableWorlds.Contains(world));
         }
     }
 }
