@@ -1,5 +1,9 @@
 # Adding Scenarios
 This is a quick explanation on how to define scenarios in KuberaManager so that they can be randomly selected as a moneymaker or used as a requirement.
+### tl;dr:
+1. Create scenario in `C` function of the correct [Assigner](https://github.com/NotCoffee418/KuberaManager/tree/main/KuberaManager/Logic/ScenarioLogic/Scenarios/Assigners).
+2. (Quests only) Add a [CompletionDataDefinition](https://github.com/NotCoffee418/KuberaManager/blob/main/KuberaManager/Models/Data/CompletionDataDefinition.cs) for the quest.
+3. Specify additional [requirements](https://github.com/NotCoffee418/KuberaManager/blob/main/Documentation/Scenario-Requirements.md) if needed.
 
 ### Overview
 Most of the scenario logic is located at [KuberaManager.Logic.ScenarioLogic](https://github.com/NotCoffee418/KuberaManager/tree/main/KuberaManager/Logic/ScenarioLogic).  
