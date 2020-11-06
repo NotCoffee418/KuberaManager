@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using KuberaManager.Models.Data.Runescape;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -114,6 +115,61 @@ namespace KuberaManager.Models.Database
                 Thieving + Woodcutting;
         }
 
+        public int GetSkillLevel(Skill skill)
+        {
+            switch (skill)
+            {
+                case Skill.Attack:
+                    return Attack;
+                case Skill.Hitpoints:
+                    return Hitpoints;
+                case Skill.Mining:
+                    return Mining;
+                case Skill.Strength:
+                    return Strength;
+                case Skill.Agility:
+                    return Agility;
+                case Skill.Smithing:
+                    return Smithing;
+                case Skill.Defence:
+                    return Defence;
+                case Skill.Herblore:
+                    return Herblore;
+                case Skill.Fishing:
+                    return Fishing;
+                case Skill.Ranged:
+                    return Ranged;
+                case Skill.Thieving:
+                    return Thieving;
+                case Skill.Cooking:
+                    return Cooking;
+                case Skill.Prayer:
+                    return Prayer;
+                case Skill.Crafting:
+                    return Crafting;
+                case Skill.Firemaking:
+                    return Firemaking;
+                case Skill.Magic:
+                    return Magic;
+                case Skill.Fletching:
+                    return Fletching;
+                case Skill.Woodcutting:
+                    return Woodcutting;
+                case Skill.Runecrafting:
+                    return Runecrafting;
+                case Skill.Slayer:
+                    return Slayer;
+                case Skill.Farming:
+                    return Farming;
+                case Skill.Construction:
+                    return Construction;
+                case Skill.Hunter:
+                    return Hunter;
+                default:
+                    throw new Exception("This skill is not implemented.");
+            }
+        }
+
 
         #region Static Methods
         public static Levels FromAccount(int id)
@@ -125,7 +181,6 @@ namespace KuberaManager.Models.Database
                     .FirstOrDefault();
             }
         }
-
         #endregion
     }
 }

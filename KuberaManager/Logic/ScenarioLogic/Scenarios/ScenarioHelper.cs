@@ -27,6 +27,7 @@ namespace KuberaManager.Logic.ScenarioLogic.Scenarios
             {
                 return new List<ScenarioBase>()
                     .Concat(QuestAssigner.AllQuests)
+                    .Concat(SkillAssigner.AllSkillScenarios)
                     //.Concat(...)
                     .ToList();
             }

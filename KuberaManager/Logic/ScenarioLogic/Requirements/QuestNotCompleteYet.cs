@@ -4,19 +4,20 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using KuberaManager.Logic.ScenarioLogic.Scenarios.Types;
 
 namespace KuberaManager.Logic.ScenarioLogic.Requirements
 {
     public class QuestNotCompleteYet : IRequirement
     {
-        public QuestNotCompleteYet(Quest quest)
+        public QuestNotCompleteYet(QuestScenario quest)
         {
             Quest = quest;
         }
 
         public bool IsPriority { get; set; } = false;
 
-        private Quest Quest { get; set; }
+        private QuestScenario Quest { get; set; }
 
         public bool DoesMeetCondition(Account acc)
         {

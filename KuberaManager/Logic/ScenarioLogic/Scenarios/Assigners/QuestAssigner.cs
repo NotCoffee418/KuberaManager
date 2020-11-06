@@ -1,5 +1,6 @@
 ﻿using KuberaManager.Helpers;
 using KuberaManager.Logic.ScenarioLogic.Requirements;
+using KuberaManager.Logic.ScenarioLogic.Scenarios.Types;
 using KuberaManager.Models.Data;
 using KuberaManager.Models.Database;
 using System;
@@ -12,14 +13,14 @@ namespace KuberaManager.Logic.ScenarioLogic.Scenarios.Assigners
 {
     public class QuestAssigner
     {
-        private static List<Quest> _allQuestIdentifiers = null;
-        public static List<Quest> AllQuests
+        private static List<QuestScenario> _allQuestIdentifiers = null;
+        public static List<QuestScenario> AllQuests
         {
             get
             {
                 if (_allQuestIdentifiers == null)
                 {
-                    _allQuestIdentifiers = new List<Quest>()
+                    _allQuestIdentifiers = new List<QuestScenario>()
                     {
                         // Free to play
                         C(281, "TUTORIAL_ISLAND", true, CompletionDataDefinition.TutorialComplete),
@@ -53,10 +54,10 @@ namespace KuberaManager.Logic.ScenarioLogic.Scenarios.Assigners
         }
 
         // Helper function for cleanliness
-        private static Quest C(int varp, string questName, bool isFreeToPlay, CompletionDataDefinition def)
+        private static QuestScenario C(int varp, string questName, bool isFreeToPlay, CompletionDataDefinition def)
         {
             // Create
-            Quest q = new Quest(varp, questName, isFreeToPlay, def);
+            QuestScenario q = new QuestScenario(varp, questName, isFreeToPlay, def);
 
             // tutorial island is a base dependency for all quests.
             // Remove it if the current quest is the tutorial
@@ -69,7 +70,7 @@ namespace KuberaManager.Logic.ScenarioLogic.Scenarios.Assigners
         }
 
 
-        public static Quest GetRandomEligibleQuest(Account account)
+        public static QuestScenario GetRandomEligibleQuest(Account account)
         {
             // Get eligible quests
             var eligibleQuests = AllQuests
@@ -82,14 +83,14 @@ namespace KuberaManager.Logic.ScenarioLogic.Scenarios.Assigners
             return eligibleQuests[rand];
         }
 
-        public static Quest ByVarp(int id)
+        public static QuestScenario ByVarp(int id)
         {
             return AllQuests
                 .Where(x => x.Varp == id)
                 .FirstOrDefault();
         }
 
-        public static Quest ByName(string name)
+        public static QuestScenario ByName(string name)
         {
             return AllQuests
                 .Where(x => x.QuestName == name)

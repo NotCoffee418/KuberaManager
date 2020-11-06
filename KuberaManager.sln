@@ -5,7 +5,12 @@ VisualStudioVersion = 16.0.30413.136
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KuberaManager", "KuberaManager\KuberaManager.csproj", "{20AB0803-A3C8-4E53-8E8C-4781A693B96F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KuberaManagerUnitTests", "KuberaManagerUnitTests\KuberaManagerUnitTests.csproj", "{E7F96715-6738-4E0F-8E11-535F22DD44D1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KuberaManagerUnitTests", "KuberaManagerUnitTests\KuberaManagerUnitTests.csproj", "{E7F96715-6738-4E0F-8E11-535F22DD44D1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{39E67C5E-C15F-4F87-8DE3-A153DF68B4B3}"
+	ProjectSection(SolutionItems) = preProject
+		Adding-Scenarios.md = Adding-Scenarios.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

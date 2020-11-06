@@ -1,4 +1,5 @@
 ﻿using KuberaManager.Logic.ScenarioLogic.Scenarios;
+using KuberaManager.Logic.ScenarioLogic.Scenarios.Types;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -58,12 +59,12 @@ namespace KuberaManager.Models.Database
             ScenarioBase scen = ScenarioHelper.ByIdentifier(ScenarioIdentifier);
 
             // For quests..
-            if (scen.GetType().Equals(typeof(Quest)))
+            if (scen.GetType().Equals(typeof(QuestScenario)))
             {
                 // Set account definition
                 Session sess = Session.FromId(SessionId);
                 AccountCompletionData.AddDefinition(
-                    sess.AccountId, ((Quest)scen).CompletionDefinition);
+                    sess.AccountId, ((QuestScenario)scen).CompletionDefinition);
             }
             // else if ...
             // Any new scenario types with account definitions should be added here

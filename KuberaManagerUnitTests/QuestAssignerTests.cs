@@ -6,6 +6,7 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using KuberaManager.Logic.ScenarioLogic.Scenarios.Types;
 
 namespace KuberaManagerUnitTests
 {
@@ -38,7 +39,7 @@ namespace KuberaManagerUnitTests
             for (int i = 0; i < 10; i++)
             {
                 // Get random
-                Quest q = QuestAssigner.GetRandomEligibleQuest(freeAcc);
+                QuestScenario q = QuestAssigner.GetRandomEligibleQuest(freeAcc);
                 Assert.NotNull(q);
                 Assert.IsTrue(q.IsFreeToPlay);
             }
@@ -48,9 +49,9 @@ namespace KuberaManagerUnitTests
         public void ByVarp_ThreeFreeQuest_GetsCorrectQuestsByCompletionDataDefinition()
         {
             // Grab three random quests
-            Quest blackKnightsFortress = QuestAssigner.ByVarp(130);
-            Quest cooksAssistant = QuestAssigner.ByVarp(29);
-            Quest ernestTheChicken = QuestAssigner.ByVarp(32);
+            QuestScenario blackKnightsFortress = QuestAssigner.ByVarp(130);
+            QuestScenario cooksAssistant = QuestAssigner.ByVarp(29);
+            QuestScenario ernestTheChicken = QuestAssigner.ByVarp(32);
 
             // Assert
             Assert.AreEqual(CompletionDataDefinition.QUEST_BLACK_KNIGHTS_FORTRESS, blackKnightsFortress.CompletionDefinition);
@@ -63,9 +64,9 @@ namespace KuberaManagerUnitTests
         public void ByName_ThreeFreeQuest_GetsCorrectQuestsByCompletionDataDefinition()
         {
             // Grab three random quests
-            Quest blackKnightsFortress = QuestAssigner.ByName("BLACK_KNIGHTS_FORTRESS");
-            Quest cooksAssistant = QuestAssigner.ByName("COOKS_ASSISTANT");
-            Quest ernestTheChicken = QuestAssigner.ByName("ERNEST_THE_CHICKEN");
+            QuestScenario blackKnightsFortress = QuestAssigner.ByName("BLACK_KNIGHTS_FORTRESS");
+            QuestScenario cooksAssistant = QuestAssigner.ByName("COOKS_ASSISTANT");
+            QuestScenario ernestTheChicken = QuestAssigner.ByName("ERNEST_THE_CHICKEN");
 
             // Assert
             Assert.AreEqual(CompletionDataDefinition.QUEST_BLACK_KNIGHTS_FORTRESS, blackKnightsFortress.CompletionDefinition);

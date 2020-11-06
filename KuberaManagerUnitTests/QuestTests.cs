@@ -6,6 +6,7 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using KuberaManager.Logic.ScenarioLogic.Scenarios.Types;
 
 namespace KuberaManagerUnitTests
 {
@@ -35,7 +36,7 @@ namespace KuberaManagerUnitTests
             Account acc = Account.FromId(1);
 
             // Grab arbitrary quest
-            Quest q = QuestAssigner.ByVarp(2561);
+            QuestScenario q = QuestAssigner.ByVarp(2561);
 
             // Verify that account returns false correctly
             Assert.IsFalse(acc.HasDefinition(q.CompletionDefinition));

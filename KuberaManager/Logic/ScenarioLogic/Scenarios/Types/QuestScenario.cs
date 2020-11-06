@@ -5,11 +5,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace KuberaManager.Logic.ScenarioLogic.Scenarios
+namespace KuberaManager.Logic.ScenarioLogic.Scenarios.Types
 {
-    public class Quest : ScenarioBase
+    public class QuestScenario : ScenarioBase
     {
-        public Quest(int varp, string questName, bool isFreeToPlay, CompletionDataDefinition def) 
+        public QuestScenario(int varp, string questName, bool isFreeToPlay, CompletionDataDefinition def) 
             : base()
         {
             ScenarioName = "Quest"; // For scenario
