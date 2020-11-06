@@ -16,7 +16,7 @@ namespace KuberaManager.Logic.ScenarioLogic.Scenarios
         /// If they don't meet the requirements, they'll get them first.
         /// </summary>
         public readonly static List<string> PrimaryScenarios = 
-            QuestAssigner.AllQuests.Select(x => x.ScenarioName).ToList();
+            QuestAssigner.AllQuests.Select(x => x.Identifier).ToList();
             //{ "Quest.COOKS_ASSISTANT", };
 
 
@@ -42,7 +42,7 @@ namespace KuberaManager.Logic.ScenarioLogic.Scenarios
             // Validate
             string[] parts = identifier.Split('.');
             if (parts.Count() != 2)
-                throw new Exception($"{identifier} does not have a valid scenario identifier format. Valid format must be structured like: Quest.ExampleQuest");
+                throw new Exception($"'{identifier}' is not a valid scenario identifier format. Valid format must be structured like: Quest.ExampleQuest");
 
             // Find the correct scenario
             return AllScenarios

@@ -30,19 +30,22 @@ namespace KuberaManager.Models.Database
         /// <returns>default(T) or value</returns>
         public static T Get<T>(string confKey)
         {
-            var context = new kuberaDbContext();
+            Config c = null;
+            using (var context = new kuberaDbContext())
+            {
+                // Query database.
+                c = context.Configs
+                    .Where(x => x.ConfKey == confKey)
+                    .FirstOrDefault();
+            }
 
-            // Query database
-            Config c = context.Configs
-                .Where(x => x.ConfKey == confKey)
-                .FirstOrDefault();
+            // Null check
+            if (c == null)
+                throw new Exception($"Config.Get() failed because the key '{confKey}' does not exist in the database.");
 
             // Return null or value
             TypeConverter converter = TypeDescriptor.GetConverter(typeof(T));
-            if (c == null || converter == null)
-                return default(T);
-            else // Convert to T & return
-                return (T)converter.ConvertFrom(c.ConfValue);
+            return (T)converter.ConvertFrom(c.ConfValue);
         }
 
         public static void Set<T>(string confKey, T value)
@@ -69,8 +72,17 @@ namespace KuberaManager.Models.Database
                 .OrderByDescending(x => x.ConfigVersion)
                 .First().ConfigVersion;
 
-            // Det DB config version
-            int databaseVersion = Config.Get<int>("InstalledConfigVersion");
+
+            // Manually find database version
+            int databaseVersion = 0;
+            using (var db = new kuberaDbContext())
+            {
+                var row = db.Configs
+                    .Where(x => x.ConfKey == "InstalledConfigVersion")
+                    .FirstOrDefault();
+                if (row != null)
+                    databaseVersion = Convert.ToInt32(row.ConfValue);
+            }
 
             // Install new keys if needed
             if (applicationVersion > databaseVersion)

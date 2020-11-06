@@ -99,6 +99,7 @@ namespace KuberaManagerUnitTests
 
 
         [Test]
+        [NonParallelizable]
         public void GetRandomSessionJobDuration_HunderedRuns_ReasonableDeviation()
         {
             // Prepare data
@@ -251,6 +252,34 @@ namespace KuberaManagerUnitTests
             Assert.NotNull(scen);
             Assert.AreNotEqual("TUTORIAL_ISLAND", scen.ScenarioArgument);
             Assert.IsFalse(scen.MembersOnly);
+        }
+
+
+        [Test]
+        public void FindNewJob_AccountWithContinueScenario_ExpectContinueScenario()
+        {
+            // Prep data
+            _TestHelper.DbCreateMockAccounts(1);
+            _TestHelper.DbCreateMockSession(1, false, DateTime.Now.AddMinutes(-5), TimeSpan.FromHours(3), false);
+            Session sess = Session.FromId(1);
+
+            // Set a continue scenario
+            Account acc = Account.FromId(1);
+            acc.AddDefinition(CompletionDataDefinition.TutorialComplete);
+            using (var db = new kuberaDbContext())
+            {
+                db.Attach(acc);
+                acc.ContinueScenario = "Quest.PRINCE_ALI_RESCUE";
+                db.SaveChanges();
+            }
+
+            // Get new job's data
+            Job job = Brain.FindNewJob(sess);
+            ScenarioBase scen = ScenarioHelper.ByIdentifier(job.ScenarioIdentifier);
+
+            // Assert
+            Assert.AreEqual("Quest", scen.ScenarioName);
+            Assert.AreEqual("PRINCE_ALI_RESCUE", scen.ScenarioArgument);
         }
     }
 }

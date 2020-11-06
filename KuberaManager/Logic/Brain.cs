@@ -129,6 +129,9 @@ namespace KuberaManager.Models.Logic
             TimeSpan minTime = TimeSpan.FromMinutes(15);
             TimeSpan maxTime = TimeSpan.FromHours(3);
 
+            // testdel
+            var testGet = Config.Get<int>("MaxHoursPerDay");
+
             // Get max time from config & Subtract time account already played today
             TimeSpan todayTimeLeft = TimeSpan.FromHours(Config.Get<int>("MaxHoursPerDay"))
                 .Subtract(account.GetTodayPlayedTime());
