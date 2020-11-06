@@ -7,6 +7,7 @@ using System.IO;
 using KuberaManager.Models.Database;
 using KuberaManager.Models.PageModels;
 using Microsoft.AspNetCore.Authorization;
+using KuberaManager.Logic;
 
 namespace KuberaManager.Controllers.Db
 {
@@ -25,6 +26,8 @@ namespace KuberaManager.Controllers.Db
         {
             try
             {
+                ConfigHelper ch = new ConfigHelper();
+
                 // handle unusual config keys
                 switch (config.ConfKey)
                 {
@@ -38,13 +41,13 @@ namespace KuberaManager.Controllers.Db
 
 
                     default: // Update value in db
-                        Config.Set<string>(config.ConfKey, config.ConfValue);
+                        ch.Set<string>(config.ConfKey, config.ConfValue);
                         break;
                 }
 
                 // Retrieve current values from DB
                 ViewBag.ConfKey = config.ConfKey;
-                ViewBag.ConfValue = Config.Get<string>(config.ConfKey);
+                ViewBag.ConfValue = ch.Get<string>(config.ConfKey);
             }
             catch (Exception ex)
             {
@@ -68,7 +71,8 @@ namespace KuberaManager.Controllers.Db
                     return Redirect("/Config/ChangeAdminPass");
 
                 default:
-                    Config.Get<string>(confKey);
+                    ConfigHelper ch = new ConfigHelper();
+                    ch.Get<string>(confKey);
                     break;
 
             }
@@ -87,7 +91,8 @@ namespace KuberaManager.Controllers.Db
         public IActionResult ChangeAdminPass()
         {
             // if pass isn't set or user is admin.
-            string passHash = Config.Get<string>("AdminPassHash");
+            ConfigHelper ch = new ConfigHelper();
+            string passHash = ch.Get<string>("AdminPassHash");
             if (passHash == null || passHash == "" || User.IsInRole("Admin"))
             {
                 return View();
@@ -100,13 +105,14 @@ namespace KuberaManager.Controllers.Db
         public IActionResult ChangeAdminPass(AdminPassword adminPass)
         {
             // if pass isn't set or user is admin.
-            string passHash = Config.Get<string>("AdminPassHash");
+            ConfigHelper ch = new ConfigHelper();
+            string passHash = ch.Get<string>("AdminPassHash");
             if (passHash == null || passHash == "" || User.IsInRole("Admin"))
             {
                 if (ModelState.IsValid)
                 {
                     ViewBag.Notification = "Admin password successfully updated";
-                    Config.Set<string>("AdminPassHash", adminPass.GetPasswordHash());
+                    ch.Set<string>("AdminPassHash", adminPass.GetPasswordHash());
                 }
 
                 return View();

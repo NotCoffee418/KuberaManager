@@ -199,8 +199,8 @@
                         </li>
 
 
-                        @if (KuberaManager.Models.Database.Config.Get<bool?>("DeveloperMode") != null &&
-                              KuberaManager.Models.Database.Config.Get<bool>("DeveloperMode"))
+                        @if (new KuberaManager.Logic.ConfigHelper().Get<bool?>("DeveloperMode") != null &&
+                              new KuberaManager.Logic.ConfigHelper().Get<bool>("DeveloperMode"))
                             {
 
                         <li class="nav-header">Developer Tools</li>

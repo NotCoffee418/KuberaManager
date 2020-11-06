@@ -1,4 +1,5 @@
-﻿using KuberaManager.Models.Database;
+﻿using KuberaManager.Logic;
+using KuberaManager.Models.Database;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -146,7 +147,8 @@ namespace KuberaManagerUnitTests
             // Create ongoing session
             _TestHelper.DbCreateMockSession(1, true, DateTime.Now.AddHours(-1), TimeSpan.FromHours(2), isFinished:false);
             // Set max hours per day
-            Config.Set<int>("MaxHoursPerDay", 8);
+            ConfigHelper ch = new ConfigHelper();
+            ch.Set<int>("MaxHoursPerDay", 8);
 
 
             // TEZSTDEL
@@ -162,7 +164,8 @@ namespace KuberaManagerUnitTests
         {
             // Variables
             _TestHelper.DbCreateMockAccounts(2,0);
-            Config.Set<int>("MaxHoursPerDay", 8);
+            ConfigHelper ch = new ConfigHelper();
+            ch.Set<int>("MaxHoursPerDay", 8);
 
             // Assert
             Account acc = Account.GetAvailableAccount();
@@ -175,7 +178,8 @@ namespace KuberaManagerUnitTests
         {
             // Variables
             _TestHelper.DbCreateMockAccounts(2, 0);
-            Config.Set<int>("MaxHoursPerDay", 0);
+            ConfigHelper ch = new ConfigHelper();
+            ch.Set<int>("MaxHoursPerDay", 0);
 
             // Assert
             Account acc = Account.GetAvailableAccount();

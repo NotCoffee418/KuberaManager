@@ -9,6 +9,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
+using KuberaManager.Logic;
 
 namespace KuberaManager.Models.Database
 {
@@ -107,7 +108,8 @@ namespace KuberaManager.Models.Database
         public static Account GetAvailableAccount()
         {
             // Define maxTimePerDayPerAcc from config
-            TimeSpan maxTimePerDayPerAcc = TimeSpan.FromHours(Config.Get<int>("MaxHoursPerDay"));
+            ConfigHelper ch = new ConfigHelper();
+            TimeSpan maxTimePerDayPerAcc = TimeSpan.FromHours(ch.Get<int>("MaxHoursPerDay"));
             if (maxTimePerDayPerAcc == TimeSpan.FromSeconds(0))
                 maxTimePerDayPerAcc = TimeSpan.FromHours(25);
 

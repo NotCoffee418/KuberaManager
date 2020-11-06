@@ -60,7 +60,8 @@ namespace KuberaManager.Models.Logic
         private static async Task RspeerPostRequest(string path, dynamic data)
         {
             // Send spoof request
-            if (!Config.Get<bool>("AllowRspeerApiCalls"))
+            ConfigHelper ch = new ConfigHelper();
+            if (!ch.Get<bool>("AllowRspeerApiCalls"))
             {
                 SpoofRequest("Post", path, data);
                 return;
@@ -70,7 +71,7 @@ namespace KuberaManager.Models.Logic
             using (var client = new HttpClient())
             {
                 var request = new HttpRequestMessage(HttpMethod.Post, new Uri($"https://services.rspeer.org/{path}"));
-                request.Headers.Add("ApiClient", Config.Get<string>("RspeerApiKey1"));
+                request.Headers.Add("ApiClient", ch.Get<string>("RspeerApiKey1"));
                 if (data != null)
                 {
                     string json = JsonConvert.SerializeObject(data);
@@ -83,7 +84,8 @@ namespace KuberaManager.Models.Logic
         private static async Task<T> RspeerGetRequest<T>(string path)
         {
             // Send spoof request
-            if (!Config.Get<bool>("AllowRspeerApiCalls"))
+            ConfigHelper ch = new ConfigHelper();
+            if (!ch.Get<bool>("AllowRspeerApiCalls"))
             {
                 SpoofRequest("Get", path, null);
                 // NOT RETURNING, SENDING REGARDLESS
@@ -93,7 +95,7 @@ namespace KuberaManager.Models.Logic
             using (var client = new HttpClient())
             {
                 var request = new HttpRequestMessage(HttpMethod.Get, new Uri($"https://services.rspeer.org/{path}"));
-                request.Headers.Add("ApiClient", Config.Get<string>("RspeerApiKey1"));
+                request.Headers.Add("ApiClient", ch.Get<string>("RspeerApiKey1"));
                 var response = await client.SendAsync(request);
                 string json = await response.Content.ReadAsStringAsync();
                 return JsonConvert.DeserializeObject<T>(json);

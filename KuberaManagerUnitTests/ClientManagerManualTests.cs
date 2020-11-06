@@ -1,4 +1,5 @@
-﻿using KuberaManager.Models.Database;
+﻿using KuberaManager.Logic;
+using KuberaManager.Models.Database;
 using KuberaManager.Models.Logic;
 using NUnit.Framework;
 using System;
@@ -41,7 +42,8 @@ namespace KuberaManagerUnitTests
             // Automatic vars
             _TestHelper.DbCreateMockAccounts(1);
             Account acc = Account.FromLogin("testAccount1@mockup.fake");
-            Config.Set<string>("RspeerApiKey1", RspeerApiKey);
+            ConfigHelper ch = new ConfigHelper();
+            ch.Set<string>("RspeerApiKey1", RspeerApiKey);
 
             // Find relevant session
             Session sess = Session.FromAccount(acc.Login);

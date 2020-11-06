@@ -1,4 +1,5 @@
-﻿using KuberaManager.Models.Database;
+﻿using KuberaManager.Logic;
+using KuberaManager.Models.Database;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -27,7 +28,8 @@ namespace KuberaManager.Models.PageModels
 
         public bool IsCorrectPassword()
         {
-            string passwordHash = Config.Get<string>("AdminPassHash");
+            ConfigHelper ch = new ConfigHelper();
+            string passwordHash = ch.Get<string>("AdminPassHash");
             if (passwordHash == null)
                 return false;
             else return BCrypt.Net.BCrypt.Verify(AdminPassPlain, passwordHash);

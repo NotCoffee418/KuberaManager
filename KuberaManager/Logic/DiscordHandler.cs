@@ -1,4 +1,5 @@
-﻿using KuberaManager.Models.Database;
+﻿using KuberaManager.Logic;
+using KuberaManager.Models.Database;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -22,7 +23,8 @@ namespace KuberaManager.Models.Logic
                 return; // Don't post when unittesting
 
             // Post message
-            string webhookToken = Config.Get<string>("DiscordApiKey");
+            ConfigHelper ch = new ConfigHelper();
+            string webhookToken = ch.Get<string>("DiscordApiKey");
             string json = JsonConvert.SerializeObject(new Dictionary<string, dynamic>
             {
                 { "content", msg },

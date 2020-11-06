@@ -1,4 +1,5 @@
-﻿using KuberaManager.Models.Database;
+﻿using KuberaManager.Logic;
+using KuberaManager.Models.Database;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +16,8 @@ namespace KuberaManager.Models.Data.RspeerApiStructure
             string scriptStartupArgs = "-manager " +
                 (isManualSession ? "manual" : session.Id.ToString());
 
-            string apiUrlOverride = Config.Get<string>("ApiUrlOverride");
+            ConfigHelper ch = new ConfigHelper();
+            string apiUrlOverride = ch.Get<string>("ApiUrlOverride");
             if (apiUrlOverride != null && apiUrlOverride != "")
                 scriptStartupArgs += $" -apiUrl {apiUrlOverride}";
 

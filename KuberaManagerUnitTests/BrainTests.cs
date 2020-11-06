@@ -1,4 +1,5 @@
-﻿using KuberaManager.Logic.ScenarioLogic.Requirements;
+﻿using KuberaManager.Logic;
+using KuberaManager.Logic.ScenarioLogic.Requirements;
 using KuberaManager.Logic.ScenarioLogic.Scenarios;
 using KuberaManager.Logic.ScenarioLogic.Scenarios.Assigners;
 using KuberaManager.Models.Data;
@@ -103,7 +104,8 @@ namespace KuberaManagerUnitTests
         public void GetRandomSessionJobDuration_HunderedRuns_ReasonableDeviation()
         {
             // Prepare data
-            Config.Set<int>("MaxHoursPerDay", 1);
+            ConfigHelper ch = new ConfigHelper();
+            ch.Set<int>("MaxHoursPerDay", 1);
             _TestHelper.DbCreateMockAccounts(1, 0);
             Account acc = Account.FromId(1);
 
@@ -142,7 +144,8 @@ namespace KuberaManagerUnitTests
         public void DoesClientNeedJobUpdate_NeverHadJob_True()
         {
             // Prepare data
-            Config.Set<int>("MaxHoursPerDay", 1);
+            ConfigHelper ch = new ConfigHelper();
+            ch.Set<int>("MaxHoursPerDay", 1);
             _TestHelper.DbCreateMockAccounts(1, 0);
             Account acc = Account.FromId(1);
 
@@ -159,7 +162,8 @@ namespace KuberaManagerUnitTests
         public void DoesClientNeedJobUpdate_ExpiredJob_True()
         {
             // Prepare data
-            Config.Set<int>("MaxHoursPerDay", 1);
+            ConfigHelper ch = new ConfigHelper();
+            ch.Set<int>("MaxHoursPerDay", 1);
             _TestHelper.DbCreateMockAccounts(1, 0);
             Account acc = Account.FromId(1);
 
@@ -189,7 +193,8 @@ namespace KuberaManagerUnitTests
         public void DoesClientNeedJobUpdate_HasJob_False()
         {
             // Prepare data
-            Config.Set<int>("MaxHoursPerDay", 1);
+            ConfigHelper ch = new ConfigHelper();
+            ch.Set<int>("MaxHoursPerDay", 1);
             _TestHelper.DbCreateMockAccounts(1, 0);
             Account acc = Account.FromId(1);
 

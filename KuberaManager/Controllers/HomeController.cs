@@ -9,6 +9,7 @@ using KuberaManager.Models;
 using KuberaManager.Models.Database;
 using KuberaManager.Models.Logic;
 using Microsoft.AspNetCore.Authorization;
+using KuberaManager.Logic;
 
 namespace KuberaManager.Controllers
 {
@@ -28,7 +29,8 @@ namespace KuberaManager.Controllers
             try
             {
                 // Redirect to set admin password page if password isn't defined yet
-                string adminPassHash = Config.Get<string>("AdminPassHash");
+                ConfigHelper ch = new ConfigHelper();
+                string adminPassHash = ch.Get<string>("AdminPassHash");
                 if (adminPassHash == null || adminPassHash == "")
                     return Redirect("/config/changeadminpass");
             }

@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using KuberaManager.Logic;
 
 namespace KuberaManager.Models.Logic
 {
@@ -18,7 +19,8 @@ namespace KuberaManager.Models.Logic
         internal static void ScheduledSessionStarter()
         {
             // Do nothing if brain is not enabled
-            if (!Config.Get<bool>("BrainEnabled"))
+            ConfigHelper ch = new ConfigHelper();
+            if (!ch.Get<bool>("BrainEnabled"))
                 return;
 
             // Determine if we have a free slot, return if not
@@ -130,7 +132,8 @@ namespace KuberaManager.Models.Logic
             TimeSpan maxTime = TimeSpan.FromHours(3);
 
             // Get max time from config & Subtract time account already played today
-            TimeSpan todayTimeLeft = TimeSpan.FromHours(Config.Get<int>("MaxHoursPerDay"))
+            ConfigHelper ch = new ConfigHelper();
+            TimeSpan todayTimeLeft = TimeSpan.FromHours(ch.Get<int>("MaxHoursPerDay"))
                 .Subtract(account.GetTodayPlayedTime());
 
             // Don't bother
