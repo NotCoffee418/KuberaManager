@@ -62,8 +62,13 @@ namespace KuberaManager.Logic.ScenarioLogic.Scenarios
             // Grab a random primary scenario to run
             if (PrimaryScenarios.Count() == 0)
                 throw new Exception("No primary scenarios are defined. Can't proceed");
-            int rand = RandomHelper.GetRandom(0, PrimaryScenarios.Count() - 1);
-            ScenarioBase baseScenario = ByIdentifier(PrimaryScenarios[rand]);
+
+            // Filter by account member status & grab random
+            ScenarioBase baseScenario = PrimaryScenarios
+                .Select(x => ScenarioHelper.ByIdentifier(x))            // Grabs the Scenario class object
+                .Where(x => account.IsMember || x.MembersOnly)          // Filter member status
+                .OrderBy(x => RandomHelper.GetRandom(0, int.MaxValue))  // Grab a random
+                .First();
 
             // Return scenario or child requirement to run
             return SelectScenarioOrRequirement(baseScenario, account);
