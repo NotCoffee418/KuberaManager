@@ -66,7 +66,7 @@ namespace KuberaManager.Logic.ScenarioLogic.Scenarios
             // Filter by account member status & grab random
             ScenarioBase baseScenario = PrimaryScenarios
                 .Select(x => ScenarioHelper.ByIdentifier(x))            // Grabs the Scenario class object
-                .Where(x => account.IsMember || x.MembersOnly)          // Filter member status
+                .Where(x => account.IsMember || !x.MembersOnly)          // Filter member status
                 .OrderBy(x => RandomHelper.GetRandom(0, int.MaxValue))  // Grab a random
                 .First();
 
