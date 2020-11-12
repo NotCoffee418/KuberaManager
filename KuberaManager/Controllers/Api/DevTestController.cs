@@ -8,6 +8,7 @@ using KuberaManager.Logic.ScenarioLogic.Scenarios;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using KuberaManager.Hangfire;
 
 namespace KuberaManager.Controllers.Api
 {
@@ -199,6 +200,20 @@ namespace KuberaManager.Controllers.Api
         public List<EventLogDisplayFormat> GetSessionEventLog(int sessionId)
         {
             return EventLog.GetSessionDisplayLogs(sessionId);
+        }
+
+        [HttpGet]
+        public string RunMinutelyJobs()
+        {
+            ScheduledTasks.RunMinutelyJobs();
+            return "It is done. " + DateTime.Now.ToString();
+        }
+
+        [HttpGet]
+        public string RunHourlyJobs()
+        {
+            ScheduledTasks.RunHourlyJobs();
+            return "It is done. " + DateTime.Now.ToString();
         }
     }
 }

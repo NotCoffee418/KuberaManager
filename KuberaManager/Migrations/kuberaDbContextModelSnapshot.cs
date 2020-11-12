@@ -15,16 +15,16 @@ namespace KuberaManager.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn)
-                .HasAnnotation("ProductVersion", "3.1.9")
-                .HasAnnotation("Relational:MaxIdentifierLength", 63);
+                .UseIdentityByDefaultColumns()
+                .HasAnnotation("Relational:MaxIdentifierLength", 63)
+                .HasAnnotation("ProductVersion", "5.0.0");
 
             modelBuilder.Entity("KuberaManager.Models.Database.Account", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .UseIdentityByDefaultColumn();
 
                     b.Property<string>("ContinueScenario")
                         .HasColumnType("text");
@@ -62,7 +62,7 @@ namespace KuberaManager.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .UseIdentityByDefaultColumn();
 
                     b.Property<int>("AccountId")
                         .HasColumnType("integer");
@@ -80,7 +80,7 @@ namespace KuberaManager.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .UseIdentityByDefaultColumn();
 
                     b.Property<bool>("DisableModelRendering")
                         .HasColumnType("boolean");
@@ -127,7 +127,7 @@ namespace KuberaManager.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .UseIdentityByDefaultColumn();
 
                     b.Property<int>("SessionId")
                         .HasColumnType("integer");
@@ -148,7 +148,7 @@ namespace KuberaManager.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .UseIdentityByDefaultColumn();
 
                     b.Property<string>("Text")
                         .IsRequired()
@@ -164,7 +164,7 @@ namespace KuberaManager.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .UseIdentityByDefaultColumn();
 
                     b.Property<bool>("ForceRunUntilComplete")
                         .HasColumnType("boolean");
@@ -193,101 +193,101 @@ namespace KuberaManager.Migrations
                 {
                     b.Property<int>("AccountId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("AccountId")
                         .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnName("AccountId")
+                        .UseIdentityByDefaultColumn();
 
                     b.Property<int>("Agility")
-                        .HasColumnName("Agility")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("Agility");
 
                     b.Property<int>("Attack")
-                        .HasColumnName("Attack")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("Attack");
 
                     b.Property<int>("Construction")
-                        .HasColumnName("Construction")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("Construction");
 
                     b.Property<int>("Cooking")
-                        .HasColumnName("Cooking")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("Cooking");
 
                     b.Property<int>("Crafting")
-                        .HasColumnName("Crafting")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("Crafting");
 
                     b.Property<int>("Defence")
-                        .HasColumnName("Defence")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("Defence");
 
                     b.Property<int>("Farming")
-                        .HasColumnName("Farming")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("Farming");
 
                     b.Property<int>("Firemaking")
-                        .HasColumnName("Firemaking")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("Firemaking");
 
                     b.Property<int>("Fishing")
-                        .HasColumnName("Fishing")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("Fishing");
 
                     b.Property<int>("Fletching")
-                        .HasColumnName("Fletching")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("Fletching");
 
                     b.Property<int>("Herblore")
-                        .HasColumnName("Herblore")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("Herblore");
 
                     b.Property<int>("Hitpoints")
-                        .HasColumnName("Hitpoints")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("Hitpoints");
 
                     b.Property<int>("Hunter")
-                        .HasColumnName("Hunter")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("Hunter");
 
                     b.Property<int>("Magic")
-                        .HasColumnName("Magic")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("Magic");
 
                     b.Property<int>("Mining")
-                        .HasColumnName("Mining")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("Mining");
 
                     b.Property<int>("Prayer")
-                        .HasColumnName("Prayer")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("Prayer");
 
                     b.Property<int>("Ranged")
-                        .HasColumnName("Ranged")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("Ranged");
 
                     b.Property<int>("Runecrafting")
-                        .HasColumnName("Runecrafting")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("Runecrafting");
 
                     b.Property<int>("Slayer")
-                        .HasColumnName("Slayer")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("Slayer");
 
                     b.Property<int>("Smithing")
-                        .HasColumnName("Smithing")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("Smithing");
 
                     b.Property<int>("Strength")
-                        .HasColumnName("Strength")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("Strength");
 
                     b.Property<int>("Thieving")
-                        .HasColumnName("Thieving")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("Thieving");
 
                     b.Property<int>("Woodcutting")
-                        .HasColumnName("Woodcutting")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("Woodcutting");
 
                     b.HasKey("AccountId");
 
@@ -299,7 +299,7 @@ namespace KuberaManager.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .UseIdentityByDefaultColumn();
 
                     b.Property<int>("AccountId")
                         .HasColumnType("integer");
@@ -332,19 +332,13 @@ namespace KuberaManager.Migrations
                     b.Property<int>("AccountId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .UseIdentityByDefaultColumn();
 
                     b.Property<int>("ComputerId")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime>("RunUntil")
-                        .HasColumnType("timestamp without time zone");
-
                     b.Property<string>("SelectedScenario")
                         .HasColumnType("text");
-
-                    b.Property<bool>("StopManually")
-                        .HasColumnType("boolean");
 
                     b.HasKey("AccountId");
 
