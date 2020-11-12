@@ -5,54 +5,51 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace KuberaManager.Migrations
 {
     [DbContext(typeof(kuberaDbContext))]
-    [Migration("20201112073537_InstallDatabase")]
-    partial class InstallDatabase
+    [Migration("20201112091011_InstallDatabaseMysql")]
+    partial class InstallDatabaseMysql
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .UseIdentityByDefaultColumns()
-                .HasAnnotation("Relational:MaxIdentifierLength", 63)
+                .HasAnnotation("Relational:MaxIdentifierLength", 64)
                 .HasAnnotation("ProductVersion", "5.0.0");
 
             modelBuilder.Entity("KuberaManager.Models.Database.Account", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .UseIdentityByDefaultColumn();
+                        .HasColumnType("int");
 
                     b.Property<string>("ContinueScenario")
-                        .HasColumnType("text");
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<bool>("IsBanned")
-                        .HasColumnType("boolean");
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<bool>("IsEnabled")
-                        .HasColumnType("boolean");
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<bool>("IsMember")
-                        .HasColumnType("boolean");
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<string>("Login")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<int>("PrefStartTimeDay")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<int>("PrefStopTimeDay")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -63,14 +60,13 @@ namespace KuberaManager.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .UseIdentityByDefaultColumn();
+                        .HasColumnType("int");
 
                     b.Property<int>("AccountId")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<int>("Definition")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -81,30 +77,29 @@ namespace KuberaManager.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .UseIdentityByDefaultColumn();
+                        .HasColumnType("int");
 
                     b.Property<bool>("DisableModelRendering")
-                        .HasColumnType("boolean");
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<bool>("DisableSceneRendering")
-                        .HasColumnType("boolean");
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<string>("Hostname")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<bool>("IsEnabled")
-                        .HasColumnType("boolean");
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<bool>("LowCpuMode")
-                        .HasColumnType("boolean");
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<int>("MaxClients")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<bool>("SuperLowCpuMode")
-                        .HasColumnType("boolean");
+                        .HasColumnType("tinyint(1)");
 
                     b.HasKey("Id");
 
@@ -114,10 +109,10 @@ namespace KuberaManager.Migrations
             modelBuilder.Entity("KuberaManager.Models.Database.Config", b =>
                 {
                     b.Property<string>("ConfKey")
-                        .HasColumnType("text");
+                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
 
                     b.Property<string>("ConfValue")
-                        .HasColumnType("text");
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.HasKey("ConfKey");
 
@@ -128,17 +123,16 @@ namespace KuberaManager.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .UseIdentityByDefaultColumn();
+                        .HasColumnType("int");
 
                     b.Property<int>("SessionId")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<int>("TextId")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("Timestamp")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("datetime(6)");
 
                     b.HasKey("Id");
 
@@ -149,12 +143,11 @@ namespace KuberaManager.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .UseIdentityByDefaultColumn();
+                        .HasColumnType("int");
 
                     b.Property<string>("Text")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.HasKey("Id");
 
@@ -165,26 +158,25 @@ namespace KuberaManager.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .UseIdentityByDefaultColumn();
+                        .HasColumnType("int");
 
                     b.Property<bool>("ForceRunUntilComplete")
-                        .HasColumnType("boolean");
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<bool>("IsFinished")
-                        .HasColumnType("boolean");
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<string>("ScenarioIdentifier")
-                        .HasColumnType("text");
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<int>("SessionId")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("StartTime")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<TimeSpan>("TargetDuration")
-                        .HasColumnType("interval");
+                        .HasColumnType("time(6)");
 
                     b.HasKey("Id");
 
@@ -195,100 +187,99 @@ namespace KuberaManager.Migrations
                 {
                     b.Property<int>("AccountId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("AccountId")
-                        .UseIdentityByDefaultColumn();
+                        .HasColumnType("int")
+                        .HasColumnName("AccountId");
 
                     b.Property<int>("Agility")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("Agility");
 
                     b.Property<int>("Attack")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("Attack");
 
                     b.Property<int>("Construction")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("Construction");
 
                     b.Property<int>("Cooking")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("Cooking");
 
                     b.Property<int>("Crafting")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("Crafting");
 
                     b.Property<int>("Defence")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("Defence");
 
                     b.Property<int>("Farming")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("Farming");
 
                     b.Property<int>("Firemaking")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("Firemaking");
 
                     b.Property<int>("Fishing")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("Fishing");
 
                     b.Property<int>("Fletching")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("Fletching");
 
                     b.Property<int>("Herblore")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("Herblore");
 
                     b.Property<int>("Hitpoints")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("Hitpoints");
 
                     b.Property<int>("Hunter")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("Hunter");
 
                     b.Property<int>("Magic")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("Magic");
 
                     b.Property<int>("Mining")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("Mining");
 
                     b.Property<int>("Prayer")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("Prayer");
 
                     b.Property<int>("Ranged")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("Ranged");
 
                     b.Property<int>("Runecrafting")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("Runecrafting");
 
                     b.Property<int>("Slayer")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("Slayer");
 
                     b.Property<int>("Smithing")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("Smithing");
 
                     b.Property<int>("Strength")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("Strength");
 
                     b.Property<int>("Thieving")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("Thieving");
 
                     b.Property<int>("Woodcutting")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("Woodcutting");
 
                     b.HasKey("AccountId");
@@ -300,51 +291,32 @@ namespace KuberaManager.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .UseIdentityByDefaultColumn();
+                        .HasColumnType("int");
 
                     b.Property<int>("AccountId")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<int>("ActiveComputer")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<bool>("IsFinished")
-                        .HasColumnType("boolean");
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime>("LastUpdateTime")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("RspeerSessionTag")
-                        .HasColumnType("text");
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<DateTime>("StartTime")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<TimeSpan>("TargetDuration")
-                        .HasColumnType("interval");
+                        .HasColumnType("time(6)");
 
                     b.HasKey("Id");
 
                     b.ToTable("Sessions");
-                });
-
-            modelBuilder.Entity("KuberaManager.Models.PageModels.ManualSession", b =>
-                {
-                    b.Property<int>("AccountId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .UseIdentityByDefaultColumn();
-
-                    b.Property<int>("ComputerId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("SelectedScenario")
-                        .HasColumnType("text");
-
-                    b.HasKey("AccountId");
-
-                    b.ToTable("ManualSession");
                 });
 #pragma warning restore 612, 618
         }

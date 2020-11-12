@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Hangfire;
-using Hangfire.PostgreSql;
+using Hangfire.MySql;
 using KuberaManager.Hangfire;
 using KuberaManager.Models.Database;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -30,9 +30,7 @@ namespace KuberaManager
         public void ConfigureServices(IServiceCollection services)
         {
             // Add DbContext to the injection container
-            services.AddDbContext<kuberaDbContext>(options =>
-                    options.UseNpgsql(
-                        this.Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<kuberaDbContext>();
 
             // Session
             services.AddDistributedMemoryCache();
@@ -57,7 +55,14 @@ namespace KuberaManager
 
             // Hangfire
             services.AddHangfire(config =>
-                config.UsePostgreSqlStorage(Configuration.GetConnectionString("DefaultConnection")));
+                config.UseStorage(
+                    new MySqlStorage(Configuration.GetConnectionString("DefaultConnection"),
+                    new MySqlStorageOptions
+                    {
+                        TablesPrefix = "Hangfire_"
+                    })
+                    )
+                );
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

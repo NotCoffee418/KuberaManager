@@ -45,7 +45,10 @@ namespace KuberaManager.Models.Database
                         .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
                         .AddJsonFile("appsettings.json")
                         .Build();
-                    optionsBuilder.UseNpgsql(configuration.GetConnectionString("DefaultConnection"));
+                    optionsBuilder.UseMySql(
+                        configuration.GetConnectionString("DefaultConnection"),
+                        new MySqlServerVersion(new Version(5, 7, 32))
+                        );
                 }
             }
         }
@@ -68,7 +71,5 @@ namespace KuberaManager.Models.Database
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
-
-        public DbSet<KuberaManager.Models.PageModels.ManualSession> ManualSession { get; set; }
     }
 }
